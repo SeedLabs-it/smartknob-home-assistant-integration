@@ -1,4 +1,6 @@
 """The Smartknob integration."""
+from config.custom_components.smartknob.coordinator import SmartknobCoordinator
+from config.custom_components.smartknob.mqtt import MqttHandler
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
@@ -7,7 +9,6 @@ from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
 from .const import DOMAIN
 from .logger import _LOGGER
-from .mqtt import MqttHandler
 from .panel import async_register_panel, async_unregister_panel
 from .store import SmartknobStorage, async_get_registry
 from .websockets import async_register_websockets
@@ -34,8 +35,13 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
 
     store = await async_get_registry(hass)
     coordinator = SmartknobCoordinator(hass, session, entry, store)
+    mqtt_handler = MqttHandler(hass)
 
-    hass.data[DOMAIN] = {"coordinator": coordinator, "apps": []}
+    hass.data[DOMAIN] = {
+        "coordinator": coordinator,
+        "apps": [],
+        "mqtt_handler": mqtt_handler,
+    }
 
     if entry.unique_id is None:
         hass.config_entries.async_update_entry(entry, unique_id=coordinator.id, data={})
@@ -64,7 +70,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
                         app["app_id"]
                     )  # THIS DOESNT REALLY WORK WILL WORK FOR NOW
 
-        await coordinator.mqtt_handler.async_entity_state_changed(
+        await mqtt_handler.async_entity_state_changed(
             affected_knobs, app_id, old_state, new_state
         )
 
@@ -79,37 +85,3 @@ async def async_remove_entry(hass: HomeAssistant | None, entry):
     coordinator = hass.data[DOMAIN]["coordinator"]
     await coordinator.async_delete_config()
     del hass.data[DOMAIN]
-
-
-class SmartknobCoordinator(DataUpdateCoordinator):
-    """Smartknob DataUpdateCoordinator."""
-
-    def __init__(
-        self, hass: HomeAssistant | None, session, entry, store: SmartknobStorage
-    ) -> None:
-        """Initialize the coordinator."""
-        self.id = entry.entry_id
-        self.hass = hass
-        self.entry = entry
-        self.store = store
-        self.mqtt_handler = MqttHandler(self.hass)
-
-        # self.hass.data[DOMAIN]["mqtt_handler"] = MqttHandler(self.hass)
-
-        super().__init__(hass, _LOGGER, name=DOMAIN)
-
-    async def async_update_app_config(self, data: dict = None):
-        """Update config for app."""
-        if self.store.async_get_app(data.get("app_id")):
-            self.store.async_update_app(data)
-            return
-
-        self.store.async_create_app(data)
-
-    async def async_unload(self):
-        """Unload coordinator."""
-        del self.hass.data[DOMAIN]["apps"]
-
-    async def async_delete_config(self):
-        """Delete config."""
-        await self.store.async_delete()

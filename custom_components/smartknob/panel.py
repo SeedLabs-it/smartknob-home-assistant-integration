@@ -1,3 +1,4 @@
+"""Panel for Smartknob integration."""
 import os
 
 from homeassistant.components import frontend, panel_custom

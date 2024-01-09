@@ -1,18 +1,17 @@
-import json
+"""Websocket API for Smartknob integration."""
+# import json
 
 import voluptuous as vol
 
-from homeassistant.components import websocket_api
 from homeassistant.components.http import HomeAssistantView
 from homeassistant.components.http.data_validator import RequestDataValidator
-from homeassistant.components.websocket_api import async_register_command
-from homeassistant.core import HomeAssistant, callback
+from homeassistant.core import HomeAssistant
 
 from .const import APP_SLUGS, DOMAIN
 from .logger import _LOGGER
 
 
-async def async_register_websockets(hass):
+async def async_register_websockets(hass: HomeAssistant):
     """Register websockets."""
     hass.http.register_view(SmartknobAppSlugsView)
     hass.http.register_view(SmartknobKnobsView)
@@ -77,7 +76,7 @@ class SmartknobAppsView(HomeAssistantView):
         if "mac_address" and "apps" in data:
             apps = data.get("apps")
 
-            _LOGGER.error(apps)
+            _LOGGER.debug(apps)
 
             if len(apps) > 1:
                 await coordinator.store.async_update_apps(apps)

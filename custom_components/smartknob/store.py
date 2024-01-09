@@ -1,6 +1,8 @@
+"""Store for Smartknob integration."""
+
 from collections import OrderedDict
 from collections.abc import MutableMapping
-from typing import Dict, cast
+from typing import cast
 
 import attr
 
@@ -68,6 +70,7 @@ class SmartknobStorage:
         self.knobs = knobs
 
         # TODO ADD CHECK IF NO APPS
+
         # if not apps:
         #     await self.async_factory_default()
 

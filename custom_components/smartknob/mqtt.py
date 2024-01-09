@@ -1,7 +1,12 @@
 """MQTT handler for Smartknob."""
 import json
+import math
 
-from config.custom_components.smartknob.services import Services
+from config.custom_components.smartknob.services import (
+    LightState,
+    Services,
+    SwitchState,
+)
 
 # from config.custom_components.smartknob.store import SmartknobConfig
 from homeassistant.components import mqtt
@@ -105,9 +110,14 @@ class MqttHandler:
                 app = await coordinator.store.async_get_app(mac_address, app_id)
                 if app is not None:
                     if app["app_slug_id"] == "light_switch":
-                        await self.services.async_light(app["entity_id"], state)
+                        await self.services.async_set_light(
+                            app["entity_id"],
+                            LightState(state),
+                        )
                     elif app["app_slug_id"] == "switch":
-                        await self.services.async_switch(app["entity_id"], state)
+                        await self.services.async_toggle_switch(
+                            app["entity_id"], SwitchState(state)
+                        )
                     else:
                         _LOGGER.error("Not implemented command")
                     # knob.async_update(msg.payload)

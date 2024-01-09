@@ -1,6 +1,7 @@
 """MQTT handler for Smartknob."""
 import json
 
+from config.custom_components.smartknob.coordinator import SmartknobCoordinator
 from config.custom_components.smartknob.services import Services
 
 # from config.custom_components.smartknob.store import SmartknobConfig
@@ -79,10 +80,15 @@ class MqttHandler:
 
             if "mac_address" in payload:
                 mac_address = payload["mac_address"]
-                coordinator = self.hass.data[DOMAIN]["coordinator"]
-                coordinator.store.async_init_knob(
-                    {"mac_address": mac_address, "apps": []}
-                )
+                coordinator: SmartknobCoordinator = self.hass.data[DOMAIN][
+                    "coordinator"
+                ]
+                _LOGGER.debug("INIT RECEIVED")
+                _LOGGER.error(coordinator.store.async_get_knob(mac_address))
+
+                # coordinator.store.async_init_knob(
+                #     {"mac_address": mac_address, "apps": []}
+                # )
 
         except ValueError:
             _LOGGER.error("Error decoding JSON payload")
@@ -105,9 +111,9 @@ class MqttHandler:
                 app = await coordinator.store.async_get_app(mac_address, app_id)
                 if app is not None:
                     if app["app_slug_id"] == "light_switch":
-                        await self.services.async_light(app["entity_id"], state)
+                        await self.services.async_set_light(app["entity_id"], state)
                     elif app["app_slug_id"] == "switch":
-                        await self.services.async_switch(app["entity_id"], state)
+                        await self.services.async_toggle_switch(app["entity_id"], state)
                     else:
                         _LOGGER.error("Not implemented command")
                     # knob.async_update(msg.payload)

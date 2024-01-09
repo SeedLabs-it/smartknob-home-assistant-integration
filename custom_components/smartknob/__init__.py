@@ -16,7 +16,7 @@ from .websockets import async_register_websockets
 
 async def async_setup(hass: HomeAssistant, config):
     """Set up the Smartknob component."""
-    _LOGGER.debug("async_setup")
+    _LOGGER.debug("Smartknob - Setup")
 
     # # Define a callback function to call when a state change occurs
     # def state_change_callback(entity_id, old_state, new_state):

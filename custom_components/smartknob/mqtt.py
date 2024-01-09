@@ -1,6 +1,5 @@
 """MQTT handler for Smartknob."""
 import json
-import math
 
 from config.custom_components.smartknob.coordinator import SmartknobCoordinator
 from config.custom_components.smartknob.services import (
@@ -89,11 +88,14 @@ class MqttHandler:
                     "coordinator"
                 ]
                 _LOGGER.debug("INIT RECEIVED")
-                _LOGGER.error(coordinator.store.async_get_knob(mac_address))
 
-                # coordinator.store.async_init_knob(
-                #     {"mac_address": mac_address, "apps": []}
-                # )
+                if not coordinator.store.async_get_knob(mac_address):
+                    await coordinator.store.async_init_knob(
+                        {"mac_address": mac_address, "apps": []}
+                    )
+                else:
+                    _LOGGER.debug("KNOB ALREADY INITIALIZED")
+                    # TODO: Handle this case
 
         except ValueError:
             _LOGGER.error("Error decoding JSON payload")

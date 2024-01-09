@@ -9,7 +9,7 @@ class SwitchState:
 
     def __init__(self, state) -> None:
         """Initialize the SwitchState object."""
-        self.on = state["on"]
+        self.on: bool = state["on"]
 
 
 class LightState:
@@ -17,9 +17,46 @@ class LightState:
 
     def __init__(self, state) -> None:
         """Initialize the LightState object."""
-        self.brightness = state["brightness"]
-        self.color_temp = state["color_temp"]
-        self.rgb_color = state["rgb_color"]
+        self.brightness: int = state["brightness"]
+        self.color_temp: int = state["color_temp"]
+        self.rgb_color: list[int] = state["rgb_color"]
+
+
+class BlindsState:
+    """Defines the structure of the BlindsState object."""
+
+    def __init__(self, state) -> None:
+        """Initialize the BlindsState object."""
+        self.position: int = state["position"]
+
+
+class ClimateState:
+    """Defines the structure of the ClimateState object."""
+
+    def __init__(self, state) -> None:
+        """Initialize the ClimateState object."""
+        self.temperature: float = state["temperature"]
+        self.humidity: int = state["humidity"]
+
+
+class MediaState:
+    """Defines the structure of the MediaState object."""
+
+    def __init__(self, state) -> None:
+        """Initialize the MediaState object."""
+        self.volume = state["volume"]
+        self.mute = state["mute"]
+        self.playing = state["playing"]
+        self.previous = state["previous"]
+        self.next = state["next"]
+
+
+class LockState:
+    """Defines the structure of the LockState object."""
+
+    def __init__(self, state) -> None:
+        """Initialize the LockState object."""
+        self.locked = state["locked"]
 
 
 class Services:

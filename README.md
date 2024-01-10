@@ -55,7 +55,7 @@ Set-up
 <li>
   **INSTALL HOME ASSISTANT CORE**. Follow the instructions to install <a href="https://developers.home-assistant.io/docs/development_environment"> Home Assistant Core</a> This will setup a local dockerized version of Home Assistant Core. A Visual Studio projet will also be initialized based on the clone Home Assistant Core repo. 
   From Visual Studio menu select Terminal -> Run Task -> Run Home Assistant Core to start your docker instance of Home Assistant. 
-  You should now be able to see the instance running in Docker Desktor or by running <code>doker ps</code>
+  You should now be able to see the instance running in Docker Desktop or by running <code>doker ps</code>
 </li>
 <li>
   **MQTT BROKER**: We recommend <a href="https://mosquitto.org/download/">Mosquitto</a>. 

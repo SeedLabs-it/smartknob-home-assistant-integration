@@ -61,7 +61,7 @@ Set-up
   **MQTT BROKER**: We recommend <a href="https://mosquitto.org/download/">Mosquitto</a>. 
   Once installed, you can start the broker, with something along those lines : <code>/usr/local/opt/mosquitto/sbin/mosquitto -c /usr/local/etc/mosquitto/mosquitto.conf</code>. 
   By default, Mosquitto runs unencrypted and unauthenticated.
-  YOu can test the installation and ensure the server is running successfully by typing on a new terminal window 
+  You can test the installation and ensure the server is running successfully by typing on a new terminal window 
 <code> mosquitto_sub -t topic/state </code> to subscribe to a new topic/state, and in a third window, send a message by typing
    <code>mosquitto_pub -t topic/state -m "Hello World"</code>
 </li>

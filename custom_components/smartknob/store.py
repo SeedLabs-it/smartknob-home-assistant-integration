@@ -109,6 +109,9 @@ class SmartknobStorage:
     def async_get_knobs(self):
         """Get all smartknobs."""
         res = {}
+        if not self.knobs:
+            return res
+
         for key, val in self.knobs.items():
             res[key] = attr.asdict(val)
         return res

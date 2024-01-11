@@ -35,8 +35,6 @@ export const saveApps = (hass: HomeAssistant, apps: App[]) => {
     });
   }
 
-  console.log(_apps);
-  console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
   return hass.callApi('POST', 'smartknob/apps', {
     apps: _apps,
   });
@@ -59,9 +57,6 @@ export const getAsyncKnobs = async (hass: HomeAssistant) => {
     'GET',
     'smartknob/knobs',
   );
-  console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-
-  console.log(res);
   if (res.success != true) console.log("ERROR: Couldn't get knobs");
 
   return res;

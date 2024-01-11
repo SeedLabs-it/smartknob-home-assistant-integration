@@ -99,14 +99,14 @@
       }
     },
     g = (t, e) => e !== t && (e == e || t == t),
-    $ = {
+    y = {
       attribute: !0,
       type: String,
       converter: _,
       reflect: !1,
       hasChanged: g
     },
-    y = "finalized";
+    $ = "finalized";
   class m extends HTMLElement {
     constructor() {
       super(), this._$Ei = new Map(), this.isUpdatePending = !1, this.hasUpdated = !1, this._$El = null, this._$Eu();
@@ -123,7 +123,7 @@
         void 0 !== i && (this._$Ev.set(i, s), t.push(i));
       }), t;
     }
-    static createProperty(t, e = $) {
+    static createProperty(t, e = y) {
       if (e.state && (e.attribute = !1), this.finalize(), this.elementProperties.set(t, e), !e.noAccessor && !this.prototype.hasOwnProperty(t)) {
         const s = "symbol" == typeof t ? Symbol() : "__" + t,
           i = this.getPropertyDescriptor(t, s, e);
@@ -144,11 +144,11 @@
       };
     }
     static getPropertyOptions(t) {
-      return this.elementProperties.get(t) || $;
+      return this.elementProperties.get(t) || y;
     }
     static finalize() {
-      if (this.hasOwnProperty(y)) return !1;
-      this[y] = !0;
+      if (this.hasOwnProperty($)) return !1;
+      this[$] = !0;
       const t = Object.getPrototypeOf(this);
       if (t.finalize(), void 0 !== t.h && (this.h = [...t.h]), this.elementProperties = new Map(t.elementProperties), this._$Ev = new Map(), this.hasOwnProperty("properties")) {
         const t = this.properties,
@@ -209,7 +209,7 @@
     attributeChangedCallback(t, e, s) {
       this._$AK(t, s);
     }
-    _$EO(t, e, s = $) {
+    _$EO(t, e, s = y) {
       var i;
       const n = this.constructor._$Ep(t, s);
       if (void 0 !== n && !0 === s.reflect) {
@@ -294,7 +294,7 @@
        * SPDX-License-Identifier: BSD-3-Clause
        */
   var f;
-  m[y] = !0, m.elementProperties = new Map(), m.elementStyles = [], m.shadowRootOptions = {
+  m[$] = !0, m.elementProperties = new Map(), m.elementStyles = [], m.shadowRootOptions = {
     mode: "open"
   }, null == v || v({
     ReactiveElement: m
@@ -1059,7 +1059,9 @@
     type: Array
   })], _t.prototype, "appSlugs", void 0), e([dt({
     type: Array
-  })], _t.prototype, "apps", void 0), e([pt()], _t.prototype, "_selectedSlug", void 0), e([pt()], _t.prototype, "_selectedEntity", void 0), e([pt()], _t.prototype, "_domain", void 0), e([pt()], _t.prototype, "_sortable", void 0), _t = e([at("app-form")], _t);
+  })], _t.prototype, "apps", void 0), e([dt({
+    type: String
+  })], _t.prototype, "mac_address", void 0), e([pt()], _t.prototype, "_selectedSlug", void 0), e([pt()], _t.prototype, "_selectedEntity", void 0), e([pt()], _t.prototype, "_domain", void 0), e([pt()], _t.prototype, "_sortable", void 0), _t = e([at("app-form")], _t);
   const gt = [{
     tabId: "setup",
     tabName: "Setup"
@@ -1075,7 +1077,7 @@
       var t, e;
       const s = (await (async t => {
           const e = await t.callApi("GET", "smartknob/knobs");
-          return "success" != e.success && console.log("ERROR: Couldn't get knobs"), e;
+          return console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"), console.log(e), 1 != e.success && console.log("ERROR: Couldn't get knobs"), e;
         })(this.hass)).knobs,
         i = (await (async t => {
           const e = await t.callApi("GET", "smartknob/app_slugs");
@@ -1115,7 +1117,6 @@
     }
     render() {
       if (!customElements.get("ha-panel-config") || !customElements.get("ha-menu-button")) return D` loading... `;
-      this._knobs;
       const t = [...Object.values(this.hass.states)];
       return D`<div>
       <div>
@@ -1144,6 +1145,7 @@
             .entities=${t}
             .appSlugs=${this._appSlugs}
             .apps=${this._appList}
+            .mac_address=${this._knobs[Object.keys(this._knobs)[0]].mac_address}
           ></app-form>
         </div>
       </div>

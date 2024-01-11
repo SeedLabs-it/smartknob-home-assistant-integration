@@ -59,7 +59,10 @@ export const getAsyncKnobs = async (hass: HomeAssistant) => {
     'GET',
     'smartknob/knobs',
   );
-  if (res.success != 'success') console.log("ERROR: Couldn't get knobs");
+  console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+
+  console.log(res);
+  if (res.success != true) console.log("ERROR: Couldn't get knobs");
 
   return res;
 };

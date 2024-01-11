@@ -114,7 +114,7 @@ class SmartknobStorage:
         return res
 
     @callback
-    def async_init_knob(self, data: dict) -> SmartknobConfig:
+    async def async_init_knob(self, data: dict) -> SmartknobConfig:
         """Init new smartknob and add to registry."""
         new_knob = SmartknobConfig(**data)
         self.knobs[data["mac_address"]] = new_knob

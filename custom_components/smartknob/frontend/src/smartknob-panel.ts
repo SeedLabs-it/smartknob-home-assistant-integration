@@ -102,8 +102,6 @@ export class SmartknobPanel extends LitElement {
     )
       return html` loading... `;
 
-    this._knobs; //REMOVE
-
     const entities = [...Object.values(this.hass.states)];
 
     return html`<div>
@@ -136,6 +134,7 @@ export class SmartknobPanel extends LitElement {
             .entities=${entities}
             .appSlugs=${this._appSlugs}
             .apps=${this._appList}
+            .mac_address=${this._knobs[Object.keys(this._knobs)[0]].mac_address}
           ></app-form>
         </div>
       </div>

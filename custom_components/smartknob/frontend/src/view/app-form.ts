@@ -43,6 +43,7 @@ export class AppForm extends LitElement {
   @property({ type: Array }) entities!: HassEntity[];
   @property({ type: Array }) appSlugs!: AppSlug[];
   @property({ type: Array }) apps!: AppListItem[];
+  @property({ type: String }) mac_address!: String;
 
   @state() private _selectedSlug: AppSlug | null = null;
   @state() private _selectedEntity: HassEntity | null = null;

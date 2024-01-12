@@ -726,7 +726,7 @@
       entity_id: t.entity_id,
       friendly_name: t.friendly_name
     });
-    return console.log(s), console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"), t.callApi("POST", "smartknob/apps", {
+    return t.callApi("POST", "smartknob/apps", {
       apps: s
     });
   };
@@ -1077,7 +1077,7 @@
       var t, e;
       const s = (await (async t => {
           const e = await t.callApi("GET", "smartknob/knobs");
-          return console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"), console.log(e), 1 != e.success && console.log("ERROR: Couldn't get knobs"), e;
+          return 1 != e.success && console.log("ERROR: Couldn't get knobs"), e;
         })(this.hass)).knobs,
         i = (await (async t => {
           const e = await t.callApi("GET", "smartknob/app_slugs");

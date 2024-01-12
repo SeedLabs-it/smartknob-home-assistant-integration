@@ -43,7 +43,7 @@ export class AppForm extends LitElement {
   @property({ type: Array }) entities!: HassEntity[];
   @property({ type: Array }) appSlugs!: AppSlug[];
   @property({ type: Array }) apps!: AppListItem[];
-  @property({ type: String }) mac_address!: String;
+  @property({ type: String }) mac_address!: string;
 
   @state() private _selectedSlug: AppSlug | null = null;
   @state() private _selectedEntity: HassEntity | null = null;
@@ -157,7 +157,7 @@ export class AppForm extends LitElement {
       this.apps.push(appListItem);
     this.apps = [...this.apps]; //TODO VALIDATE DATA _entity could be null for example
 
-    asyncSaveApp(this.hass, '1C:9D:C2:FD:ED:50', appListItem.app); //SAVE TO STORAGE --- FIX!!!!! HARDCODED MAC ADDRESS TO TEST FOR NOW
+    asyncSaveApp(this.hass, this.mac_address, appListItem.app); //SAVE TO STORAGE --- FIX!!!!! HARDCODED MAC ADDRESS TO TEST FOR NOW
 
     this.requestUpdate();
   };

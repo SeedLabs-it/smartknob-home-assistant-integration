@@ -60,7 +60,7 @@ export class SmartknobPanel extends LitElement {
     for (const knob in loadedKnobs) {
       for (const app of loadedKnobs[knob].apps) {
         const _appSlug =
-          loadedAppSlugs.find((a) => a.slug_id == app.app_slug_id) ??
+          loadedAppSlugs.find((a) => a.slug == app.app_slug) ??
           loadedAppSlugs[0];
 
         const _entity =
@@ -71,7 +71,7 @@ export class SmartknobPanel extends LitElement {
         __appList.push({
           app: {
             app_id: app.app_id,
-            app_slug_id: app.app_slug_id,
+            app_slug: app.app_slug,
             entity_id: app.entity_id,
             friendly_name: app.friendly_name,
           },

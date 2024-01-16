@@ -4,19 +4,26 @@ export const getAsyncApps = (hass: HomeAssistant) => {
   return hass.callApi<{ success; apps: App[] }>('GET', 'smartknob/apps');
 };
 
+export const asyncSyncToKnob = async (
+  hass: HomeAssistant,
+  mac_address: string,
+) => {
+  return await hass.callApi('POST', 'smartknob/knob/sync', {
+    mac_address,
+  });
+};
+
 export const asyncSaveApp = async (
   hass: HomeAssistant,
   mac_address: string,
   app: App,
 ) => {
-  console.log('HMMMM');
-
   return await hass.callApi('POST', 'smartknob/apps', {
     mac_address,
     apps: [
       {
         app_id: app.app_id,
-        app_slug_id: app.app_slug_id,
+        app_slug: app.app_slug,
         entity_id: app.entity_id,
         friendly_name: app.friendly_name,
       },
@@ -29,7 +36,7 @@ export const saveApps = (hass: HomeAssistant, apps: App[]) => {
   for (const app of apps) {
     _apps.push({
       app_id: app.app_id,
-      app_slug_id: app.app_slug_id,
+      app_slug: app.app_slug,
       entity_id: app.entity_id,
       friendly_name: app.friendly_name,
     });

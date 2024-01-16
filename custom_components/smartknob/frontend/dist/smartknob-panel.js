@@ -307,27 +307,27 @@
     E = `lit$${(Math.random() + "").slice(9)}$`,
     w = "?" + E,
     H = `<${w}>`,
-    x = document,
-    k = () => x.createComment(""),
+    k = document,
+    x = () => k.createComment(""),
     C = t => null === t || "object" != typeof t && "function" != typeof t,
     P = Array.isArray,
     V = "[ \t\n\f\r]",
-    U = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g,
-    M = /-->/g,
-    O = />/g,
+    O = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g,
+    U = /-->/g,
+    M = />/g,
     T = RegExp(`>|${V}(?:([^\\s"'>=/]+)(${V}*=${V}*(?:[^ \t\n\f\r"'\`<>=]|("|')|))|$)`, "g"),
     L = /'/g,
     R = /"/g,
     N = /^(?:script|style|textarea|title)$/i,
-    D = (t => (e, ...s) => ({
+    j = (t => (e, ...s) => ({
       _$litType$: t,
       strings: e,
       values: s
     }))(1),
-    j = Symbol.for("lit-noChange"),
+    D = Symbol.for("lit-noChange"),
     I = Symbol.for("lit-nothing"),
     B = new WeakMap(),
-    q = x.createTreeWalker(x, 129, null, !1);
+    q = k.createTreeWalker(k, 129, null, !1);
   function z(t, e) {
     if (!Array.isArray(t) || !t.hasOwnProperty("raw")) throw Error("invalid template strings array");
     return void 0 !== S ? S.createHTML(e) : e;
@@ -337,16 +337,16 @@
       i = [];
     let n,
       r = 2 === e ? "<svg>" : "",
-      o = U;
+      o = O;
     for (let e = 0; e < s; e++) {
       const s = t[e];
       let a,
         l,
         d = -1,
         p = 0;
-      for (; p < s.length && (o.lastIndex = p, l = o.exec(s), null !== l);) p = o.lastIndex, o === U ? "!--" === l[1] ? o = M : void 0 !== l[1] ? o = O : void 0 !== l[2] ? (N.test(l[2]) && (n = RegExp("</" + l[2], "g")), o = T) : void 0 !== l[3] && (o = T) : o === T ? ">" === l[0] ? (o = null != n ? n : U, d = -1) : void 0 === l[1] ? d = -2 : (d = o.lastIndex - l[2].length, a = l[1], o = void 0 === l[3] ? T : '"' === l[3] ? R : L) : o === R || o === L ? o = T : o === M || o === O ? o = U : (o = T, n = void 0);
+      for (; p < s.length && (o.lastIndex = p, l = o.exec(s), null !== l);) p = o.lastIndex, o === O ? "!--" === l[1] ? o = U : void 0 !== l[1] ? o = M : void 0 !== l[2] ? (N.test(l[2]) && (n = RegExp("</" + l[2], "g")), o = T) : void 0 !== l[3] && (o = T) : o === T ? ">" === l[0] ? (o = null != n ? n : O, d = -1) : void 0 === l[1] ? d = -2 : (d = o.lastIndex - l[2].length, a = l[1], o = void 0 === l[3] ? T : '"' === l[3] ? R : L) : o === R || o === L ? o = T : o === U || o === M ? o = O : (o = T, n = void 0);
       const h = o === T && t[e + 1].startsWith("/>") ? " " : "";
-      r += o === U ? s + H : d >= 0 ? (i.push(a), s.slice(0, d) + "$lit$" + s.slice(d) + E + h) : s + E + (-2 === d ? (i.push(void 0), e) : h);
+      r += o === O ? s + H : d >= 0 ? (i.push(a), s.slice(0, d) + "$lit$" + s.slice(d) + E + h) : s + E + (-2 === d ? (i.push(void 0), e) : h);
     }
     return [z(t, r + (t[s] || "<?>") + (2 === e ? "</svg>" : "")), i];
   };
@@ -395,11 +395,11 @@
               e = t.length - 1;
             if (e > 0) {
               i.textContent = A ? A.emptyScript : "";
-              for (let s = 0; s < e; s++) i.append(t[s], k()), q.nextNode(), a.push({
+              for (let s = 0; s < e; s++) i.append(t[s], x()), q.nextNode(), a.push({
                 type: 2,
                 index: ++n
               });
-              i.append(t[e], k());
+              i.append(t[e], x());
             }
           }
         } else if (8 === i.nodeType) if (i.data === w) a.push({
@@ -416,13 +416,13 @@
       }
     }
     static createElement(t, e) {
-      const s = x.createElement("template");
+      const s = k.createElement("template");
       return s.innerHTML = t, s;
     }
   }
   function K(t, e, s = t, i) {
     var n, r, o, a;
-    if (e === j) return e;
+    if (e === D) return e;
     let l = void 0 !== i ? null === (n = s._$Co) || void 0 === n ? void 0 : n[i] : s._$Cl;
     const d = C(e) ? void 0 : e._$litDirective$;
     return (null == l ? void 0 : l.constructor) !== d && (null === (r = null == l ? void 0 : l._$AO) || void 0 === r || r.call(l, !1), void 0 === d ? l = void 0 : (l = new d(t), l._$AT(t, s, i)), void 0 !== i ? (null !== (o = (a = s)._$Co) && void 0 !== o ? o : a._$Co = [])[i] = l : s._$Cl = l), void 0 !== l && (e = K(t, l._$AS(t, e.values), l, i)), e;
@@ -445,7 +445,7 @@
           },
           parts: i
         } = this._$AD,
-        n = (null !== (e = null == t ? void 0 : t.creationScope) && void 0 !== e ? e : x).importNode(s, !0);
+        n = (null !== (e = null == t ? void 0 : t.creationScope) && void 0 !== e ? e : k).importNode(s, !0);
       q.currentNode = n;
       let r = q.nextNode(),
         o = 0,
@@ -458,7 +458,7 @@
         }
         o !== (null == l ? void 0 : l.index) && (r = q.nextNode(), o++);
       }
-      return q.currentNode = x, n;
+      return q.currentNode = k, n;
     }
     v(t) {
       let e = 0;
@@ -486,7 +486,7 @@
       return this._$AB;
     }
     _$AI(t, e = this) {
-      t = K(this, t, e), C(t) ? t === I || null == t || "" === t ? (this._$AH !== I && this._$AR(), this._$AH = I) : t !== this._$AH && t !== j && this._(t) : void 0 !== t._$litType$ ? this.g(t) : void 0 !== t.nodeType ? this.$(t) : (t => P(t) || "function" == typeof (null == t ? void 0 : t[Symbol.iterator]))(t) ? this.T(t) : this._(t);
+      t = K(this, t, e), C(t) ? t === I || null == t || "" === t ? (this._$AH !== I && this._$AR(), this._$AH = I) : t !== this._$AH && t !== D && this._(t) : void 0 !== t._$litType$ ? this.g(t) : void 0 !== t.nodeType ? this.$(t) : (t => P(t) || "function" == typeof (null == t ? void 0 : t[Symbol.iterator]))(t) ? this.T(t) : this._(t);
     }
     k(t) {
       return this._$AA.parentNode.insertBefore(t, this._$AB);
@@ -495,7 +495,7 @@
       this._$AH !== t && (this._$AR(), this._$AH = this.k(t));
     }
     _(t) {
-      this._$AH !== I && C(this._$AH) ? this._$AA.nextSibling.data = t : this.$(x.createTextNode(t)), this._$AH = t;
+      this._$AH !== I && C(this._$AH) ? this._$AA.nextSibling.data = t : this.$(k.createTextNode(t)), this._$AH = t;
     }
     g(t) {
       var e;
@@ -519,7 +519,7 @@
       const e = this._$AH;
       let s,
         i = 0;
-      for (const n of t) i === e.length ? e.push(s = new J(this.k(k()), this.k(k()), this, this.options)) : s = e[i], s._$AI(n), i++;
+      for (const n of t) i === e.length ? e.push(s = new J(this.k(x()), this.k(x()), this, this.options)) : s = e[i], s._$AI(n), i++;
       i < e.length && (this._$AR(s && s._$AB.nextSibling, i), e.length = i);
     }
     _$AR(t = this._$AA.nextSibling, e) {
@@ -547,10 +547,10 @@
     _$AI(t, e = this, s, i) {
       const n = this.strings;
       let r = !1;
-      if (void 0 === n) t = K(this, t, e, 0), r = !C(t) || t !== this._$AH && t !== j, r && (this._$AH = t);else {
+      if (void 0 === n) t = K(this, t, e, 0), r = !C(t) || t !== this._$AH && t !== D, r && (this._$AH = t);else {
         const i = t;
         let o, a;
-        for (t = n[0], o = 0; o < n.length - 1; o++) a = K(this, i[s + o], e, o), a === j && (a = this._$AH[o]), r || (r = !C(a) || a !== this._$AH[o]), a === I ? t = I : t !== I && (t += (null != a ? a : "") + n[o + 1]), this._$AH[o] = a;
+        for (t = n[0], o = 0; o < n.length - 1; o++) a = K(this, i[s + o], e, o), a === D && (a = this._$AH[o]), r || (r = !C(a) || a !== this._$AH[o]), a === I ? t = I : t !== I && (t += (null != a ? a : "") + n[o + 1]), this._$AH[o] = a;
       }
       r && !i && this.j(t);
     }
@@ -581,7 +581,7 @@
     }
     _$AI(t, e = this) {
       var s;
-      if ((t = null !== (s = K(this, t, e, 0)) && void 0 !== s ? s : I) === j) return;
+      if ((t = null !== (s = K(this, t, e, 0)) && void 0 !== s ? s : I) === D) return;
       const i = this._$AH,
         n = t === I && i !== I || t.capture !== i.capture || t.once !== i.once || t.passive !== i.passive,
         r = t !== I && (i === I || n);
@@ -630,7 +630,7 @@
         let o = r._$litPart$;
         if (void 0 === o) {
           const t = null !== (n = null == s ? void 0 : s.renderBefore) && void 0 !== n ? n : null;
-          r._$litPart$ = o = new J(e.insertBefore(k(), t), t, void 0, null != s ? s : {});
+          r._$litPart$ = o = new J(e.insertBefore(x(), t), t, void 0, null != s ? s : {});
         }
         return o._$AI(t), o;
       })(e, this.renderRoot, this.renderOptions);
@@ -644,7 +644,7 @@
       super.disconnectedCallback(), null === (t = this._$Do) || void 0 === t || t.setConnected(!1);
     }
     render() {
-      return j;
+      return D;
     }
   }
   rt.finalized = !0, rt._$litElement$ = !0, null === (it = globalThis.litElementHydrateSupport) || void 0 === it || it.call(globalThis, {
@@ -722,7 +722,7 @@
     const s = [];
     for (const t of e) s.push({
       app_id: t.app_id,
-      app_slug_id: t.app_slug_id,
+      app_slug: t.app_slug,
       entity_id: t.entity_id,
       friendly_name: t.friendly_name
     });
@@ -745,10 +745,10 @@
           }))
         }
       };
-      return D`
+      return j`
       ${this.apps.map((e, s) => {
         var i;
-        return D`<sk-reorderable-list-item
+        return j`<sk-reorderable-list-item
             .app_id=${e.app.app_id}
             .isDraggable=${this.sortable}
             @drop="${this.drop}"
@@ -841,7 +841,7 @@
       super.connectedCallback(), this.addEventListener("dragstart", this.dragStart), this.addEventListener("dragenter", this.dragEnter), this.addEventListener("dragover", this.dragOver), this.addEventListener("dragleave", this.dragLeave), this.addEventListener("dragend", this.dragEnd);
     }
     render() {
-      return this.isDraggable ? this.setAttribute("draggable", "true") : this.removeAttribute("draggable"), this.setAttribute("draggable-id", this.app_id), D`
+      return this.isDraggable ? this.setAttribute("draggable", "true") : this.removeAttribute("draggable"), this.setAttribute("draggable-id", this.app_id), j`
       <slot></slot>
       <div class="actions">
         <ha-svg-icon
@@ -927,25 +927,25 @@
         if (t.preventDefault(), !this._selectedSlug || !this._selectedEntity) return;
         const s = {
           app: {
-            app_id: `${this._selectedSlug.slug_id}-${this._selectedEntity.entity_id}`,
-            app_slug_id: this._selectedSlug.slug_id,
+            app_id: `${this._selectedSlug.slug}-${this._selectedEntity.entity_id}`,
+            app_slug: this._selectedSlug.slug,
             entity_id: this._selectedEntity.entity_id,
             friendly_name: null !== (e = this._selectedEntity.attributes.friendly_name) && void 0 !== e ? e : ""
           },
           app_slug: this._selectedSlug,
           entity: this._selectedEntity
         };
-        this.apps.find(t => t.app_slug == s.app_slug && t.entity == s.entity) || this.apps.push(s), this.apps = [...this.apps], (async (t, e, s) => {
-          console.log("HMMMM"), await t.callApi("POST", "smartknob/apps", {
+        this.apps.find(t => t.app_slug == s.app_slug && t.entity == s.entity) || this.apps.push(s), this.apps = [...this.apps], console.log(this._selectedSlug), (async (t, e, s) => {
+          console.log("HMMMM"), console.log(s), await t.callApi("POST", "smartknob/apps", {
             mac_address: e,
             apps: [{
               app_id: s.app_id,
-              app_slug_id: s.app_slug_id,
+              app_slug: s.app_slug,
               entity_id: s.entity_id,
               friendly_name: s.friendly_name
             }]
           });
-        })(this.hass, "1C:9D:C2:FD:ED:50", s.app), this.requestUpdate();
+        })(this.hass, this.mac_address, s.app), this.requestUpdate();
       };
     }
     connectedCallback() {
@@ -958,19 +958,30 @@
           custom_value: !1,
           mode: "dropdown",
           options: this.appSlugs.map(t => ({
-            value: t.slug_id,
+            value: t.slug,
             label: t.friendly_name
           }))
         }
       };
-      return D`
+      return j`
+      <button
+        @click=${() => {
+        (async (t, e) => {
+          await t.callApi("POST", "smartknob/knob/sync", {
+            mac_address: e
+          });
+        })(this.hass, this.mac_address);
+      }}
+      >
+        Sync to KNOB
+      </button>
       <form class="add-app" @submit=${this.handleSubmit}>
         <ha-selector
           .hass=${this.hass}
           .selector=${s}
           .required=${!0}
           .label=${"Select App"}
-          .value=${null === (t = this._selectedSlug) || void 0 === t ? void 0 : t.slug_id}
+          .value=${null === (t = this._selectedSlug) || void 0 === t ? void 0 : t.slug}
           @value-changed=${this.appSlugChanged}
         ></ha-selector>
         <ha-selector
@@ -979,7 +990,7 @@
         entity: {
           include_entities: this.entities.map(t => !t.entity_id.startsWith(this._domain) || this.apps.find(e => {
             var s;
-            return (null === (s = this._selectedSlug) || void 0 === s ? void 0 : s.slug_id) == e.app.app_slug_id && e.app.entity_id == t.entity_id;
+            return (null === (s = this._selectedSlug) || void 0 === s ? void 0 : s.slug) == e.app.app_slug && e.app.entity_id == t.entity_id;
           }) ? "" : t.entity_id)
         }
       }}
@@ -1011,9 +1022,9 @@
     `;
     }
     listApps() {
-      return D`${this.apps.map(t => {
-        const e = `${t.app_slug.slug_id}-${t.entity.entity_id}`;
-        return D`<li .id="${e}">
+      return j`${this.apps.map(t => {
+        const e = `${t.app_slug.slug}-${t.entity.entity_id}`;
+        return j`<li .id="${e}">
         ${t.app_slug.friendly_name} - ${t.entity.attributes.friendly_name}
       </li>`;
       })}`;
@@ -1021,7 +1032,7 @@
     appSlugChanged(t) {
       var e, s, i;
       //!https://github.com/home-assistant/frontend/blob/dev/src/common/dom/fire_event.ts#L60
-      this._selectedSlug = null !== (e = this.appSlugs.find(e => e.slug_id == t.detail.value)) && void 0 !== e ? e : null, this._domain = null !== (i = null === (s = this._selectedSlug) || void 0 === s ? void 0 : s.domain) && void 0 !== i ? i : "", this._selectedEntity = null, this.requestUpdate();
+      this._selectedSlug = null !== (e = this.appSlugs.find(e => e.slug == t.detail.value)) && void 0 !== e ? e : null, this._domain = null !== (i = null === (s = this._selectedSlug) || void 0 === s ? void 0 : s.domain) && void 0 !== i ? i : "", this._selectedEntity = null, this.requestUpdate();
     }
     entityChanged(t) {
       var e;
@@ -1085,12 +1096,12 @@
         })(this.hass)).app_slugs,
         n = [];
       for (const r in s) for (const o of s[r].apps) {
-        const s = null !== (t = i.find(t => t.slug_id == o.app_slug_id)) && void 0 !== t ? t : i[0],
+        const s = null !== (t = i.find(t => t.slug == o.app_slug)) && void 0 !== t ? t : i[0],
           r = null !== (e = [...Object.values(this.hass.states)].find(t => t.entity_id == o.entity_id)) && void 0 !== e ? e : null;
         n.push({
           app: {
             app_id: o.app_id,
-            app_slug_id: o.app_slug_id,
+            app_slug: o.app_slug,
             entity_id: o.entity_id,
             friendly_name: o.friendly_name
           },
@@ -1116,9 +1127,9 @@
       })(), this.requestUpdate();
     }
     render() {
-      if (!customElements.get("ha-panel-config") || !customElements.get("ha-menu-button")) return D` loading... `;
+      if (!customElements.get("ha-panel-config") || !customElements.get("ha-menu-button")) return j` loading... `;
       const t = [...Object.values(this.hass.states)];
-      return D`<div>
+      return j`<div>
       <div>
         <div class="header">
           <div class="toolbar">
@@ -1134,7 +1145,7 @@
             .selected=${this._currentTab.tabId}
             @iron-activate=${this.handleTabSelect}
           >
-            ${gt.map(t => D`<paper-tab tab-name=${t.tabId}
+            ${gt.map(t => j`<paper-tab tab-name=${t.tabId}
                   >${t.tabName}</paper-tab
                 >`)}
           </ha-tabs>

@@ -8,7 +8,7 @@ export declare class AppForm extends LitElement {
     entities: HassEntity[];
     appSlugs: AppSlug[];
     apps: AppListItem[];
-    mac_address: String;
+    mac_address: string;
     private _selectedSlug;
     private _selectedEntity;
     private _domain;

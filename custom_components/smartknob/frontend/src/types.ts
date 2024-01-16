@@ -17,7 +17,7 @@ declare global {
 
 //MY CUSTOM TYPES
 export interface AppSlug {
-  slug_id: string;
+  slug: string;
   friendly_name: string;
   domain: string;
   supported_features: string;
@@ -25,7 +25,7 @@ export interface AppSlug {
 
 export interface App {
   app_id: string;
-  app_slug_id: string;
+  app_slug: string;
   entity_id: string;
   friendly_name: string;
 }

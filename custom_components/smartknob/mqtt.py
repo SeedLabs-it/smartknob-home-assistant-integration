@@ -108,30 +108,52 @@ class MqttHandler:
             payload = json.loads(msg.payload)
             _LOGGER.debug("PAYLOAD")
             _LOGGER.debug(msg.payload)
-            if "mac_address" in payload:
-                mac_address = payload["mac_address"]
-                app_id = payload["app_id"]
-                state = payload["state"]
-                coordinator = self.hass.data[DOMAIN]["coordinator"]
+            _LOGGER.error(msg.payload)
 
-                # knob = coordinator.store.async_get_knob(mac_address)
-                app = await coordinator.store.async_get_app(mac_address, app_id)
-                if app is not None:
-                    if app["app_slug_id"] == "light_switch":
-                        await self.services.async_set_light(
-                            app["entity_id"],
-                            LightState(state),
-                        )
-                    elif app["app_slug_id"] == "switch":
-                        await self.services.async_toggle_switch(
-                            app["entity_id"], SwitchState(state)
-                        )
-                    else:
-                        _LOGGER.error("Not implemented command")
-                    # knob.async_update(msg.payload)
-                    _LOGGER.debug("KNOB GOT")
-                    _LOGGER.debug(app)
+            mac_address = msg.topic.split("/")[1]  # UGLY BAD WAY
+            app_id = payload["app_id"]
+            state = payload["state"]
+            coordinator = self.hass.data[DOMAIN]["coordinator"]
+
+            # knob = coordinator.store.async_get_knob(mac_address)
+            app = await coordinator.store.async_get_app(mac_address, app_id)
+            if app is not None:
+                if app["app_slug"] == "light_dimmer":
+                    await self.services.async_set_light(
+                        app["entity_id"],
+                        LightState(state),
+                    )
+                elif app["app_slug"] == "switch" or app["app_slug"] == "light_switch":
+                    await self.services.async_toggle_switch(
+                        app["entity_id"], SwitchState(state)
+                    )
+                else:
+                    _LOGGER.error("Not implemented command")
+                # knob.async_update(msg.payload)
+                _LOGGER.debug("KNOB GOT")
+                _LOGGER.debug(app)
 
         except ValueError:
             _LOGGER.error("Error decoding JSON payload")
             return
+
+    @callback
+    async def async_sync_knob(self, mac_address):
+        """Sync a knob."""
+        _LOGGER.debug("SYNCING KNOB")
+        _LOGGER.debug(mac_address)
+        coordinator = self.hass.data[DOMAIN]["coordinator"]
+        knob = coordinator.store.async_get_knob(mac_address)
+        _LOGGER.debug(knob)
+        if knob is not None:
+            _LOGGER.debug("KNOB FOUND")
+            await mqtt.async_publish(
+                self.hass,
+                "smartknob/" + knob["mac_address"] + "/from_hass",
+                json.dumps(
+                    {"type": "sync", "apps": knob["apps"]}
+                ),  # app_id[0] is for testing now TODO NEEDS NEW IMPLEMENTATION
+                retain=False,
+            )
+        else:
+            _LOGGER.debug("KNOB NOT FOUND")

@@ -22,19 +22,19 @@ DOMAIN_SWITCH = "switch"
 
 APP_SLUGS = [
     {
-        "slug_id": LIGHT_SWITCH,
+        "slug": LIGHT_SWITCH,
         "friendly_name": "Light Switch",
         "domain": DOMAIN_LIGHT,
         "supported_features": 1,
     },
     {
-        "slug_id": LIGHT_DIMMER,
+        "slug": LIGHT_DIMMER,
         "friendly_name": "Light Dimmer",
         "domain": DOMAIN_LIGHT,
         "supported_features": 1,
     },
     {
-        "slug_id": SWITCH,
+        "slug": SWITCH,
         "friendly_name": "Switch",
         "domain": DOMAIN_SWITCH,
         "supported_features": 1,

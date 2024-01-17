@@ -40,16 +40,13 @@ class MqttHandler:
         """Handle entity state changes."""
         _LOGGER.debug("STATE CHANGE CALLBACK")
         _LOGGER.debug(knobs_needing_update)
-        for knob in knobs_needing_update:
-            new_bool_state = new_state.state == "on"
-            await mqtt.async_publish(
-                self.hass,
-                "smartknob/" + knob["mac_address"] + "/from_hass",
-                json.dumps(
-                    {"app_id": app_id[0], "new_state": new_bool_state}
-                ),  # app_id[0] is for testing now TODO NEEDS NEW IMPLEMENTATION
-                retain=True,
-            )
+        # for knob in knobs_needing_update:
+        #     new_bool_state = new_state.state == "on"
+        #     await mqtt.async_publish(
+        #         self.hass,
+        #         "smartknob/" + knob["mac_address"] + "/from_hass",
+        #         json.dumps({"app_id": app_id[0], "new_state": new_bool_state}),
+        #     )
 
     async def _async_subscribe_to_init(self):
         """Subscribe to init topic."""
@@ -150,10 +147,7 @@ class MqttHandler:
             await mqtt.async_publish(
                 self.hass,
                 "smartknob/" + knob["mac_address"] + "/from_hass",
-                json.dumps(
-                    {"type": "sync", "apps": knob["apps"]}
-                ),  # app_id[0] is for testing now TODO NEEDS NEW IMPLEMENTATION
-                retain=False,
+                json.dumps({"type": "sync", "apps": knob["apps"]}),
             )
         else:
             _LOGGER.debug("KNOB NOT FOUND")

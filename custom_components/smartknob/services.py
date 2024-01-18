@@ -70,11 +70,11 @@ class Services:
         """Switch the entity on or off."""
         if state.on:
             await self.hass.services.async_call(
-                "switch", "turn_on", {"entity_id": entity_id}
+                "light", "turn_on", {"entity_id": entity_id}
             )
         elif not state.on:
             await self.hass.services.async_call(
-                "switch", "turn_off", {"entity_id": entity_id}
+                "light", "turn_off", {"entity_id": entity_id}
             )
         else:
             _LOGGER.error("Not implemented")

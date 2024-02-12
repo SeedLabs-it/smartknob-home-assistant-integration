@@ -51,7 +51,7 @@ export class SkReorderableList extends LitElement {
   render() {
     const options: SelectOption[] = this.appSlugs.map((slug) => {
       return {
-        value: slug.slug_id,
+        value: slug.slug,
         label: slug.friendly_name,
       };
     });
@@ -72,6 +72,7 @@ export class SkReorderableList extends LitElement {
             @drop="${this.drop}"
             @delete="${() => {
               // TODO show confirmation dialog before deletion
+              console.log('delete');
               this.apps = this.apps.filter(
                 (app) => app.app.app_id !== item.app.app_id,
               );
@@ -89,7 +90,7 @@ export class SkReorderableList extends LitElement {
                 .selector=${selectSelector}
                 .required=${true}
                 .label=${'Select App'}
-                .value=${item.app_slug.slug_id}
+                .value=${item.app_slug.slug}
               ></ha-selector>
               <ha-selector
                 .hass=${this.hass}

@@ -306,16 +306,16 @@
     }) : void 0,
     E = `lit$${(Math.random() + "").slice(9)}$`,
     w = "?" + E,
-    H = `<${w}>`,
-    k = document,
-    x = () => k.createComment(""),
+    k = `<${w}>`,
+    x = document,
+    H = () => x.createComment(""),
     C = t => null === t || "object" != typeof t && "function" != typeof t,
     P = Array.isArray,
     V = "[ \t\n\f\r]",
     O = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g,
     U = /-->/g,
-    M = />/g,
-    T = RegExp(`>|${V}(?:([^\\s"'>=/]+)(${V}*=${V}*(?:[^ \t\n\f\r"'\`<>=]|("|')|))|$)`, "g"),
+    T = />/g,
+    M = RegExp(`>|${V}(?:([^\\s"'>=/]+)(${V}*=${V}*(?:[^ \t\n\f\r"'\`<>=]|("|')|))|$)`, "g"),
     L = /'/g,
     R = /"/g,
     N = /^(?:script|style|textarea|title)$/i,
@@ -327,7 +327,7 @@
     D = Symbol.for("lit-noChange"),
     I = Symbol.for("lit-nothing"),
     B = new WeakMap(),
-    q = k.createTreeWalker(k, 129, null, !1);
+    q = x.createTreeWalker(x, 129, null, !1);
   function z(t, e) {
     if (!Array.isArray(t) || !t.hasOwnProperty("raw")) throw Error("invalid template strings array");
     return void 0 !== S ? S.createHTML(e) : e;
@@ -344,9 +344,9 @@
         l,
         d = -1,
         p = 0;
-      for (; p < s.length && (o.lastIndex = p, l = o.exec(s), null !== l);) p = o.lastIndex, o === O ? "!--" === l[1] ? o = U : void 0 !== l[1] ? o = M : void 0 !== l[2] ? (N.test(l[2]) && (n = RegExp("</" + l[2], "g")), o = T) : void 0 !== l[3] && (o = T) : o === T ? ">" === l[0] ? (o = null != n ? n : O, d = -1) : void 0 === l[1] ? d = -2 : (d = o.lastIndex - l[2].length, a = l[1], o = void 0 === l[3] ? T : '"' === l[3] ? R : L) : o === R || o === L ? o = T : o === U || o === M ? o = O : (o = T, n = void 0);
-      const h = o === T && t[e + 1].startsWith("/>") ? " " : "";
-      r += o === O ? s + H : d >= 0 ? (i.push(a), s.slice(0, d) + "$lit$" + s.slice(d) + E + h) : s + E + (-2 === d ? (i.push(void 0), e) : h);
+      for (; p < s.length && (o.lastIndex = p, l = o.exec(s), null !== l);) p = o.lastIndex, o === O ? "!--" === l[1] ? o = U : void 0 !== l[1] ? o = T : void 0 !== l[2] ? (N.test(l[2]) && (n = RegExp("</" + l[2], "g")), o = M) : void 0 !== l[3] && (o = M) : o === M ? ">" === l[0] ? (o = null != n ? n : O, d = -1) : void 0 === l[1] ? d = -2 : (d = o.lastIndex - l[2].length, a = l[1], o = void 0 === l[3] ? M : '"' === l[3] ? R : L) : o === R || o === L ? o = M : o === U || o === T ? o = O : (o = M, n = void 0);
+      const h = o === M && t[e + 1].startsWith("/>") ? " " : "";
+      r += o === O ? s + k : d >= 0 ? (i.push(a), s.slice(0, d) + "$lit$" + s.slice(d) + E + h) : s + E + (-2 === d ? (i.push(void 0), e) : h);
     }
     return [z(t, r + (t[s] || "<?>") + (2 === e ? "</svg>" : "")), i];
   };
@@ -395,11 +395,11 @@
               e = t.length - 1;
             if (e > 0) {
               i.textContent = A ? A.emptyScript : "";
-              for (let s = 0; s < e; s++) i.append(t[s], x()), q.nextNode(), a.push({
+              for (let s = 0; s < e; s++) i.append(t[s], H()), q.nextNode(), a.push({
                 type: 2,
                 index: ++n
               });
-              i.append(t[e], x());
+              i.append(t[e], H());
             }
           }
         } else if (8 === i.nodeType) if (i.data === w) a.push({
@@ -416,7 +416,7 @@
       }
     }
     static createElement(t, e) {
-      const s = k.createElement("template");
+      const s = x.createElement("template");
       return s.innerHTML = t, s;
     }
   }
@@ -445,7 +445,7 @@
           },
           parts: i
         } = this._$AD,
-        n = (null !== (e = null == t ? void 0 : t.creationScope) && void 0 !== e ? e : k).importNode(s, !0);
+        n = (null !== (e = null == t ? void 0 : t.creationScope) && void 0 !== e ? e : x).importNode(s, !0);
       q.currentNode = n;
       let r = q.nextNode(),
         o = 0,
@@ -458,7 +458,7 @@
         }
         o !== (null == l ? void 0 : l.index) && (r = q.nextNode(), o++);
       }
-      return q.currentNode = k, n;
+      return q.currentNode = x, n;
     }
     v(t) {
       let e = 0;
@@ -495,7 +495,7 @@
       this._$AH !== t && (this._$AR(), this._$AH = this.k(t));
     }
     _(t) {
-      this._$AH !== I && C(this._$AH) ? this._$AA.nextSibling.data = t : this.$(k.createTextNode(t)), this._$AH = t;
+      this._$AH !== I && C(this._$AH) ? this._$AA.nextSibling.data = t : this.$(x.createTextNode(t)), this._$AH = t;
     }
     g(t) {
       var e;
@@ -519,7 +519,7 @@
       const e = this._$AH;
       let s,
         i = 0;
-      for (const n of t) i === e.length ? e.push(s = new J(this.k(x()), this.k(x()), this, this.options)) : s = e[i], s._$AI(n), i++;
+      for (const n of t) i === e.length ? e.push(s = new J(this.k(H()), this.k(H()), this, this.options)) : s = e[i], s._$AI(n), i++;
       i < e.length && (this._$AR(s && s._$AB.nextSibling, i), e.length = i);
     }
     _$AR(t = this._$AA.nextSibling, e) {
@@ -630,7 +630,7 @@
         let o = r._$litPart$;
         if (void 0 === o) {
           const t = null !== (n = null == s ? void 0 : s.renderBefore) && void 0 !== n ? n : null;
-          r._$litPart$ = o = new J(e.insertBefore(x(), t), t, void 0, null != s ? s : {});
+          r._$litPart$ = o = new J(e.insertBefore(H(), t), t, void 0, null != s ? s : {});
         }
         return o._$AI(t), o;
       })(e, this.renderRoot, this.renderOptions);
@@ -740,7 +740,7 @@
           custom_value: !1,
           mode: "dropdown",
           options: this.appSlugs.map(t => ({
-            value: t.slug_id,
+            value: t.slug,
             label: t.friendly_name
           }))
         }
@@ -753,7 +753,7 @@
             .isDraggable=${this.sortable}
             @drop="${this.drop}"
             @delete="${() => {
-          this.apps = this.apps.filter(t => t.app.app_id !== e.app.app_id), ct(this.hass, this.apps.map(t => t.app)), this.requestUpdate();
+          console.log("delete"), this.apps = this.apps.filter(t => t.app.app_id !== e.app.app_id), ct(this.hass, this.apps.map(t => t.app)), this.requestUpdate();
         }}"
           >
             <div class="list-item">
@@ -763,7 +763,7 @@
                 .selector=${t}
                 .required=${!0}
                 .label=${"Select App"}
-                .value=${e.app_slug.slug_id}
+                .value=${e.app_slug.slug}
               ></ha-selector>
               <ha-selector
                 .hass=${this.hass}
@@ -935,8 +935,8 @@
           app_slug: this._selectedSlug,
           entity: this._selectedEntity
         };
-        this.apps.find(t => t.app_slug == s.app_slug && t.entity == s.entity) || this.apps.push(s), this.apps = [...this.apps], console.log(this._selectedSlug), (async (t, e, s) => {
-          console.log("HMMMM"), console.log(s), await t.callApi("POST", "smartknob/apps", {
+        this.apps.find(t => t.app_slug == s.app_slug && t.entity == s.entity) || this.apps.push(s), this.apps = [...this.apps], (async (t, e, s) => {
+          await t.callApi("POST", "smartknob/apps", {
             mac_address: e,
             apps: [{
               app_id: s.app_id,

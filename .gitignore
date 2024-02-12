@@ -5,6 +5,7 @@
 /custom_components/smartknob/old_stuff_do_not_include/
 
 /custom_components/smartknob/frontend/.vscode/
+/custom_components/smartknob/frontend/dist/
 /custom_components/smartknob/frontend/dev/
 /custom_components/smartknob/frontend/node_modules/
 /custom_components/smartknob/frontend/yarn.lock

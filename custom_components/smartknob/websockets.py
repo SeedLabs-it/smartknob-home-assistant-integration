@@ -101,9 +101,36 @@ class SmartknobAppsView(HomeAssistantView):
             _LOGGER.debug(apps)
 
             if len(apps) > 1:
-                await coordinator.store.async_update_apps(apps)
-            await coordinator.store.async_add_app(
-                data.get("mac_address"), data.get("apps")[0]
-            )
+                await coordinator.store.async_update_apps(
+                    data.get("mac_address"), apps
+                )  # ADD ADD APPS FUNCTION!!!
+
+            await coordinator.store.async_add_app(data.get("mac_address"), apps[0])
+
+        return self.json({"success": True})  # TODO return actual success or error
+
+    @RequestDataValidator(
+        vol.Schema(
+            {
+                vol.Required("mac_address"): str,
+                vol.Required("apps"): [
+                    {
+                        vol.Required("app_id"): str,
+                        vol.Required("app_slug"): str,
+                        vol.Required("entity_id"): str,
+                        vol.Required("friendly_name"): str,
+                    }
+                ],
+            }
+        )
+    )
+    async def put(self, request, data: dict):
+        """Update config for app."""
+        hass: HomeAssistant = request.app["hass"]
+        coordinator = hass.data[DOMAIN]["coordinator"]
+        if "mac_address" and "apps" in data:
+            apps = data.get("apps")
+
+            await coordinator.store.async_update_apps(data.get("mac_address"), apps)
 
         return self.json({"success": True})  # TODO return actual success or error

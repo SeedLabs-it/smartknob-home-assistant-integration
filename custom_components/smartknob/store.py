@@ -2,6 +2,7 @@
 
 from collections import OrderedDict
 from collections.abc import MutableMapping
+from math import log
 from typing import cast
 
 import attr
@@ -24,7 +25,7 @@ class AppEntry:
     friendly_name = attr.ib(type=str, default=None)
 
 
-@attr.s(slots=True, frozen=True)
+@attr.s(slots=True, frozen=False)
 class SmartknobConfig:
     """Smartknob device configuration, storage entry."""
 
@@ -131,6 +132,20 @@ class SmartknobStorage:
         self.knobs[mac_address].apps.append(new_app)  #! GOOD WAY TO DO THIS?
         self.async_schedule_save()
         return attr.asdict(new_app)
+
+    @callback
+    def async_update_apps(self, mac_address, new_apps):
+        """Update existing config."""
+        new = []
+
+        for app in new_apps:
+            new_app = AppEntry(**app)
+            new.append(new_app)
+
+        self.knobs[mac_address].apps = new
+        self.async_schedule_save()
+
+        return attr.asdict(self.knobs)  #! MIGHT BE INCORRECT
 
     @callback
     async def async_get_app(self, mac_address, app_id: str) -> AppEntry:

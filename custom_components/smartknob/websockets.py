@@ -16,6 +16,7 @@ async def async_register_websockets(hass: HomeAssistant):
     hass.http.register_view(SmartknobAppSlugsView)
     hass.http.register_view(SmartknobKnobsView)
     hass.http.register_view(SmartknobAppsView)
+    hass.http.register_view(SmartknobKnobSyncView)
 
 
 class SmartknobAppSlugsView(HomeAssistantView):
@@ -48,6 +49,27 @@ class SmartknobKnobsView(HomeAssistantView):
         )  # TODO return actual success or error
 
 
+class SmartknobKnobSyncView(HomeAssistantView):
+    """View to handle Smartknob config requests."""
+
+    url = "/api/smartknob/knob/sync"
+    name = "api:smartknob:knob:sync"
+
+    @RequestDataValidator(
+        vol.Schema(
+            {
+                vol.Required("mac_address"): str,
+            }
+        )
+    )
+    async def post(self, request, data: dict):
+        """Update config for app."""
+        hass: HomeAssistant = request.app["hass"]
+        mqtt = hass.data[DOMAIN]["mqtt_handler"]
+        if "mac_address" in data:
+            await mqtt.async_sync_knob(data.get("mac_address"))
+
+
 class SmartknobAppsView(HomeAssistantView):
     """View to handle Smartknob config requests."""
 
@@ -61,7 +83,7 @@ class SmartknobAppsView(HomeAssistantView):
                 vol.Required("apps"): [
                     {
                         vol.Required("app_id"): str,
-                        vol.Required("app_slug_id"): str,
+                        vol.Required("app_slug"): str,
                         vol.Required("entity_id"): str,
                         vol.Required("friendly_name"): str,
                     }

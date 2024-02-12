@@ -19,7 +19,7 @@ class AppEntry:
     """App storage entry."""
 
     app_id = attr.ib(type=str, default=None)
-    app_slug_id = attr.ib(type=str, default=None)
+    app_slug = attr.ib(type=str, default=None)
     entity_id = attr.ib(type=str, default=None)
     friendly_name = attr.ib(type=str, default=None)
 
@@ -57,7 +57,7 @@ class SmartknobStorage:
                 apps = [
                     AppEntry(
                         app_id=app["app_id"],
-                        app_slug_id=app["app_slug_id"],
+                        app_slug=app["app_slug"],
                         entity_id=app["entity_id"],
                         friendly_name=app["friendly_name"],
                     )

@@ -10,7 +10,7 @@ import {
 import { HassEntity } from 'home-assistant-js-websocket';
 import '../components/SkReorderableList';
 import { mdiPlus, mdiSort } from '@mdi/js';
-import { asyncSaveApp } from '../data/websockets';
+import { asyncSaveApp, asyncSyncToKnob } from '../data/websockets';
 // import { selectSelector } from '../const';
 
 @customElement('app-form')
@@ -59,7 +59,7 @@ export class AppForm extends LitElement {
   render() {
     const options: SelectOption[] = this.appSlugs.map((slug) => {
       return {
-        value: slug.slug_id,
+        value: slug.slug,
         label: slug.friendly_name,
       };
     });
@@ -73,13 +73,20 @@ export class AppForm extends LitElement {
     };
 
     return html`
+      <button
+        @click=${() => {
+          asyncSyncToKnob(this.hass, this.mac_address);
+        }}
+      >
+        Sync to KNOB
+      </button>
       <form class="add-app" @submit=${this.handleSubmit}>
         <ha-selector
           .hass=${this.hass}
           .selector=${selectSelector}
           .required=${true}
           .label=${'Select App'}
-          .value=${this._selectedSlug?.slug_id}
+          .value=${this._selectedSlug?.slug}
           @value-changed=${this.appSlugChanged}
         ></ha-selector>
         <ha-selector
@@ -91,7 +98,7 @@ export class AppForm extends LitElement {
                   !entity.entity_id.startsWith(this._domain) ||
                   this.apps.find((app) => {
                     if (
-                      this._selectedSlug?.slug_id == app.app.app_slug_id &&
+                      this._selectedSlug?.slug == app.app.app_slug &&
                       app.app.entity_id == entity.entity_id
                     )
                       return true;
@@ -139,8 +146,8 @@ export class AppForm extends LitElement {
 
     const appListItem: AppListItem = {
       app: {
-        app_id: `${this._selectedSlug.slug_id}-${this._selectedEntity.entity_id}`,
-        app_slug_id: this._selectedSlug.slug_id,
+        app_id: `${this._selectedSlug.slug}-${this._selectedEntity.entity_id}`,
+        app_slug: this._selectedSlug.slug,
         entity_id: this._selectedEntity.entity_id,
         friendly_name: this._selectedEntity.attributes.friendly_name ?? '', //TODO what to add if no frindly name? entity id?
       },
@@ -164,7 +171,7 @@ export class AppForm extends LitElement {
 
   listApps() {
     return html`${this.apps.map((app) => {
-      const id = `${app.app_slug.slug_id}-${app.entity!.entity_id}`;
+      const id = `${app.app_slug.slug}-${app.entity!.entity_id}`;
       return html`<li .id="${id}">
         ${app.app_slug.friendly_name} - ${app.entity!.attributes.friendly_name}
       </li>`;
@@ -175,7 +182,7 @@ export class AppForm extends LitElement {
     //TODO CREATE TYPE MATCHING EVENT LOOK AT COMMENTED TYPE UP TOP ETC https://github.com/home-assistant/frontend/blob/dev/src/common/dom/fire_event.ts#L60
     //!https://github.com/home-assistant/frontend/blob/dev/src/common/dom/fire_event.ts#L60
     this._selectedSlug =
-      this.appSlugs.find((app) => app.slug_id == e.detail.value) ?? null;
+      this.appSlugs.find((app) => app.slug == e.detail.value) ?? null;
     this._domain = this._selectedSlug?.domain ?? '';
     this._selectedEntity = null;
     this.requestUpdate();

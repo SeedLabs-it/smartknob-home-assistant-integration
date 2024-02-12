@@ -3,6 +3,7 @@ export declare const getAsyncApps: (hass: HomeAssistant) => Promise<{
     success: any;
     apps: App[];
 }>;
+export declare const asyncSyncToKnob: (hass: HomeAssistant, mac_address: string) => Promise<unknown>;
 export declare const asyncSaveApp: (hass: HomeAssistant, mac_address: string, app: App) => Promise<unknown>;
 export declare const saveApps: (hass: HomeAssistant, apps: App[]) => Promise<unknown>;
 export declare const getAsyncAppSlugs: (hass: HomeAssistant) => Promise<{

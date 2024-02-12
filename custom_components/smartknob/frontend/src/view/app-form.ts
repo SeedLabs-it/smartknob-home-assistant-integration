@@ -136,6 +136,7 @@ export class AppForm extends LitElement {
         .apps="${this.apps}"
         .sortable=${this._sortable}
         .entities=${this.entities}
+        .mac_address=${this.mac_address}
       ></sk-reorderable-list>
     `;
   }

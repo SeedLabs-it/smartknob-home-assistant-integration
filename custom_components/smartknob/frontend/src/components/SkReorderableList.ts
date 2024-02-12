@@ -8,7 +8,7 @@ import {
   SelectOption,
   SelectSelector,
 } from '../types';
-import { saveApps } from '../data/websockets';
+import { asyncSaveApps } from '../data/websockets';
 import { HassEntity } from 'home-assistant-js-websocket';
 
 @customElement('sk-reorderable-list')
@@ -47,6 +47,7 @@ export class SkReorderableList extends LitElement {
   @property({ type: Array }) public entities!: HassEntity[];
   @property({ type: Array }) apps: AppListItem[] = [];
   @property({ type: Boolean }) sortable: boolean = false;
+  @property({ type: String }) mac_address!: string;
 
   render() {
     const options: SelectOption[] = this.appSlugs.map((slug) => {
@@ -72,12 +73,12 @@ export class SkReorderableList extends LitElement {
             @drop="${this.drop}"
             @delete="${() => {
               // TODO show confirmation dialog before deletion
-              console.log('delete');
               this.apps = this.apps.filter(
                 (app) => app.app.app_id !== item.app.app_id,
               );
-              saveApps(
+              asyncSaveApps(
                 this.hass,
+                this.mac_address,
                 this.apps.map((item) => item.app),
               );
               this.requestUpdate();
@@ -121,8 +122,9 @@ export class SkReorderableList extends LitElement {
 
     this.apps = this.reorderItems(this.apps, draggableId, dropId);
 
-    saveApps(
+    asyncSaveApps(
       this.hass,
+      this.mac_address,
       this.apps.map((item) => item.app),
     );
     this.requestUpdate();

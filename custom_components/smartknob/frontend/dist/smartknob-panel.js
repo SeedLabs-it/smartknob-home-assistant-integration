@@ -311,11 +311,11 @@
     H = () => x.createComment(""),
     C = t => null === t || "object" != typeof t && "function" != typeof t,
     P = Array.isArray,
-    V = "[ \t\n\f\r]",
-    O = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g,
-    U = /-->/g,
+    U = "[ \t\n\f\r]",
+    V = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g,
+    O = /-->/g,
     T = />/g,
-    M = RegExp(`>|${V}(?:([^\\s"'>=/]+)(${V}*=${V}*(?:[^ \t\n\f\r"'\`<>=]|("|')|))|$)`, "g"),
+    M = RegExp(`>|${U}(?:([^\\s"'>=/]+)(${U}*=${U}*(?:[^ \t\n\f\r"'\`<>=]|("|')|))|$)`, "g"),
     L = /'/g,
     R = /"/g,
     N = /^(?:script|style|textarea|title)$/i,
@@ -337,16 +337,16 @@
       i = [];
     let n,
       r = 2 === e ? "<svg>" : "",
-      o = O;
+      o = V;
     for (let e = 0; e < s; e++) {
       const s = t[e];
       let a,
         l,
         d = -1,
         p = 0;
-      for (; p < s.length && (o.lastIndex = p, l = o.exec(s), null !== l);) p = o.lastIndex, o === O ? "!--" === l[1] ? o = U : void 0 !== l[1] ? o = T : void 0 !== l[2] ? (N.test(l[2]) && (n = RegExp("</" + l[2], "g")), o = M) : void 0 !== l[3] && (o = M) : o === M ? ">" === l[0] ? (o = null != n ? n : O, d = -1) : void 0 === l[1] ? d = -2 : (d = o.lastIndex - l[2].length, a = l[1], o = void 0 === l[3] ? M : '"' === l[3] ? R : L) : o === R || o === L ? o = M : o === U || o === T ? o = O : (o = M, n = void 0);
+      for (; p < s.length && (o.lastIndex = p, l = o.exec(s), null !== l);) p = o.lastIndex, o === V ? "!--" === l[1] ? o = O : void 0 !== l[1] ? o = T : void 0 !== l[2] ? (N.test(l[2]) && (n = RegExp("</" + l[2], "g")), o = M) : void 0 !== l[3] && (o = M) : o === M ? ">" === l[0] ? (o = null != n ? n : V, d = -1) : void 0 === l[1] ? d = -2 : (d = o.lastIndex - l[2].length, a = l[1], o = void 0 === l[3] ? M : '"' === l[3] ? R : L) : o === R || o === L ? o = M : o === O || o === T ? o = V : (o = M, n = void 0);
       const h = o === M && t[e + 1].startsWith("/>") ? " " : "";
-      r += o === O ? s + k : d >= 0 ? (i.push(a), s.slice(0, d) + "$lit$" + s.slice(d) + E + h) : s + E + (-2 === d ? (i.push(void 0), e) : h);
+      r += o === V ? s + k : d >= 0 ? (i.push(a), s.slice(0, d) + "$lit$" + s.slice(d) + E + h) : s + E + (-2 === d ? (i.push(void 0), e) : h);
     }
     return [z(t, r + (t[s] || "<?>") + (2 === e ? "</svg>" : "")), i];
   };
@@ -718,16 +718,17 @@
        */
   var ht;
   null === (ht = window.HTMLSlotElement) || void 0 === ht || ht.prototype.assignedElements;
-  const ct = (t, e) => {
-    const s = [];
-    for (const t of e) s.push({
+  const ct = async (t, e, s) => {
+    const i = [];
+    for (const t of s) i.push({
       app_id: t.app_id,
       app_slug: t.app_slug,
       entity_id: t.entity_id,
       friendly_name: t.friendly_name
     });
-    return t.callApi("POST", "smartknob/apps", {
-      apps: s
+    return await t.callApi("PUT", "smartknob/apps", {
+      mac_address: e,
+      apps: i
     });
   };
   let ut = class extends rt {
@@ -753,7 +754,7 @@
             .isDraggable=${this.sortable}
             @drop="${this.drop}"
             @delete="${() => {
-          console.log("delete"), this.apps = this.apps.filter(t => t.app.app_id !== e.app.app_id), ct(this.hass, this.apps.map(t => t.app)), this.requestUpdate();
+          this.apps = this.apps.filter(t => t.app.app_id !== e.app.app_id), ct(this.hass, this.mac_address, this.apps.map(t => t.app)), this.requestUpdate();
         }}"
           >
             <div class="list-item">
@@ -786,7 +787,7 @@
       t.target.classList.remove("over");
       const s = null === (e = t.dataTransfer) || void 0 === e ? void 0 : e.getData("text/plain"),
         i = t.target.getAttribute("draggable-id");
-      this.apps = this.reorderItems(this.apps, s, i), ct(this.hass, this.apps.map(t => t.app)), this.requestUpdate();
+      this.apps = this.reorderItems(this.apps, s, i), ct(this.hass, this.mac_address, this.apps.map(t => t.app)), this.requestUpdate();
     }
     reorderItems(t, e, s) {
       const i = t.findIndex(t => t.app.app_id === e),
@@ -832,7 +833,9 @@
     type: Array
   })], ut.prototype, "apps", void 0), e([dt({
     type: Boolean
-  })], ut.prototype, "sortable", void 0), ut = e([at("sk-reorderable-list")], ut);
+  })], ut.prototype, "sortable", void 0), e([dt({
+    type: String
+  })], ut.prototype, "mac_address", void 0), ut = e([at("sk-reorderable-list")], ut);
   let vt = class extends rt {
     constructor() {
       super(...arguments), this.isDraggable = !0;
@@ -1018,6 +1021,7 @@
         .apps="${this.apps}"
         .sortable=${this._sortable}
         .entities=${this.entities}
+        .mac_address=${this.mac_address}
       ></sk-reorderable-list>
     `;
     }

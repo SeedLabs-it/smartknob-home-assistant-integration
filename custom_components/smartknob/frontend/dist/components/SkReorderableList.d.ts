@@ -8,6 +8,7 @@ export declare class SkReorderableList extends LitElement {
     entities: HassEntity[];
     apps: AppListItem[];
     sortable: boolean;
+    mac_address: string;
     render(): import("lit-html").TemplateResult<1>;
     drop(e: any): void;
     reorderItems(items: AppListItem[], draggedId: string, dropId: string): AppListItem[];

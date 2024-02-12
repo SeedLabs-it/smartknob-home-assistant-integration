@@ -31,7 +31,11 @@ export const asyncSaveApp = async (
   });
 };
 
-export const saveApps = (hass: HomeAssistant, apps: App[]) => {
+export const asyncSaveApps = async (
+  hass: HomeAssistant,
+  mac_address: string,
+  apps: App[],
+) => {
   const _apps: {}[] = [];
   for (const app of apps) {
     _apps.push({
@@ -42,7 +46,8 @@ export const saveApps = (hass: HomeAssistant, apps: App[]) => {
     });
   }
 
-  return hass.callApi('POST', 'smartknob/apps', {
+  return await hass.callApi('PUT', 'smartknob/apps', {
+    mac_address,
     apps: _apps,
   });
 };

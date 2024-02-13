@@ -82,6 +82,7 @@ export class SmartknobPanel extends LitElement {
     }
     this._appList = __appList;
     this._appSlugs = loadedAppSlugs;
+
     this._knobs = loadedKnobs;
 
     super.connectedCallback();

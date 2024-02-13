@@ -32,11 +32,13 @@ class BlindsState:
 
 
 class ClimateMode(Enum):
-    AUTO = 1
-    AC = 2
-    HEAT = 3
-    PASSIVE = 4
-    IDLE = 5
+    off = 0
+    heat = 1
+    cool = 2
+    heat_cool = 3
+    auto = 4
+    dry = 5
+    fan_only = 6
 
 
 class ClimateState:
@@ -44,7 +46,7 @@ class ClimateState:
 
     def __init__(self, state) -> None:
         """Initialize the ClimateState object."""
-        self.mode: ClimateMode = state["mode"]
+        self.mode: int = state["mode"]
         self.target_temp = state["target_temp"]
 
 
@@ -113,12 +115,14 @@ class Services:
 
     async def async_handle_climate(self, entity_id: str, state: ClimateState):
         """Handle climate entity."""
+        mode = ClimateMode(state.mode)
+
         await self.hass.services.async_call(
             "climate",
             "set_temperature",
             {
                 "entity_id": entity_id,
-                "temperature": state.temperature,
+                "temperature": state.target_temp,
             },
         )
         await self.hass.services.async_call(
@@ -126,6 +130,6 @@ class Services:
             "set_hvac_mode",
             {
                 "entity_id": entity_id,
-                "hvac_mode": state.mode.name,
+                "hvac_mode": mode.name,
             },
         )

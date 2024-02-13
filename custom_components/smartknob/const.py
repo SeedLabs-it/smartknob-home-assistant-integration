@@ -15,9 +15,11 @@ TOPIC_TO_HASS = "smartknob/to_hass"
 LIGHT_SWITCH = "light_switch"
 LIGHT_DIMMER = "light_dimmer"
 SWITCH = "switch"
+CLIMATE = "climate"
 
 DOMAIN_LIGHT = "light"
 DOMAIN_SWITCH = "switch"
+DOMAIN_CLIMATE = "climate"
 
 
 APP_SLUGS = [
@@ -37,6 +39,12 @@ APP_SLUGS = [
         "slug": SWITCH,
         "friendly_name": "Switch",
         "domain": DOMAIN_SWITCH,
+        "supported_features": 1,
+    },
+    {
+        "slug": CLIMATE,
+        "friendly_name": "Climate",
+        "domain": DOMAIN_CLIMATE,
         "supported_features": 1,
     },
 ]

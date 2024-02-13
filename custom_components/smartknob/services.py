@@ -1,4 +1,5 @@
 """Define the services called by smartknob on HASS entities."""
+from enum import Enum
 from homeassistant.core import HomeAssistant
 
 from .logger import _LOGGER
@@ -30,13 +31,21 @@ class BlindsState:
         self.position: int = state["position"]
 
 
+class ClimateMode(Enum):
+    AUTO = 1
+    AC = 2
+    HEAT = 3
+    PASSIVE = 4
+    IDLE = 5
+
+
 class ClimateState:
     """Defines the structure of the ClimateState object."""
 
     def __init__(self, state) -> None:
         """Initialize the ClimateState object."""
-        self.temperature: float = state["temperature"]
-        self.humidity: int = state["humidity"]
+        self.mode: ClimateMode = state["mode"]
+        self.target_temp = state["target_temp"]
 
 
 class MediaState:
@@ -101,3 +110,22 @@ class Services:
             )
         else:
             _LOGGER.error("Not implemented")
+
+    async def async_handle_climate(self, entity_id: str, state: ClimateState):
+        """Handle climate entity."""
+        await self.hass.services.async_call(
+            "climate",
+            "set_temperature",
+            {
+                "entity_id": entity_id,
+                "temperature": state.temperature,
+            },
+        )
+        await self.hass.services.async_call(
+            "climate",
+            "set_hvac_mode",
+            {
+                "entity_id": entity_id,
+                "hvac_mode": state.mode.name,
+            },
+        )

@@ -3,6 +3,7 @@ import json
 
 from config.custom_components.smartknob.coordinator import SmartknobCoordinator
 from config.custom_components.smartknob.services import (
+    ClimateState,
     LightState,
     Services,
     SwitchState,
@@ -105,7 +106,6 @@ class MqttHandler:
             payload = json.loads(msg.payload)
             _LOGGER.debug("PAYLOAD")
             _LOGGER.debug(msg.payload)
-            _LOGGER.error(msg.payload)
 
             mac_address = msg.topic.split("/")[1]  # UGLY BAD WAY
             app_id = payload["app_id"]
@@ -123,6 +123,11 @@ class MqttHandler:
                 elif app["app_slug"] == "switch" or app["app_slug"] == "light_switch":
                     await self.services.async_toggle_switch(
                         app["entity_id"], SwitchState(state)
+                    )
+                elif app["app_slug"] == "climate":
+                    await self.services.async_handle_climate(
+                        app["entity_id"],
+                        ClimateState(state),
                     )
                 else:
                     _LOGGER.error("Not implemented command")

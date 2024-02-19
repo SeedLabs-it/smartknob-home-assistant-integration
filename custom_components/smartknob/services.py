@@ -113,6 +113,19 @@ class Services:
         else:
             _LOGGER.error("Not implemented")
 
+        if state.rgb_color:
+            await self.hass.services.async_call(
+                "light",
+                "turn_on",
+                {
+                    "entity_id": entity_id,
+                    "brightness": state.brightness,
+                    "rgb_color": state.rgb_color,
+                },
+            )
+        else:
+            _LOGGER.error("Not implemented")
+
     async def async_handle_climate(self, entity_id: str, state: ClimateState):
         """Handle climate entity."""
         mode = ClimateMode(state.mode)

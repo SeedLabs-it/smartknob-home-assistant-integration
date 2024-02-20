@@ -1,6 +1,6 @@
 """The Smartknob integration."""
-from config.custom_components.smartknob.coordinator import SmartknobCoordinator
-from config.custom_components.smartknob.mqtt import MqttHandler
+from .coordinator import SmartknobCoordinator
+from .mqtt import MqttHandler
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession

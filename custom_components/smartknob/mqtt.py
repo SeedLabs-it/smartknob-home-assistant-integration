@@ -1,15 +1,15 @@
 """MQTT handler for Smartknob."""
 import json
 
-from config.custom_components.smartknob.coordinator import SmartknobCoordinator
-from config.custom_components.smartknob.services import (
+from .coordinator import SmartknobCoordinator
+from .services import (
     ClimateState,
     LightState,
     Services,
     SwitchState,
 )
 
-# from config.custom_components.smartknob.store import SmartknobConfig
+# from store import SmartknobConfig
 from homeassistant.components import mqtt
 from homeassistant.core import HomeAssistant, callback
 

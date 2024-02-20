@@ -1113,7 +1113,7 @@
           entity: r
         });
       }
-      this._appList = n, this._appSlugs = i, this._knobs = s, super.connectedCallback(), this.requestUpdate();
+      this._appList = n, this._appSlugs = i, console.log(this._appSlugs), this._knobs = s, super.connectedCallback(), this.requestUpdate();
     }
     async firstUpdated() {
       await (async () => {

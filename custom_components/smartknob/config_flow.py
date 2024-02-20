@@ -13,6 +13,9 @@ _LOGGER = logging.getLogger(__name__)
 class SmartknobConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     """Handle a config flow for Smartknob."""
 
+    VERSION = 1
+    MINOR_VERSION = 1
+
     async def async_step_user(self, user_input=None):
         """Handle the initial step."""
         if user_input is None:
@@ -21,4 +24,4 @@ class SmartknobConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             )
 
         _LOGGER.debug("Creating config entry for Smartknob")
-        return self.async_create_entry(title="Smartknob", data=user_input)
+        return self.async_create_entry(title=DOMAIN, data=user_input)

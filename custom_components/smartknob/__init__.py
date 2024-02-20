@@ -1,16 +1,15 @@
 """The Smartknob integration."""
-from config.custom_components.smartknob.coordinator import SmartknobCoordinator
-from config.custom_components.smartknob.mqtt import MqttHandler
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.event import async_track_state_change
-from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
 from .const import DOMAIN
+from .coordinator import SmartknobCoordinator
 from .logger import _LOGGER
+from .mqtt import MqttHandler
 from .panel import async_register_panel, async_unregister_panel
-from .store import SmartknobStorage, async_get_registry
+from .store import async_get_registry
 from .websockets import async_register_websockets
 
 

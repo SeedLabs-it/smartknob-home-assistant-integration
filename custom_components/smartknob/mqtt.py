@@ -2,12 +2,12 @@
 import json
 
 from homeassistant.components import mqtt
-from homeassistant.core import HomeAssistant, callback
+from homeassistant.core import HomeAssistant, State, callback
 
 from .const import DOMAIN, TOPIC_INIT
 from .coordinator import SmartknobCoordinator
 from .logger import _LOGGER
-from .services import ClimateState, LightState, Services, SwitchState
+from .services import ClimateState, LightState, Services, StateEncoder, SwitchState
 
 
 class MqttHandler:
@@ -27,20 +27,37 @@ class MqttHandler:
     async def async_entity_state_changed(
         self,
         knobs_needing_update: list[dict],
-        app_id,
-        old_state,
-        new_state,
+        apps,
+        old_state: State,
+        new_state: State,
     ):
         """Handle entity state changes."""
         _LOGGER.debug("STATE CHANGE CALLBACK")
-        _LOGGER.debug(knobs_needing_update)
-        # for knob in knobs_needing_update:
-        #     new_bool_state = new_state.state == "on"
-        #     await mqtt.async_publish(
-        #         self.hass,
-        #         "smartknob/" + knob["mac_address"] + "/from_hass",
-        #         json.dumps({"app_id": app_id[0], "new_state": new_bool_state}),
-        #     )
+        for knob in knobs_needing_update:
+            for app in apps:
+                state = None
+                if app["app_slug"] == "light_switch":
+                    state = SwitchState(new_state.state == "on")
+
+                if app["app_slug"] == "light_dimmer":
+                    state = LightState(  #! FOR SOME REASON BRIGHTNESS IS NOT SET ON FIRST STATE AFTER RESTART OF HASS UI CAN SHOW LIGHT ON STATE CAN BE "ON" BUT BRIGHTNESS IS NOT SET SO FIRST STATE SENT TO KNOB IS OFF BRIGHTNESS 0
+                        new_state.attributes.get("brightness") or 0,
+                        new_state.attributes.get("color_temp") or 0,
+                        new_state.attributes.get("rgb_color") or [255, 255, 255],
+                    )
+                if state is not None:
+                    await mqtt.async_publish(
+                        self.hass,
+                        "smartknob/" + knob["mac_address"] + "/from_hass",
+                        json.dumps(
+                            {
+                                "type": "state_update",
+                                "app_id": app["app_id"],
+                                "new_state": state,
+                            },
+                            cls=StateEncoder,
+                        ),
+                    )
 
     async def _async_subscribe_to_init(self):
         """Subscribe to init topic."""

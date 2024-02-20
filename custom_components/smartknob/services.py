@@ -1,5 +1,6 @@
 """Define the services called by smartknob on HASS entities."""
 from enum import Enum
+
 from homeassistant.core import HomeAssistant
 
 from .logger import _LOGGER
@@ -32,6 +33,8 @@ class BlindsState:
 
 
 class ClimateMode(Enum):
+    """Enum for climate modes."""
+
     off = 0
     heat = 1
     cool = 2

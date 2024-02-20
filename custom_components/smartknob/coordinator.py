@@ -1,8 +1,10 @@
-from .store import SmartknobStorage
+"""Coordinator."""
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
-from .logger import _LOGGER
+
 from .const import DOMAIN
+from .logger import _LOGGER
+from .store import SmartknobStorage
 
 
 class SmartknobCoordinator(DataUpdateCoordinator):

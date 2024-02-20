@@ -1,3 +1,4 @@
+"""Constants."""
 DOMAIN = "smartknob"
 NAME = "Smartknob"
 

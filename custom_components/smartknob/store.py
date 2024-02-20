@@ -2,7 +2,6 @@
 
 from collections import OrderedDict
 from collections.abc import MutableMapping
-from math import log
 from typing import cast
 
 import attr

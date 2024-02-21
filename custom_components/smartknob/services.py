@@ -14,10 +14,6 @@ class SwitchState:
         """Initialize the SwitchState object."""
         self.on: bool = on
 
-    def fromJson(self, jsonState):
-        """Convert JSON to SwitchState object."""
-        self.on = jsonState["on"]
-
 
 class LightState:
     """Defines the structure of the LightState object."""
@@ -27,12 +23,6 @@ class LightState:
         self.brightness: int = brightness
         self.color_temp: int = color_temp
         self.rgb_color: list[int] = rgb_color
-
-    def fromJson(self, jsonState):
-        """Convert JSON to LightState object."""
-        self.brightness = jsonState["brightness"]
-        self.color_temp = jsonState["color_temp"]
-        self.rgb_color = jsonState["rgb_color"]
 
 
 class BlindsState:
@@ -58,10 +48,10 @@ class ClimateMode(Enum):
 class ClimateState:
     """Defines the structure of the ClimateState object."""
 
-    def __init__(self, state) -> None:
+    def __init__(self, mode: int, target_temp: int) -> None:
         """Initialize the ClimateState object."""
-        self.mode: int = state["mode"]
-        self.target_temp = state["target_temp"]
+        self.mode: int = mode
+        self.target_temp: int = target_temp
 
 
 class MediaState:

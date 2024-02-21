@@ -26,14 +26,14 @@ class MqttHandler:
     # @callback
     async def async_entity_state_changed(
         self,
-        knobs_needing_update: list[dict],
+        affected_knobs: list[dict],
         apps,
         old_state: State,
         new_state: State,
     ):
         """Handle entity state changes."""
         _LOGGER.debug("STATE CHANGE CALLBACK")
-        for knob in knobs_needing_update:
+        for knob in affected_knobs:
             for app in apps:
                 state = None
                 if app["app_slug"] == "light_switch":
@@ -128,16 +128,26 @@ class MqttHandler:
                 if app["app_slug"] == "light_dimmer":
                     await self.services.async_set_light(
                         app["entity_id"],
-                        LightState(state),
+                        LightState(
+                            state.get("brightness"),
+                            state.get("color_temp"),
+                            state.get("rgb_color"),
+                        ),
                     )
                 elif app["app_slug"] == "switch" or app["app_slug"] == "light_switch":
                     await self.services.async_toggle_switch(
-                        app["entity_id"], SwitchState(state)
+                        app["entity_id"],
+                        SwitchState(
+                            state.get("on"),
+                        ),
                     )
                 elif app["app_slug"] == "climate":
                     await self.services.async_handle_climate(
                         app["entity_id"],
-                        ClimateState(state),
+                        ClimateState(
+                            state.get("mode"),
+                            state.get("target_temp"),
+                        ),
                     )
                 else:
                     _LOGGER.error("Not implemented command")

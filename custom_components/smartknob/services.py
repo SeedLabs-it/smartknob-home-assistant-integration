@@ -97,11 +97,11 @@ class Services:
     async def async_set_light(self, entity_id: str, state: LightState):
         """Switch the light on or off, and set its brightness and color."""
 
-        if state.brightness == 255:
-            await self.hass.services.async_call(
-                "light", "turn_on", {"entity_id": entity_id}
-            )
-        elif state.brightness > 0 and state.brightness < 255:
+        # if state.brightness == 255:
+        #     await self.hass.services.async_call(
+        #         "light", "turn_on", {"entity_id": entity_id}
+        #     )
+        if state.brightness >= 0 and state.brightness <= 255:
             await self.hass.services.async_call(
                 "light",
                 "turn_on",
@@ -110,10 +110,10 @@ class Services:
                     "brightness": state.brightness,
                 },
             )
-        elif state.brightness == 0:
-            await self.hass.services.async_call(
-                "light", "turn_off", {"entity_id": entity_id}
-            )
+        # elif state.brightness == 0:
+        #     await self.hass.services.async_call(
+        #         "light", "turn_off", {"entity_id": entity_id}
+        #     )
         else:
             _LOGGER.error("Not implemented")
 

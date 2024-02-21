@@ -32,11 +32,12 @@ class MqttHandler:
         new_state: State,
     ):
         """Handle entity state changes."""
-        _LOGGER.debug("STATE CHANGE CALLBACK")
+        if new_state.context.user_id is None:
+            return
         for knob in affected_knobs:
             for app in apps:
                 state = None
-                if app["app_slug"] == "light_switch":
+                if app["app_slug"] == "light_switch" or app["app_slug"] == "switch":
                     state = SwitchState(new_state.state == "on")
 
                 if app["app_slug"] == "light_dimmer":
@@ -56,6 +57,10 @@ class MqttHandler:
                                 "new_state": state,
                             },
                             cls=StateEncoder,
+                            separators=(
+                                ",",
+                                ":",
+                            ),  # REMOVES WHITESPACE FOR STRCMP ON KNOB
                         ),
                     )
 

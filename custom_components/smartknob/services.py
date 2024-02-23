@@ -18,8 +18,11 @@ class SwitchState:
 class LightState:
     """Defines the structure of the LightState object."""
 
-    def __init__(self, brightness: int, color_temp: int, rgb_color: list[int]) -> None:
+    def __init__(
+        self, on: bool, brightness: int, color_temp: int, rgb_color: list[int]
+    ) -> None:
         """Initialize the LightState object."""
+        self.on: bool = on
         self.brightness: int = brightness
         self.color_temp: int = color_temp
         self.rgb_color: list[int] = rgb_color
@@ -161,6 +164,7 @@ class StateEncoder(json.JSONEncoder):
             return {"on": o.on}
         if isinstance(o, LightState):
             return {
+                "on": o.on,
                 "brightness": o.brightness,
                 "color_temp": o.color_temp,
                 "rgb_color": o.rgb_color,

@@ -1,5 +1,6 @@
 """MQTT handler for Smartknob."""
 import json
+from config.custom_components.smartknob.store import SmartknobConfig
 
 from homeassistant.components import mqtt
 from homeassistant.core import HomeAssistant, State, callback
@@ -32,8 +33,7 @@ class MqttHandler:
         new_state: State,
     ):
         """Handle entity state changes."""
-        if new_state.context.user_id is None:
-            return
+        _LOGGER.debug(new_state)
         for knob in affected_knobs:
             for app in apps:
                 state = None
@@ -42,6 +42,7 @@ class MqttHandler:
 
                 if app["app_slug"] == "light_dimmer":
                     state = LightState(  #! FOR SOME REASON BRIGHTNESS IS NOT SET ON FIRST STATE AFTER RESTART OF HASS UI CAN SHOW LIGHT ON STATE CAN BE "ON" BUT BRIGHTNESS IS NOT SET SO FIRST STATE SENT TO KNOB IS OFF BRIGHTNESS 0
+                        new_state.state == "on" or False,
                         new_state.attributes.get("brightness") or 0,
                         new_state.attributes.get("color_temp") or 0,
                         new_state.attributes.get("rgb_color") or [255, 255, 255],
@@ -77,7 +78,7 @@ class MqttHandler:
         """Subscribe to knob topics."""
         try:
             _LOGGER.debug("SUBSCRIBING TO KNOBS")
-            coordinator = self.hass.data[DOMAIN]["coordinator"]
+            coordinator: SmartknobCoordinator = self.hass.data[DOMAIN]["coordinator"]
             knobs = coordinator.store.knobs
             for mac_address in knobs:
                 _LOGGER.debug(mac_address)
@@ -108,7 +109,9 @@ class MqttHandler:
                     )
                 else:
                     _LOGGER.debug("KNOB ALREADY INITIALIZED")
-                    # TODO: Handle this case
+                    knob: dict = coordinator.store.async_get_knob(mac_address)
+                    _LOGGER.debug(knob.get("apps"))
+                    await self.async_sync_knob(mac_address)
 
         except ValueError:
             _LOGGER.error("Error decoding JSON payload")
@@ -119,46 +122,63 @@ class MqttHandler:
         """Handle messages from Smartknob."""
         try:
             payload = json.loads(msg.payload)
-            _LOGGER.debug("PAYLOAD")
-            _LOGGER.debug(msg.payload)
 
             mac_address = msg.topic.split("/")[1]  # UGLY BAD WAY
-            app_id = payload["app_id"]
-            state = payload["state"]
-            coordinator = self.hass.data[DOMAIN]["coordinator"]
+            type_ = payload["type"]
 
-            # knob = coordinator.store.async_get_knob(mac_address)
-            app = await coordinator.store.async_get_app(mac_address, app_id)
-            if app is not None:
-                if app["app_slug"] == "light_dimmer":
-                    await self.services.async_set_light(
-                        app["entity_id"],
-                        LightState(
-                            state.get("brightness"),
-                            state.get("color_temp"),
-                            state.get("rgb_color"),
-                        ),
-                    )
-                elif app["app_slug"] == "switch" or app["app_slug"] == "light_switch":
-                    await self.services.async_toggle_switch(
-                        app["entity_id"],
-                        SwitchState(
-                            state.get("on"),
-                        ),
-                    )
-                elif app["app_slug"] == "climate":
-                    await self.services.async_handle_climate(
-                        app["entity_id"],
-                        ClimateState(
-                            state.get("mode"),
-                            state.get("target_temp"),
-                        ),
-                    )
-                else:
-                    _LOGGER.error("Not implemented command")
-                # knob.async_update(msg.payload)
-                _LOGGER.debug("KNOB GOT")
-                _LOGGER.debug(app)
+            coordinator: SmartknobCoordinator = self.hass.data[DOMAIN]["coordinator"]
+
+            if type_ == "acknowledgement":
+                data = payload["data"]
+                if data == "sync":
+                    knob = coordinator.store.async_get_knob(mac_address)
+                    for app in knob.get("apps"):
+                        _LOGGER.debug("Sending initial state. to " + app.get("app_id"))
+                        state: State = self.hass.states.get(app.get("entity_id"))
+                        await self.async_entity_state_changed(
+                            [knob],
+                            [app],
+                            None,
+                            state,
+                        )
+
+            elif type_ == "state_update":
+                app_id = payload["app_id"]
+                state = payload["state"]
+
+                # knob = coordinator.store.async_get_knob(mac_address)
+                app = await coordinator.store.async_get_app(mac_address, app_id)
+                if app is not None:
+                    if app["app_slug"] == "light_dimmer":
+                        await self.services.async_set_light(
+                            app["entity_id"],
+                            LightState(
+                                state.get("on"),
+                                state.get("brightness"),
+                                state.get("color_temp"),
+                                state.get("rgb_color"),
+                            ),
+                        )
+                    elif (
+                        app["app_slug"] == "switch" or app["app_slug"] == "light_switch"
+                    ):
+                        await self.services.async_toggle_switch(
+                            app["entity_id"],
+                            SwitchState(
+                                state.get("on"),
+                            ),
+                        )
+                    elif app["app_slug"] == "climate":
+                        await self.services.async_handle_climate(
+                            app["entity_id"],
+                            ClimateState(
+                                state.get("mode"),
+                                state.get("target_temp"),
+                            ),
+                        )
+                    else:
+                        _LOGGER.error("Not implemented command: ")
+                        _LOGGER.debug(app)
 
         except ValueError:
             _LOGGER.error("Error decoding JSON payload")

@@ -1,6 +1,5 @@
 """MQTT handler for Smartknob."""
 import json
-from config.custom_components.smartknob.store import SmartknobConfig
 
 from homeassistant.components import mqtt
 from homeassistant.core import HomeAssistant, State, callback
@@ -9,6 +8,7 @@ from .const import DOMAIN, TOPIC_INIT
 from .coordinator import SmartknobCoordinator
 from .logger import _LOGGER
 from .services import ClimateState, LightState, Services, StateEncoder, SwitchState
+from .store import SmartknobConfig
 
 
 class MqttHandler:

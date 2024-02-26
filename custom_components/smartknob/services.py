@@ -51,10 +51,11 @@ class ClimateMode(Enum):
 class ClimateState:
     """Defines the structure of the ClimateState object."""
 
-    def __init__(self, mode: int, target_temp: int) -> None:
+    def __init__(self, mode: int, target_temp: int, current_temp: int) -> None:
         """Initialize the ClimateState object."""
         self.mode: int = mode
         self.target_temp: int = target_temp
+        self.current_temp: int = current_temp
 
 
 class MediaState:
@@ -168,5 +169,11 @@ class StateEncoder(json.JSONEncoder):
                 "brightness": o.brightness,
                 "color_temp": o.color_temp,
                 "rgb_color": o.rgb_color,
+            }
+        if isinstance(o, ClimateState):
+            return {
+                "mode": o.mode,
+                "target_temp": o.target_temp,
+                "current_temp": o.current_temp,
             }
         return super().default(o)

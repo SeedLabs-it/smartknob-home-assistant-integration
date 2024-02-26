@@ -7,7 +7,14 @@ from homeassistant.core import HomeAssistant, State, callback
 from .const import DOMAIN, TOPIC_INIT
 from .coordinator import SmartknobCoordinator
 from .logger import _LOGGER
-from .services import ClimateState, LightState, Services, StateEncoder, SwitchState
+from .services import (
+    ClimateMode,
+    ClimateState,
+    LightState,
+    Services,
+    StateEncoder,
+    SwitchState,
+)
 from .store import SmartknobConfig
 
 
@@ -47,6 +54,15 @@ class MqttHandler:
                         new_state.attributes.get("color_temp") or None,
                         new_state.attributes.get("rgb_color") or None,
                     )
+                if app["app_slug"] == "climate":
+                    if new_state.state in ClimateMode.__members__:
+                        mode = ClimateMode[new_state.state].value
+                    state = ClimateState(
+                        mode or "off",
+                        new_state.attributes.get("temperature") or 0,
+                        new_state.attributes.get("current_temperature") or 0,
+                    )
+
                 if state is not None:
                     await mqtt.async_publish(
                         self.hass,
@@ -174,6 +190,7 @@ class MqttHandler:
                             ClimateState(
                                 state.get("mode"),
                                 state.get("target_temp"),
+                                state.get("current_temp"),
                             ),
                         )
                     else:

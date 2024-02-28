@@ -3,6 +3,7 @@ import { customElement, property, state } from 'lit/decorators';
 import {
   AppListItem,
   AppSlug,
+  EntitySelector,
   HomeAssistant,
   SelectOption,
   SelectSelector,
@@ -64,12 +65,42 @@ export class AppForm extends LitElement {
       };
     });
 
-    const selectSelector: SelectSelector = {
+    const slugSelector: SelectSelector = {
       select: {
         custom_value: false,
         mode: 'dropdown',
         options,
       },
+    };
+
+    const included_entity_ids: string[] = this.entities
+      .map((entity) => {
+        if (
+          !entity.entity_id.startsWith(this._domain) ||
+          this.apps.find((app) => {
+            if (
+              this._selectedSlug?.slug == app.app.app_slug &&
+              app.app.entity_id == entity.entity_id
+            )
+              return true;
+            return false;
+          })
+        ) {
+          return '';
+        }
+        return entity.entity_id;
+      })
+      .filter((e) => e != '')!;
+
+    const entitySelector: EntitySelector = {
+      entity: {
+        include_entities: included_entity_ids,
+      },
+    };
+
+    const entitySelectorDisabled = () => {
+      if (this._selectedSlug?.slug == 'stopwatch') return true;
+      return false;
     };
 
     return html`
@@ -83,7 +114,7 @@ export class AppForm extends LitElement {
       <form class="add-app" @submit=${this.handleSubmit}>
         <ha-selector
           .hass=${this.hass}
-          .selector=${selectSelector}
+          .selector=${slugSelector}
           .required=${true}
           .label=${'Select App'}
           .value=${this._selectedSlug?.slug}
@@ -91,27 +122,9 @@ export class AppForm extends LitElement {
         ></ha-selector>
         <ha-selector
           .hass=${this.hass}
-          .selector=${{
-            entity: {
-              include_entities: this.entities.map((entity) => {
-                if (
-                  !entity.entity_id.startsWith(this._domain) ||
-                  this.apps.find((app) => {
-                    if (
-                      this._selectedSlug?.slug == app.app.app_slug &&
-                      app.app.entity_id == entity.entity_id
-                    )
-                      return true;
-                    return false;
-                  })
-                ) {
-                  return '';
-                }
-                return entity.entity_id;
-              }),
-            },
-          }}
-          .required=${true}
+          .selector=${entitySelector}
+          .required=${this._selectedSlug?.slug == 'stopwatch' ? false : true}
+          .disabled=${entitySelectorDisabled()}
           .value=${this._selectedEntity?.attributes.friendly_name}
           @value-changed=${this.entityChanged}
         ></ha-selector>
@@ -143,14 +156,22 @@ export class AppForm extends LitElement {
   handleSubmit = (e: Event) => {
     e.preventDefault();
     //! VALIDATE INPUTS
-    if (!this._selectedSlug || !this._selectedEntity) return; //TODO HANDLE
+    if (!this._selectedSlug) return; //TODO HANDLE
 
     const appListItem: AppListItem = {
       app: {
-        app_id: `${this._selectedSlug.slug}-${this._selectedEntity.entity_id}`,
+        app_id: `${this._selectedSlug.slug}-${
+          this._selectedEntity
+            ? this._selectedEntity.entity_id
+            : this._selectedSlug.slug + '-UID'
+        }`,
         app_slug: this._selectedSlug.slug,
-        entity_id: this._selectedEntity.entity_id,
-        friendly_name: this._selectedEntity.attributes.friendly_name ?? '', //TODO what to add if no frindly name? entity id?
+        entity_id: this._selectedEntity
+          ? this._selectedEntity.entity_id
+          : this._selectedSlug.slug + '-UID',
+        friendly_name: this._selectedEntity
+          ? this._selectedEntity.attributes.friendly_name ?? ''
+          : 'Stopwatch - UID', //TODO what to add if no frindly name? entity id?
       },
       app_slug: this._selectedSlug,
       entity: this._selectedEntity,

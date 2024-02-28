@@ -64,54 +64,60 @@ export class SkReorderableList extends LitElement {
         options,
       },
     };
-    return html`
-      ${this.apps.map(
-        (item, index) =>
-          html`<sk-reorderable-list-item
-            .app_id=${item.app.app_id}
-            .isDraggable=${this.sortable}
-            @drop="${this.drop}"
-            @delete="${() => {
-              // TODO show confirmation dialog before deletion
-              this.apps = this.apps.filter(
-                (app) => app.app.app_id !== item.app.app_id,
-              );
-              asyncSaveApps(
-                this.hass,
-                this.mac_address,
-                this.apps.map((item) => item.app),
-              );
-              this.requestUpdate();
-            }}"
-          >
-            <div class="list-item">
-              <div class="index">${index + 1}</div>
-              <ha-selector
-                .hass=${this.hass}
-                .selector=${selectSelector}
-                .required=${true}
-                .label=${'Select App'}
-                .value=${item.app_slug.slug}
-              ></ha-selector>
-              <ha-selector
-                .hass=${this.hass}
-                .selector="${{
-                  entity: {
-                    include_entities: this.entities.map((entity) => {
-                      if (!entity.entity_id.startsWith(item.app_slug.domain))
-                        return '';
 
-                      return entity.entity_id;
-                    }),
-                  },
-                }}"
-                }}
-                .required=${true}
-                .value=${item.entity?.entity_id}
-              ></ha-selector>
-            </div>
-          </sk-reorderable-list-item> `,
-      )}
+    return html`
+      ${this.apps.map((item, index) => {
+        const entitySelectorDisabled = () => {
+          if (item.app_slug?.slug == 'stopwatch') return true;
+          return false;
+        };
+
+        return html`<sk-reorderable-list-item
+          .app_id=${item.app.app_id}
+          .isDraggable=${this.sortable}
+          @drop="${this.drop}"
+          @delete="${() => {
+            // TODO show confirmation dialog before deletion
+            this.apps = this.apps.filter(
+              (app) => app.app.app_id !== item.app.app_id,
+            );
+            asyncSaveApps(
+              this.hass,
+              this.mac_address,
+              this.apps.map((item) => item.app),
+            );
+            this.requestUpdate();
+          }}"
+        >
+          <div class="list-item">
+            <div class="index">${index + 1}</div>
+            <ha-selector
+              .hass=${this.hass}
+              .selector=${selectSelector}
+              .required=${true}
+              .label=${'Select App'}
+              .value=${item.app_slug.slug}
+            ></ha-selector>
+            <ha-selector
+              .hass=${this.hass}
+              .selector="${{
+                entity: {
+                  include_entities: this.entities.map((entity) => {
+                    if (!entity.entity_id.startsWith(item.app_slug.domain))
+                      return '';
+
+                    return entity.entity_id;
+                  }),
+                },
+              }}"
+              }}
+              .required=${item.app_slug?.slug == 'stopwatch' ? false : true}
+              .disabled=${entitySelectorDisabled()}
+              .value=${item.entity?.entity_id}
+            ></ha-selector>
+          </div>
+        </sk-reorderable-list-item> `;
+      })}
     `;
   }
 

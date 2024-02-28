@@ -61,11 +61,11 @@
          * Copyright 2017 Google LLC
          * SPDX-License-Identifier: BSD-3-Clause
          */;
-  var p;
-  const h = window,
-    c = h.trustedTypes,
+  var h;
+  const p = window,
+    c = p.trustedTypes,
     u = c ? c.emptyScript : "",
-    v = h.reactiveElementPolyfillSupport,
+    v = p.reactiveElementPolyfillSupport,
     _ = {
       toAttribute(t, e) {
         switch (e) {
@@ -298,7 +298,7 @@
     mode: "open"
   }, null == v || v({
     ReactiveElement: m
-  }), (null !== (p = h.reactiveElementVersions) && void 0 !== p ? p : h.reactiveElementVersions = []).push("1.6.3");
+  }), (null !== (h = p.reactiveElementVersions) && void 0 !== h ? h : p.reactiveElementVersions = []).push("1.6.3");
   const b = window,
     A = b.trustedTypes,
     S = A ? A.createPolicy("lit-html", {
@@ -319,12 +319,12 @@
     L = /'/g,
     R = /"/g,
     N = /^(?:script|style|textarea|title)$/i,
-    j = (t => (e, ...s) => ({
+    D = (t => (e, ...s) => ({
       _$litType$: t,
       strings: e,
       values: s
     }))(1),
-    D = Symbol.for("lit-noChange"),
+    j = Symbol.for("lit-noChange"),
     I = Symbol.for("lit-nothing"),
     B = new WeakMap(),
     q = x.createTreeWalker(x, 129, null, !1);
@@ -343,10 +343,10 @@
       let a,
         l,
         d = -1,
-        p = 0;
-      for (; p < s.length && (o.lastIndex = p, l = o.exec(s), null !== l);) p = o.lastIndex, o === V ? "!--" === l[1] ? o = O : void 0 !== l[1] ? o = T : void 0 !== l[2] ? (N.test(l[2]) && (n = RegExp("</" + l[2], "g")), o = M) : void 0 !== l[3] && (o = M) : o === M ? ">" === l[0] ? (o = null != n ? n : V, d = -1) : void 0 === l[1] ? d = -2 : (d = o.lastIndex - l[2].length, a = l[1], o = void 0 === l[3] ? M : '"' === l[3] ? R : L) : o === R || o === L ? o = M : o === O || o === T ? o = V : (o = M, n = void 0);
-      const h = o === M && t[e + 1].startsWith("/>") ? " " : "";
-      r += o === V ? s + k : d >= 0 ? (i.push(a), s.slice(0, d) + "$lit$" + s.slice(d) + E + h) : s + E + (-2 === d ? (i.push(void 0), e) : h);
+        h = 0;
+      for (; h < s.length && (o.lastIndex = h, l = o.exec(s), null !== l);) h = o.lastIndex, o === V ? "!--" === l[1] ? o = O : void 0 !== l[1] ? o = T : void 0 !== l[2] ? (N.test(l[2]) && (n = RegExp("</" + l[2], "g")), o = M) : void 0 !== l[3] && (o = M) : o === M ? ">" === l[0] ? (o = null != n ? n : V, d = -1) : void 0 === l[1] ? d = -2 : (d = o.lastIndex - l[2].length, a = l[1], o = void 0 === l[3] ? M : '"' === l[3] ? R : L) : o === R || o === L ? o = M : o === O || o === T ? o = V : (o = M, n = void 0);
+      const p = o === M && t[e + 1].startsWith("/>") ? " " : "";
+      r += o === V ? s + k : d >= 0 ? (i.push(a), s.slice(0, d) + "$lit$" + s.slice(d) + E + p) : s + E + (-2 === d ? (i.push(void 0), e) : p);
     }
     return [z(t, r + (t[s] || "<?>") + (2 === e ? "</svg>" : "")), i];
   };
@@ -422,7 +422,7 @@
   }
   function K(t, e, s = t, i) {
     var n, r, o, a;
-    if (e === D) return e;
+    if (e === j) return e;
     let l = void 0 !== i ? null === (n = s._$Co) || void 0 === n ? void 0 : n[i] : s._$Cl;
     const d = C(e) ? void 0 : e._$litDirective$;
     return (null == l ? void 0 : l.constructor) !== d && (null === (r = null == l ? void 0 : l._$AO) || void 0 === r || r.call(l, !1), void 0 === d ? l = void 0 : (l = new d(t), l._$AT(t, s, i)), void 0 !== i ? (null !== (o = (a = s)._$Co) && void 0 !== o ? o : a._$Co = [])[i] = l : s._$Cl = l), void 0 !== l && (e = K(t, l._$AS(t, e.values), l, i)), e;
@@ -486,7 +486,7 @@
       return this._$AB;
     }
     _$AI(t, e = this) {
-      t = K(this, t, e), C(t) ? t === I || null == t || "" === t ? (this._$AH !== I && this._$AR(), this._$AH = I) : t !== this._$AH && t !== D && this._(t) : void 0 !== t._$litType$ ? this.g(t) : void 0 !== t.nodeType ? this.$(t) : (t => P(t) || "function" == typeof (null == t ? void 0 : t[Symbol.iterator]))(t) ? this.T(t) : this._(t);
+      t = K(this, t, e), C(t) ? t === I || null == t || "" === t ? (this._$AH !== I && this._$AR(), this._$AH = I) : t !== this._$AH && t !== j && this._(t) : void 0 !== t._$litType$ ? this.g(t) : void 0 !== t.nodeType ? this.$(t) : (t => P(t) || "function" == typeof (null == t ? void 0 : t[Symbol.iterator]))(t) ? this.T(t) : this._(t);
     }
     k(t) {
       return this._$AA.parentNode.insertBefore(t, this._$AB);
@@ -547,10 +547,10 @@
     _$AI(t, e = this, s, i) {
       const n = this.strings;
       let r = !1;
-      if (void 0 === n) t = K(this, t, e, 0), r = !C(t) || t !== this._$AH && t !== D, r && (this._$AH = t);else {
+      if (void 0 === n) t = K(this, t, e, 0), r = !C(t) || t !== this._$AH && t !== j, r && (this._$AH = t);else {
         const i = t;
         let o, a;
-        for (t = n[0], o = 0; o < n.length - 1; o++) a = K(this, i[s + o], e, o), a === D && (a = this._$AH[o]), r || (r = !C(a) || a !== this._$AH[o]), a === I ? t = I : t !== I && (t += (null != a ? a : "") + n[o + 1]), this._$AH[o] = a;
+        for (t = n[0], o = 0; o < n.length - 1; o++) a = K(this, i[s + o], e, o), a === j && (a = this._$AH[o]), r || (r = !C(a) || a !== this._$AH[o]), a === I ? t = I : t !== I && (t += (null != a ? a : "") + n[o + 1]), this._$AH[o] = a;
       }
       r && !i && this.j(t);
     }
@@ -581,7 +581,7 @@
     }
     _$AI(t, e = this) {
       var s;
-      if ((t = null !== (s = K(this, t, e, 0)) && void 0 !== s ? s : I) === D) return;
+      if ((t = null !== (s = K(this, t, e, 0)) && void 0 !== s ? s : I) === j) return;
       const i = this._$AH,
         n = t === I && i !== I || t.capture !== i.capture || t.once !== i.once || t.passive !== i.passive,
         r = t !== I && (i === I || n);
@@ -644,7 +644,7 @@
       super.disconnectedCallback(), null === (t = this._$Do) || void 0 === t || t.setConnected(!1);
     }
     render() {
-      return D;
+      return j;
     }
   }
   rt.finalized = !0, rt._$litElement$ = !0, null === (it = globalThis.litElementHydrateSupport) || void 0 === it || it.call(globalThis, {
@@ -705,7 +705,7 @@
          * SPDX-License-Identifier: BSD-3-Clause
          */
   }
-  function pt(t) {
+  function ht(t) {
     return dt({
       ...t,
       state: !0
@@ -716,8 +716,8 @@
        * Copyright 2021 Google LLC
        * SPDX-License-Identifier: BSD-3-Clause
        */
-  var ht;
-  null === (ht = window.HTMLSlotElement) || void 0 === ht || ht.prototype.assignedElements;
+  var pt;
+  null === (pt = window.HTMLSlotElement) || void 0 === pt || pt.prototype.assignedElements;
   const ct = async (t, e, s) => {
     const i = [];
     for (const t of s) i.push({
@@ -746,39 +746,43 @@
           }))
         }
       };
-      return j`
+      return D`
       ${this.apps.map((e, s) => {
-        var i;
-        return j`<sk-reorderable-list-item
-            .app_id=${e.app.app_id}
-            .isDraggable=${this.sortable}
-            @drop="${this.drop}"
-            @delete="${() => {
+        var i, n;
+        return D`<sk-reorderable-list-item
+          .app_id=${e.app.app_id}
+          .isDraggable=${this.sortable}
+          @drop="${this.drop}"
+          @delete="${() => {
           this.apps = this.apps.filter(t => t.app.app_id !== e.app.app_id), ct(this.hass, this.mac_address, this.apps.map(t => t.app)), this.requestUpdate();
         }}"
-          >
-            <div class="list-item">
-              <div class="index">${s + 1}</div>
-              <ha-selector
-                .hass=${this.hass}
-                .selector=${t}
-                .required=${!0}
-                .label=${"Select App"}
-                .value=${e.app_slug.slug}
-              ></ha-selector>
-              <ha-selector
-                .hass=${this.hass}
-                .selector="${{
+        >
+          <div class="list-item">
+            <div class="index">${s + 1}</div>
+            <ha-selector
+              .hass=${this.hass}
+              .selector=${t}
+              .required=${!0}
+              .label=${"Select App"}
+              .value=${e.app_slug.slug}
+            ></ha-selector>
+            <ha-selector
+              .hass=${this.hass}
+              .selector="${{
           entity: {
             include_entities: this.entities.map(t => t.entity_id.startsWith(e.app_slug.domain) ? t.entity_id : "")
           }
         }}"
-                }}
-                .required=${!0}
-                .value=${null === (i = e.entity) || void 0 === i ? void 0 : i.entity_id}
-              ></ha-selector>
-            </div>
-          </sk-reorderable-list-item> `;
+              }}
+              .required=${"stopwatch" != (null === (i = e.app_slug) || void 0 === i ? void 0 : i.slug)}
+              .disabled=${(() => {
+          var t;
+          return "stopwatch" == (null === (t = e.app_slug) || void 0 === t ? void 0 : t.slug);
+        })()}
+              .value=${null === (n = e.entity) || void 0 === n ? void 0 : n.entity_id}
+            ></ha-selector>
+          </div>
+        </sk-reorderable-list-item> `;
       })}
     `;
     }
@@ -844,7 +848,7 @@
       super.connectedCallback(), this.addEventListener("dragstart", this.dragStart), this.addEventListener("dragenter", this.dragEnter), this.addEventListener("dragover", this.dragOver), this.addEventListener("dragleave", this.dragLeave), this.addEventListener("dragend", this.dragEnd);
     }
     render() {
-      return this.isDraggable ? this.setAttribute("draggable", "true") : this.removeAttribute("draggable"), this.setAttribute("draggable-id", this.app_id), j`
+      return this.isDraggable ? this.setAttribute("draggable", "true") : this.removeAttribute("draggable"), this.setAttribute("draggable-id", this.app_id), D`
       <slot></slot>
       <div class="actions">
         <ha-svg-icon
@@ -927,13 +931,13 @@
       super(...arguments), this._selectedSlug = null, this._selectedEntity = null, this._domain = "", this._sortable = !1, this.handleSubmit = t => {
         var e;
         //! VALIDATE INPUTS
-        if (t.preventDefault(), !this._selectedSlug || !this._selectedEntity) return;
+        if (t.preventDefault(), !this._selectedSlug) return;
         const s = {
           app: {
-            app_id: `${this._selectedSlug.slug}-${this._selectedEntity.entity_id}`,
+            app_id: `${this._selectedSlug.slug}-${this._selectedEntity ? this._selectedEntity.entity_id : this._selectedSlug.slug + "-UID"}`,
             app_slug: this._selectedSlug.slug,
-            entity_id: this._selectedEntity.entity_id,
-            friendly_name: null !== (e = this._selectedEntity.attributes.friendly_name) && void 0 !== e ? e : ""
+            entity_id: this._selectedEntity ? this._selectedEntity.entity_id : this._selectedSlug.slug + "-UID",
+            friendly_name: this._selectedEntity ? null !== (e = this._selectedEntity.attributes.friendly_name) && void 0 !== e ? e : "" : "Stopwatch - UID"
           },
           app_slug: this._selectedSlug,
           entity: this._selectedEntity
@@ -955,18 +959,26 @@
       super.connectedCallback(), this._selectedSlug = this.appSlugs[0], this._domain = this._selectedSlug.domain;
     }
     render() {
-      var t, e;
-      const s = {
-        select: {
-          custom_value: !1,
-          mode: "dropdown",
-          options: this.appSlugs.map(t => ({
-            value: t.slug,
-            label: t.friendly_name
-          }))
-        }
-      };
-      return j`
+      var t, e, s;
+      const i = {
+          select: {
+            custom_value: !1,
+            mode: "dropdown",
+            options: this.appSlugs.map(t => ({
+              value: t.slug,
+              label: t.friendly_name
+            }))
+          }
+        },
+        n = {
+          entity: {
+            include_entities: this.entities.map(t => !t.entity_id.startsWith(this._domain) || this.apps.find(e => {
+              var s;
+              return (null === (s = this._selectedSlug) || void 0 === s ? void 0 : s.slug) == e.app.app_slug && e.app.entity_id == t.entity_id;
+            }) ? "" : t.entity_id).filter(t => "" != t)
+          }
+        };
+      return D`
       <button
         @click=${() => {
         (async (t, e) => {
@@ -981,7 +993,7 @@
       <form class="add-app" @submit=${this.handleSubmit}>
         <ha-selector
           .hass=${this.hass}
-          .selector=${s}
+          .selector=${i}
           .required=${!0}
           .label=${"Select App"}
           .value=${null === (t = this._selectedSlug) || void 0 === t ? void 0 : t.slug}
@@ -989,16 +1001,13 @@
         ></ha-selector>
         <ha-selector
           .hass=${this.hass}
-          .selector=${{
-        entity: {
-          include_entities: this.entities.map(t => !t.entity_id.startsWith(this._domain) || this.apps.find(e => {
-            var s;
-            return (null === (s = this._selectedSlug) || void 0 === s ? void 0 : s.slug) == e.app.app_slug && e.app.entity_id == t.entity_id;
-          }) ? "" : t.entity_id)
-        }
-      }}
-          .required=${!0}
-          .value=${null === (e = this._selectedEntity) || void 0 === e ? void 0 : e.attributes.friendly_name}
+          .selector=${n}
+          .required=${"stopwatch" != (null === (e = this._selectedSlug) || void 0 === e ? void 0 : e.slug)}
+          .disabled=${(() => {
+        var t;
+        return "stopwatch" == (null === (t = this._selectedSlug) || void 0 === t ? void 0 : t.slug);
+      })()}
+          .value=${null === (s = this._selectedEntity) || void 0 === s ? void 0 : s.attributes.friendly_name}
           @value-changed=${this.entityChanged}
         ></ha-selector>
 
@@ -1026,9 +1035,9 @@
     `;
     }
     listApps() {
-      return j`${this.apps.map(t => {
+      return D`${this.apps.map(t => {
         const e = `${t.app_slug.slug}-${t.entity.entity_id}`;
-        return j`<li .id="${e}">
+        return D`<li .id="${e}">
         ${t.app_slug.friendly_name} - ${t.entity.attributes.friendly_name}
       </li>`;
       })}`;
@@ -1076,7 +1085,7 @@
     type: Array
   })], _t.prototype, "apps", void 0), e([dt({
     type: String
-  })], _t.prototype, "mac_address", void 0), e([pt()], _t.prototype, "_selectedSlug", void 0), e([pt()], _t.prototype, "_selectedEntity", void 0), e([pt()], _t.prototype, "_domain", void 0), e([pt()], _t.prototype, "_sortable", void 0), _t = e([at("app-form")], _t);
+  })], _t.prototype, "mac_address", void 0), e([ht()], _t.prototype, "_selectedSlug", void 0), e([ht()], _t.prototype, "_selectedEntity", void 0), e([ht()], _t.prototype, "_domain", void 0), e([ht()], _t.prototype, "_sortable", void 0), _t = e([at("app-form")], _t);
   const gt = [{
     tabId: "setup",
     tabName: "Setup"
@@ -1113,7 +1122,7 @@
           entity: r
         });
       }
-      this._appList = n, this._appSlugs = i, console.log(this._appSlugs), this._knobs = s, super.connectedCallback(), this.requestUpdate();
+      this._appList = n, this._appSlugs = i, this._knobs = s, super.connectedCallback(), this.requestUpdate();
     }
     async firstUpdated() {
       await (async () => {
@@ -1131,9 +1140,9 @@
       })(), this.requestUpdate();
     }
     render() {
-      if (!customElements.get("ha-panel-config") || !customElements.get("ha-menu-button")) return j` loading... `;
+      if (!customElements.get("ha-panel-config") || !customElements.get("ha-menu-button")) return D` loading... `;
       const t = [...Object.values(this.hass.states)];
-      return j`<div>
+      return D`<div>
       <div>
         <div class="header">
           <div class="toolbar">
@@ -1149,7 +1158,7 @@
             .selected=${this._currentTab.tabId}
             @iron-activate=${this.handleTabSelect}
           >
-            ${gt.map(t => j`<paper-tab tab-name=${t.tabId}
+            ${gt.map(t => D`<paper-tab tab-name=${t.tabId}
                   >${t.tabName}</paper-tab
                 >`)}
           </ha-tabs>
@@ -1206,5 +1215,5 @@
     type: Object
   })], t.SmartknobPanel.prototype, "hass", void 0), e([dt({
     type: Boolean
-  })], t.SmartknobPanel.prototype, "narrow", void 0), e([pt()], t.SmartknobPanel.prototype, "_appSlugs", void 0), e([pt()], t.SmartknobPanel.prototype, "_appList", void 0), e([pt()], t.SmartknobPanel.prototype, "_knobs", void 0), e([pt()], t.SmartknobPanel.prototype, "_currentTab", void 0), t.SmartknobPanel = e([at("smartknob-panel")], t.SmartknobPanel);
+  })], t.SmartknobPanel.prototype, "narrow", void 0), e([ht()], t.SmartknobPanel.prototype, "_appSlugs", void 0), e([ht()], t.SmartknobPanel.prototype, "_appList", void 0), e([ht()], t.SmartknobPanel.prototype, "_knobs", void 0), e([ht()], t.SmartknobPanel.prototype, "_currentTab", void 0), t.SmartknobPanel = e([at("smartknob-panel")], t.SmartknobPanel);
 }({});

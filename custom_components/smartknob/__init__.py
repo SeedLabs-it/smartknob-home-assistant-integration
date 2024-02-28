@@ -60,17 +60,17 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     async def async_state_change_callback(entity_id, old_state, new_state):
         """Handle entity state changes."""
         affected_knobs = []
-        app_id = []
+        apps = []
+        if new_state.context.user_id is None:
+            return
         for knob in knobs.values():
             for app in knob["apps"]:
                 if app["entity_id"] == entity_id:
                     affected_knobs.append(knob)
-                    app_id.append(
-                        app["app_id"]
-                    )  # THIS DOESNT REALLY WORK WILL WORK FOR NOW
+                    apps.append(app)  # THIS DOESNT REALLY WORK WILL WORK FOR NOW
 
         await mqtt_handler.async_entity_state_changed(
-            affected_knobs, app_id, old_state, new_state
+            affected_knobs, apps, old_state, new_state
         )
 
     async_track_state_change(hass, entity_ids, async_state_change_callback)

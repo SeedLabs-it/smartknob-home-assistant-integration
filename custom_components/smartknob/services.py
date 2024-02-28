@@ -1,5 +1,6 @@
 """Define the services called by smartknob on HASS entities."""
 from enum import Enum
+import json
 
 from homeassistant.core import HomeAssistant
 
@@ -9,19 +10,22 @@ from .logger import _LOGGER
 class SwitchState:
     """Defines the structure of the SwitchState object."""
 
-    def __init__(self, state) -> None:
+    def __init__(self, on: bool) -> None:
         """Initialize the SwitchState object."""
-        self.on: bool = state["on"]
+        self.on: bool = on
 
 
 class LightState:
     """Defines the structure of the LightState object."""
 
-    def __init__(self, state) -> None:
+    def __init__(
+        self, on: bool, brightness: int, color_temp: int, rgb_color: list[int]
+    ) -> None:
         """Initialize the LightState object."""
-        self.brightness: int = state["brightness"]
-        self.color_temp: int = state["color_temp"]
-        self.rgb_color: list[int] = state["rgb_color"]
+        self.on: bool = on
+        self.brightness: int = brightness
+        self.color_temp: int = color_temp
+        self.rgb_color: list[int] = rgb_color
 
 
 class BlindsState:
@@ -47,10 +51,11 @@ class ClimateMode(Enum):
 class ClimateState:
     """Defines the structure of the ClimateState object."""
 
-    def __init__(self, state) -> None:
+    def __init__(self, mode: int, target_temp: int, current_temp: int) -> None:
         """Initialize the ClimateState object."""
-        self.mode: int = state["mode"]
-        self.target_temp = state["target_temp"]
+        self.mode: int = mode
+        self.target_temp: int = target_temp
+        self.current_temp: int = current_temp
 
 
 class MediaState:
@@ -96,11 +101,11 @@ class Services:
     async def async_set_light(self, entity_id: str, state: LightState):
         """Switch the light on or off, and set its brightness and color."""
 
-        if state.brightness == 255:
-            await self.hass.services.async_call(
-                "light", "turn_on", {"entity_id": entity_id}
-            )
-        elif state.brightness > 0 and state.brightness < 255:
+        # if state.brightness == 255:
+        #     await self.hass.services.async_call(
+        #         "light", "turn_on", {"entity_id": entity_id}
+        #     )
+        if state.brightness >= 0 and state.brightness <= 255:
             await self.hass.services.async_call(
                 "light",
                 "turn_on",
@@ -109,10 +114,10 @@ class Services:
                     "brightness": state.brightness,
                 },
             )
-        elif state.brightness == 0:
-            await self.hass.services.async_call(
-                "light", "turn_off", {"entity_id": entity_id}
-            )
+        # elif state.brightness == 0:
+        #     await self.hass.services.async_call(
+        #         "light", "turn_off", {"entity_id": entity_id}
+        #     )
         else:
             _LOGGER.error("Not implemented")
 
@@ -149,3 +154,26 @@ class Services:
                 "hvac_mode": mode.name,
             },
         )
+
+
+class StateEncoder(json.JSONEncoder):
+    """Custom JSON encoder for the state objects."""
+
+    def default(self, o):
+        """Encode the state objects."""
+        if isinstance(o, SwitchState):
+            return {"on": o.on}
+        if isinstance(o, LightState):
+            return {
+                "on": o.on,
+                "brightness": o.brightness,
+                "color_temp": o.color_temp,
+                "rgb_color": o.rgb_color,
+            }
+        if isinstance(o, ClimateState):
+            return {
+                "mode": o.mode,
+                "target_temp": o.target_temp,
+                "current_temp": o.current_temp,
+            }
+        return super().default(o)

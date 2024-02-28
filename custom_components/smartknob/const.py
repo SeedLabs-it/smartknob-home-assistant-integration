@@ -1,4 +1,5 @@
 """Constants."""
+
 DOMAIN = "smartknob"
 NAME = "Smartknob"
 
@@ -13,14 +14,18 @@ TOPIC_TO_KNOB = "smartknob/to_knob"
 TOPIC_TO_HASS = "smartknob/to_hass"
 
 
-LIGHT_SWITCH = "light_switch"
 LIGHT_DIMMER = "light_dimmer"
-SWITCH = "switch"
-CLIMATE = "climate"
-
 DOMAIN_LIGHT = "light"
+
+LIGHT_SWITCH = "light_switch"
+SWITCH = "switch"
 DOMAIN_SWITCH = "switch"
+
+CLIMATE = "climate"
 DOMAIN_CLIMATE = "climate"
+
+STOPWATCH = "stopwatch"
+DOMAIN_STOPWATCH = "stopwatch"
 
 
 APP_SLUGS = [
@@ -46,6 +51,12 @@ APP_SLUGS = [
         "slug": CLIMATE,
         "friendly_name": "Climate",
         "domain": DOMAIN_CLIMATE,
+        "supported_features": 1,
+    },
+    {
+        "slug": STOPWATCH,
+        "friendly_name": "Stopwatch",
+        "domain": DOMAIN_STOPWATCH,
         "supported_features": 1,
     },
 ]

@@ -10,6 +10,7 @@
 /custom_components/smartknob/frontend/yarn.lock
 
 !.gitignore
+!info.md
 !/custom_components
 !/custom_components/smartknob
 !/custom_components/smartknob/frontend

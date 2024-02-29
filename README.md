@@ -21,7 +21,7 @@ This is an integration for <a href="https://github.com/brushknight/smartknob">br
 
 ## Installation
 <details>
-<summary>Installation instructions will eventually be available here</summary>
+<summary>Click to show installation instructions for Home Assistant</summary>
 
 <br>
 

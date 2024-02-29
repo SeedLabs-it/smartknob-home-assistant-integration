@@ -937,7 +937,7 @@
             app_id: `${this._selectedSlug.slug}-${this._selectedEntity ? this._selectedEntity.entity_id : this._selectedSlug.slug + "-UID"}`,
             app_slug: this._selectedSlug.slug,
             entity_id: this._selectedEntity ? this._selectedEntity.entity_id : this._selectedSlug.slug + "-UID",
-            friendly_name: this._selectedEntity ? null !== (e = this._selectedEntity.attributes.friendly_name) && void 0 !== e ? e : "" : "Stopwatch - UID"
+            friendly_name: this._selectedEntity ? null !== (e = this._selectedEntity.attributes.friendly_name) && void 0 !== e ? e : "" : "Stopwatch"
           },
           app_slug: this._selectedSlug,
           entity: this._selectedEntity

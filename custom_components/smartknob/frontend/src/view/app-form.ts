@@ -171,7 +171,7 @@ export class AppForm extends LitElement {
           : this._selectedSlug.slug + '-UID',
         friendly_name: this._selectedEntity
           ? this._selectedEntity.attributes.friendly_name ?? ''
-          : 'Stopwatch - UID', //TODO what to add if no frindly name? entity id?
+          : 'Stopwatch', //TODO what to add if no frindly name? entity id?
       },
       app_slug: this._selectedSlug,
       entity: this._selectedEntity,

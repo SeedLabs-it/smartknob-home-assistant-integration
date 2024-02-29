@@ -15,7 +15,6 @@ from .services import (
     StateEncoder,
     SwitchState,
 )
-from .store import SmartknobConfig
 
 
 class MqttHandler:
@@ -29,7 +28,7 @@ class MqttHandler:
         self._subscriptions = []
 
         self.hass.async_add_job(self._async_subscribe_to_init())
-        self.hass.async_add_job(self._async_subscribe_to_knobs())
+        self.hass.async_add_job(self.async_subscribe_to_knobs())
 
     # @callback
     async def async_entity_state_changed(
@@ -90,7 +89,7 @@ class MqttHandler:
         except Exception as e:
             _LOGGER.error(e)
 
-    async def _async_subscribe_to_knobs(self):
+    async def async_subscribe_to_knobs(self):
         """Subscribe to knob topics."""
         try:
             _LOGGER.debug("SUBSCRIBING TO KNOBS")

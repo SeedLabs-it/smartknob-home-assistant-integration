@@ -10,7 +10,7 @@ from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.storage import Store
 from homeassistant.loader import bind_hass
 
-from .const import DATA_REGISTRY, SAVE_DELAY, STORAGE_KEY
+from .const import DATA_REGISTRY, DOMAIN, SAVE_DELAY, STORAGE_KEY
 from .logger import _LOGGER
 
 
@@ -130,6 +130,9 @@ class SmartknobStorage:
         new_app = AppEntry(**data)
         self.knobs[mac_address].apps.append(new_app)  #! GOOD WAY TO DO THIS?
         self.async_schedule_save()
+        mqtt = self.hass.data[DOMAIN]["mqtt_handler"]
+        self.hass.async_add_job(mqtt.async_subscribe_to_knobs())
+        self.hass.async_add_job(mqtt.async_sync_knob(mac_address))
         return attr.asdict(new_app)
 
     @callback
@@ -143,6 +146,10 @@ class SmartknobStorage:
 
         self.knobs[mac_address].apps = new
         self.async_schedule_save()
+
+        mqtt = self.hass.data[DOMAIN]["mqtt_handler"]
+        self.hass.async_add_job(mqtt.async_subscribe_to_knobs())
+        self.hass.async_add_job(mqtt.async_sync_knob(mac_address))
 
         return attr.asdict(self.knobs)  #! MIGHT BE INCORRECT
 

@@ -102,7 +102,11 @@ class SmartknobStorage:
     @callback
     def async_get_knob(self, mac_address: str):
         """Get smartknob by mac_address."""
-        res = self.knobs.get(mac_address)
+        try:
+            res = self.knobs.get(mac_address)
+        except:
+            res = None
+
         return attr.asdict(res) if res else None
 
     @callback

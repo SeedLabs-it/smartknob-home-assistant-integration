@@ -61,11 +61,11 @@
          * Copyright 2017 Google LLC
          * SPDX-License-Identifier: BSD-3-Clause
          */;
-  var p;
-  const h = window,
-    c = h.trustedTypes,
+  var h;
+  const p = window,
+    c = p.trustedTypes,
     u = c ? c.emptyScript : "",
-    v = h.reactiveElementPolyfillSupport,
+    v = p.reactiveElementPolyfillSupport,
     _ = {
       toAttribute(t, e) {
         switch (e) {
@@ -298,7 +298,7 @@
     mode: "open"
   }, null == v || v({
     ReactiveElement: m
-  }), (null !== (p = h.reactiveElementVersions) && void 0 !== p ? p : h.reactiveElementVersions = []).push("1.6.3");
+  }), (null !== (h = p.reactiveElementVersions) && void 0 !== h ? h : p.reactiveElementVersions = []).push("1.6.3");
   const b = window,
     A = b.trustedTypes,
     S = A ? A.createPolicy("lit-html", {
@@ -314,8 +314,8 @@
     U = "[ \t\n\f\r]",
     V = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g,
     O = /-->/g,
-    T = />/g,
-    M = RegExp(`>|${U}(?:([^\\s"'>=/]+)(${U}*=${U}*(?:[^ \t\n\f\r"'\`<>=]|("|')|))|$)`, "g"),
+    M = />/g,
+    T = RegExp(`>|${U}(?:([^\\s"'>=/]+)(${U}*=${U}*(?:[^ \t\n\f\r"'\`<>=]|("|')|))|$)`, "g"),
     L = /'/g,
     R = /"/g,
     N = /^(?:script|style|textarea|title)$/i,
@@ -343,10 +343,10 @@
       let a,
         l,
         d = -1,
-        p = 0;
-      for (; p < s.length && (o.lastIndex = p, l = o.exec(s), null !== l);) p = o.lastIndex, o === V ? "!--" === l[1] ? o = O : void 0 !== l[1] ? o = T : void 0 !== l[2] ? (N.test(l[2]) && (n = RegExp("</" + l[2], "g")), o = M) : void 0 !== l[3] && (o = M) : o === M ? ">" === l[0] ? (o = null != n ? n : V, d = -1) : void 0 === l[1] ? d = -2 : (d = o.lastIndex - l[2].length, a = l[1], o = void 0 === l[3] ? M : '"' === l[3] ? R : L) : o === R || o === L ? o = M : o === O || o === T ? o = V : (o = M, n = void 0);
-      const h = o === M && t[e + 1].startsWith("/>") ? " " : "";
-      r += o === V ? s + k : d >= 0 ? (i.push(a), s.slice(0, d) + "$lit$" + s.slice(d) + E + h) : s + E + (-2 === d ? (i.push(void 0), e) : h);
+        h = 0;
+      for (; h < s.length && (o.lastIndex = h, l = o.exec(s), null !== l);) h = o.lastIndex, o === V ? "!--" === l[1] ? o = O : void 0 !== l[1] ? o = M : void 0 !== l[2] ? (N.test(l[2]) && (n = RegExp("</" + l[2], "g")), o = T) : void 0 !== l[3] && (o = T) : o === T ? ">" === l[0] ? (o = null != n ? n : V, d = -1) : void 0 === l[1] ? d = -2 : (d = o.lastIndex - l[2].length, a = l[1], o = void 0 === l[3] ? T : '"' === l[3] ? R : L) : o === R || o === L ? o = T : o === O || o === M ? o = V : (o = T, n = void 0);
+      const p = o === T && t[e + 1].startsWith("/>") ? " " : "";
+      r += o === V ? s + k : d >= 0 ? (i.push(a), s.slice(0, d) + "$lit$" + s.slice(d) + E + p) : s + E + (-2 === d ? (i.push(void 0), e) : p);
     }
     return [z(t, r + (t[s] || "<?>") + (2 === e ? "</svg>" : "")), i];
   };
@@ -705,7 +705,7 @@
          * SPDX-License-Identifier: BSD-3-Clause
          */
   }
-  function pt(t) {
+  function ht(t) {
     return dt({
       ...t,
       state: !0
@@ -716,8 +716,8 @@
        * Copyright 2021 Google LLC
        * SPDX-License-Identifier: BSD-3-Clause
        */
-  var ht;
-  null === (ht = window.HTMLSlotElement) || void 0 === ht || ht.prototype.assignedElements;
+  var pt;
+  null === (pt = window.HTMLSlotElement) || void 0 === pt || pt.prototype.assignedElements;
   const ct = async (t, e, s) => {
     const i = [];
     for (const t of s) i.push({
@@ -748,37 +748,41 @@
       };
       return j`
       ${this.apps.map((e, s) => {
-        var i;
+        var i, n;
         return j`<sk-reorderable-list-item
-            .app_id=${e.app.app_id}
-            .isDraggable=${this.sortable}
-            @drop="${this.drop}"
-            @delete="${() => {
+          .app_id=${e.app.app_id}
+          .isDraggable=${this.sortable}
+          @drop="${this.drop}"
+          @delete="${() => {
           this.apps = this.apps.filter(t => t.app.app_id !== e.app.app_id), ct(this.hass, this.mac_address, this.apps.map(t => t.app)), this.requestUpdate();
         }}"
-          >
-            <div class="list-item">
-              <div class="index">${s + 1}</div>
-              <ha-selector
-                .hass=${this.hass}
-                .selector=${t}
-                .required=${!0}
-                .label=${"Select App"}
-                .value=${e.app_slug.slug}
-              ></ha-selector>
-              <ha-selector
-                .hass=${this.hass}
-                .selector="${{
+        >
+          <div class="list-item">
+            <div class="index">${s + 1}</div>
+            <ha-selector
+              .hass=${this.hass}
+              .selector=${t}
+              .required=${!0}
+              .label=${"Select App"}
+              .value=${e.app_slug.slug}
+            ></ha-selector>
+            <ha-selector
+              .hass=${this.hass}
+              .selector="${{
           entity: {
             include_entities: this.entities.map(t => t.entity_id.startsWith(e.app_slug.domain) ? t.entity_id : "")
           }
         }}"
-                }}
-                .required=${!0}
-                .value=${null === (i = e.entity) || void 0 === i ? void 0 : i.entity_id}
-              ></ha-selector>
-            </div>
-          </sk-reorderable-list-item> `;
+              }}
+              .required=${"stopwatch" != (null === (i = e.app_slug) || void 0 === i ? void 0 : i.slug)}
+              .disabled=${(() => {
+          var t;
+          return "stopwatch" == (null === (t = e.app_slug) || void 0 === t ? void 0 : t.slug);
+        })()}
+              .value=${null === (n = e.entity) || void 0 === n ? void 0 : n.entity_id}
+            ></ha-selector>
+          </div>
+        </sk-reorderable-list-item> `;
       })}
     `;
     }
@@ -927,13 +931,13 @@
       super(...arguments), this._selectedSlug = null, this._selectedEntity = null, this._domain = "", this._sortable = !1, this.handleSubmit = t => {
         var e;
         //! VALIDATE INPUTS
-        if (t.preventDefault(), !this._selectedSlug || !this._selectedEntity) return;
+        if (t.preventDefault(), !this._selectedSlug) return;
         const s = {
           app: {
-            app_id: `${this._selectedSlug.slug}-${this._selectedEntity.entity_id}`,
+            app_id: `${this._selectedSlug.slug}-${this._selectedEntity ? this._selectedEntity.entity_id : Math.random().toString(16).slice(0, 8)}`,
             app_slug: this._selectedSlug.slug,
-            entity_id: this._selectedEntity.entity_id,
-            friendly_name: null !== (e = this._selectedEntity.attributes.friendly_name) && void 0 !== e ? e : ""
+            entity_id: this._selectedEntity ? this._selectedEntity.entity_id : "",
+            friendly_name: this._selectedEntity ? null !== (e = this._selectedEntity.attributes.friendly_name) && void 0 !== e ? e : "" : this._selectedSlug.friendly_name
           },
           app_slug: this._selectedSlug,
           entity: this._selectedEntity
@@ -955,17 +959,25 @@
       super.connectedCallback(), this._selectedSlug = this.appSlugs[0], this._domain = this._selectedSlug.domain;
     }
     render() {
-      var t, e;
-      const s = {
-        select: {
-          custom_value: !1,
-          mode: "dropdown",
-          options: this.appSlugs.map(t => ({
-            value: t.slug,
-            label: t.friendly_name
-          }))
-        }
-      };
+      var t, e, s;
+      const i = {
+          select: {
+            custom_value: !1,
+            mode: "dropdown",
+            options: this.appSlugs.map(t => ({
+              value: t.slug,
+              label: t.friendly_name
+            }))
+          }
+        },
+        n = {
+          entity: {
+            include_entities: this.entities.map(t => !t.entity_id.startsWith(this._domain) || this.apps.find(e => {
+              var s;
+              return (null === (s = this._selectedSlug) || void 0 === s ? void 0 : s.slug) == e.app.app_slug && e.app.entity_id == t.entity_id;
+            }) ? "" : t.entity_id).filter(t => "" != t)
+          }
+        };
       return j`
       <button
         @click=${() => {
@@ -981,7 +993,7 @@
       <form class="add-app" @submit=${this.handleSubmit}>
         <ha-selector
           .hass=${this.hass}
-          .selector=${s}
+          .selector=${i}
           .required=${!0}
           .label=${"Select App"}
           .value=${null === (t = this._selectedSlug) || void 0 === t ? void 0 : t.slug}
@@ -989,16 +1001,13 @@
         ></ha-selector>
         <ha-selector
           .hass=${this.hass}
-          .selector=${{
-        entity: {
-          include_entities: this.entities.map(t => !t.entity_id.startsWith(this._domain) || this.apps.find(e => {
-            var s;
-            return (null === (s = this._selectedSlug) || void 0 === s ? void 0 : s.slug) == e.app.app_slug && e.app.entity_id == t.entity_id;
-          }) ? "" : t.entity_id)
-        }
-      }}
-          .required=${!0}
-          .value=${null === (e = this._selectedEntity) || void 0 === e ? void 0 : e.attributes.friendly_name}
+          .selector=${n}
+          .required=${"stopwatch" != (null === (e = this._selectedSlug) || void 0 === e ? void 0 : e.slug)}
+          .disabled=${(() => {
+        var t;
+        return "stopwatch" == (null === (t = this._selectedSlug) || void 0 === t ? void 0 : t.slug);
+      })()}
+          .value=${null === (s = this._selectedEntity) || void 0 === s ? void 0 : s.attributes.friendly_name}
           @value-changed=${this.entityChanged}
         ></ha-selector>
 
@@ -1076,7 +1085,7 @@
     type: Array
   })], _t.prototype, "apps", void 0), e([dt({
     type: String
-  })], _t.prototype, "mac_address", void 0), e([pt()], _t.prototype, "_selectedSlug", void 0), e([pt()], _t.prototype, "_selectedEntity", void 0), e([pt()], _t.prototype, "_domain", void 0), e([pt()], _t.prototype, "_sortable", void 0), _t = e([at("app-form")], _t);
+  })], _t.prototype, "mac_address", void 0), e([ht()], _t.prototype, "_selectedSlug", void 0), e([ht()], _t.prototype, "_selectedEntity", void 0), e([ht()], _t.prototype, "_domain", void 0), e([ht()], _t.prototype, "_sortable", void 0), _t = e([at("app-form")], _t);
   const gt = [{
     tabId: "setup",
     tabName: "Setup"
@@ -1113,7 +1122,7 @@
           entity: r
         });
       }
-      this._appList = n, this._appSlugs = i, console.log(this._appSlugs), this._knobs = s, super.connectedCallback(), this.requestUpdate();
+      this._appList = n, this._appSlugs = i, this._knobs = s, super.connectedCallback(), this.requestUpdate();
     }
     async firstUpdated() {
       await (async () => {
@@ -1206,5 +1215,5 @@
     type: Object
   })], t.SmartknobPanel.prototype, "hass", void 0), e([dt({
     type: Boolean
-  })], t.SmartknobPanel.prototype, "narrow", void 0), e([pt()], t.SmartknobPanel.prototype, "_appSlugs", void 0), e([pt()], t.SmartknobPanel.prototype, "_appList", void 0), e([pt()], t.SmartknobPanel.prototype, "_knobs", void 0), e([pt()], t.SmartknobPanel.prototype, "_currentTab", void 0), t.SmartknobPanel = e([at("smartknob-panel")], t.SmartknobPanel);
+  })], t.SmartknobPanel.prototype, "narrow", void 0), e([ht()], t.SmartknobPanel.prototype, "_appSlugs", void 0), e([ht()], t.SmartknobPanel.prototype, "_appList", void 0), e([ht()], t.SmartknobPanel.prototype, "_knobs", void 0), e([ht()], t.SmartknobPanel.prototype, "_currentTab", void 0), t.SmartknobPanel = e([at("smartknob-panel")], t.SmartknobPanel);
 }({});

@@ -314,17 +314,17 @@
     U = "[ \t\n\f\r]",
     V = /<(?:(!--|\/[^a-zA-Z])|(\/?[a-zA-Z][^>\s]*)|(\/?$))/g,
     O = /-->/g,
-    T = />/g,
-    M = RegExp(`>|${U}(?:([^\\s"'>=/]+)(${U}*=${U}*(?:[^ \t\n\f\r"'\`<>=]|("|')|))|$)`, "g"),
+    M = />/g,
+    T = RegExp(`>|${U}(?:([^\\s"'>=/]+)(${U}*=${U}*(?:[^ \t\n\f\r"'\`<>=]|("|')|))|$)`, "g"),
     L = /'/g,
     R = /"/g,
     N = /^(?:script|style|textarea|title)$/i,
-    D = (t => (e, ...s) => ({
+    j = (t => (e, ...s) => ({
       _$litType$: t,
       strings: e,
       values: s
     }))(1),
-    j = Symbol.for("lit-noChange"),
+    D = Symbol.for("lit-noChange"),
     I = Symbol.for("lit-nothing"),
     B = new WeakMap(),
     q = x.createTreeWalker(x, 129, null, !1);
@@ -344,8 +344,8 @@
         l,
         d = -1,
         h = 0;
-      for (; h < s.length && (o.lastIndex = h, l = o.exec(s), null !== l);) h = o.lastIndex, o === V ? "!--" === l[1] ? o = O : void 0 !== l[1] ? o = T : void 0 !== l[2] ? (N.test(l[2]) && (n = RegExp("</" + l[2], "g")), o = M) : void 0 !== l[3] && (o = M) : o === M ? ">" === l[0] ? (o = null != n ? n : V, d = -1) : void 0 === l[1] ? d = -2 : (d = o.lastIndex - l[2].length, a = l[1], o = void 0 === l[3] ? M : '"' === l[3] ? R : L) : o === R || o === L ? o = M : o === O || o === T ? o = V : (o = M, n = void 0);
-      const p = o === M && t[e + 1].startsWith("/>") ? " " : "";
+      for (; h < s.length && (o.lastIndex = h, l = o.exec(s), null !== l);) h = o.lastIndex, o === V ? "!--" === l[1] ? o = O : void 0 !== l[1] ? o = M : void 0 !== l[2] ? (N.test(l[2]) && (n = RegExp("</" + l[2], "g")), o = T) : void 0 !== l[3] && (o = T) : o === T ? ">" === l[0] ? (o = null != n ? n : V, d = -1) : void 0 === l[1] ? d = -2 : (d = o.lastIndex - l[2].length, a = l[1], o = void 0 === l[3] ? T : '"' === l[3] ? R : L) : o === R || o === L ? o = T : o === O || o === M ? o = V : (o = T, n = void 0);
+      const p = o === T && t[e + 1].startsWith("/>") ? " " : "";
       r += o === V ? s + k : d >= 0 ? (i.push(a), s.slice(0, d) + "$lit$" + s.slice(d) + E + p) : s + E + (-2 === d ? (i.push(void 0), e) : p);
     }
     return [z(t, r + (t[s] || "<?>") + (2 === e ? "</svg>" : "")), i];
@@ -422,7 +422,7 @@
   }
   function K(t, e, s = t, i) {
     var n, r, o, a;
-    if (e === j) return e;
+    if (e === D) return e;
     let l = void 0 !== i ? null === (n = s._$Co) || void 0 === n ? void 0 : n[i] : s._$Cl;
     const d = C(e) ? void 0 : e._$litDirective$;
     return (null == l ? void 0 : l.constructor) !== d && (null === (r = null == l ? void 0 : l._$AO) || void 0 === r || r.call(l, !1), void 0 === d ? l = void 0 : (l = new d(t), l._$AT(t, s, i)), void 0 !== i ? (null !== (o = (a = s)._$Co) && void 0 !== o ? o : a._$Co = [])[i] = l : s._$Cl = l), void 0 !== l && (e = K(t, l._$AS(t, e.values), l, i)), e;
@@ -486,7 +486,7 @@
       return this._$AB;
     }
     _$AI(t, e = this) {
-      t = K(this, t, e), C(t) ? t === I || null == t || "" === t ? (this._$AH !== I && this._$AR(), this._$AH = I) : t !== this._$AH && t !== j && this._(t) : void 0 !== t._$litType$ ? this.g(t) : void 0 !== t.nodeType ? this.$(t) : (t => P(t) || "function" == typeof (null == t ? void 0 : t[Symbol.iterator]))(t) ? this.T(t) : this._(t);
+      t = K(this, t, e), C(t) ? t === I || null == t || "" === t ? (this._$AH !== I && this._$AR(), this._$AH = I) : t !== this._$AH && t !== D && this._(t) : void 0 !== t._$litType$ ? this.g(t) : void 0 !== t.nodeType ? this.$(t) : (t => P(t) || "function" == typeof (null == t ? void 0 : t[Symbol.iterator]))(t) ? this.T(t) : this._(t);
     }
     k(t) {
       return this._$AA.parentNode.insertBefore(t, this._$AB);
@@ -547,10 +547,10 @@
     _$AI(t, e = this, s, i) {
       const n = this.strings;
       let r = !1;
-      if (void 0 === n) t = K(this, t, e, 0), r = !C(t) || t !== this._$AH && t !== j, r && (this._$AH = t);else {
+      if (void 0 === n) t = K(this, t, e, 0), r = !C(t) || t !== this._$AH && t !== D, r && (this._$AH = t);else {
         const i = t;
         let o, a;
-        for (t = n[0], o = 0; o < n.length - 1; o++) a = K(this, i[s + o], e, o), a === j && (a = this._$AH[o]), r || (r = !C(a) || a !== this._$AH[o]), a === I ? t = I : t !== I && (t += (null != a ? a : "") + n[o + 1]), this._$AH[o] = a;
+        for (t = n[0], o = 0; o < n.length - 1; o++) a = K(this, i[s + o], e, o), a === D && (a = this._$AH[o]), r || (r = !C(a) || a !== this._$AH[o]), a === I ? t = I : t !== I && (t += (null != a ? a : "") + n[o + 1]), this._$AH[o] = a;
       }
       r && !i && this.j(t);
     }
@@ -581,7 +581,7 @@
     }
     _$AI(t, e = this) {
       var s;
-      if ((t = null !== (s = K(this, t, e, 0)) && void 0 !== s ? s : I) === j) return;
+      if ((t = null !== (s = K(this, t, e, 0)) && void 0 !== s ? s : I) === D) return;
       const i = this._$AH,
         n = t === I && i !== I || t.capture !== i.capture || t.once !== i.once || t.passive !== i.passive,
         r = t !== I && (i === I || n);
@@ -644,7 +644,7 @@
       super.disconnectedCallback(), null === (t = this._$Do) || void 0 === t || t.setConnected(!1);
     }
     render() {
-      return j;
+      return D;
     }
   }
   rt.finalized = !0, rt._$litElement$ = !0, null === (it = globalThis.litElementHydrateSupport) || void 0 === it || it.call(globalThis, {
@@ -746,10 +746,10 @@
           }))
         }
       };
-      return D`
+      return j`
       ${this.apps.map((e, s) => {
         var i, n;
-        return D`<sk-reorderable-list-item
+        return j`<sk-reorderable-list-item
           .app_id=${e.app.app_id}
           .isDraggable=${this.sortable}
           @drop="${this.drop}"
@@ -848,7 +848,7 @@
       super.connectedCallback(), this.addEventListener("dragstart", this.dragStart), this.addEventListener("dragenter", this.dragEnter), this.addEventListener("dragover", this.dragOver), this.addEventListener("dragleave", this.dragLeave), this.addEventListener("dragend", this.dragEnd);
     }
     render() {
-      return this.isDraggable ? this.setAttribute("draggable", "true") : this.removeAttribute("draggable"), this.setAttribute("draggable-id", this.app_id), D`
+      return this.isDraggable ? this.setAttribute("draggable", "true") : this.removeAttribute("draggable"), this.setAttribute("draggable-id", this.app_id), j`
       <slot></slot>
       <div class="actions">
         <ha-svg-icon
@@ -934,10 +934,10 @@
         if (t.preventDefault(), !this._selectedSlug) return;
         const s = {
           app: {
-            app_id: `${this._selectedSlug.slug}-${this._selectedEntity ? this._selectedEntity.entity_id : this._selectedSlug.slug + "-UID"}`,
+            app_id: `${this._selectedSlug.slug}-${this._selectedEntity ? this._selectedEntity.entity_id : Math.random().toString(16).slice(0, 8)}`,
             app_slug: this._selectedSlug.slug,
-            entity_id: this._selectedEntity ? this._selectedEntity.entity_id : this._selectedSlug.slug + "-UID",
-            friendly_name: this._selectedEntity ? null !== (e = this._selectedEntity.attributes.friendly_name) && void 0 !== e ? e : "" : "Stopwatch"
+            entity_id: this._selectedEntity ? this._selectedEntity.entity_id : "",
+            friendly_name: this._selectedEntity ? null !== (e = this._selectedEntity.attributes.friendly_name) && void 0 !== e ? e : "" : this._selectedSlug.friendly_name
           },
           app_slug: this._selectedSlug,
           entity: this._selectedEntity
@@ -978,7 +978,7 @@
             }) ? "" : t.entity_id).filter(t => "" != t)
           }
         };
-      return D`
+      return j`
       <button
         @click=${() => {
         (async (t, e) => {
@@ -1035,9 +1035,9 @@
     `;
     }
     listApps() {
-      return D`${this.apps.map(t => {
+      return j`${this.apps.map(t => {
         const e = `${t.app_slug.slug}-${t.entity.entity_id}`;
-        return D`<li .id="${e}">
+        return j`<li .id="${e}">
         ${t.app_slug.friendly_name} - ${t.entity.attributes.friendly_name}
       </li>`;
       })}`;
@@ -1140,9 +1140,9 @@
       })(), this.requestUpdate();
     }
     render() {
-      if (!customElements.get("ha-panel-config") || !customElements.get("ha-menu-button")) return D` loading... `;
+      if (!customElements.get("ha-panel-config") || !customElements.get("ha-menu-button")) return j` loading... `;
       const t = [...Object.values(this.hass.states)];
-      return D`<div>
+      return j`<div>
       <div>
         <div class="header">
           <div class="toolbar">
@@ -1158,7 +1158,7 @@
             .selected=${this._currentTab.tabId}
             @iron-activate=${this.handleTabSelect}
           >
-            ${gt.map(t => D`<paper-tab tab-name=${t.tabId}
+            ${gt.map(t => j`<paper-tab tab-name=${t.tabId}
                   >${t.tabName}</paper-tab
                 >`)}
           </ha-tabs>

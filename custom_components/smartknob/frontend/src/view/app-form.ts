@@ -163,15 +163,13 @@ export class AppForm extends LitElement {
         app_id: `${this._selectedSlug.slug}-${
           this._selectedEntity
             ? this._selectedEntity.entity_id
-            : this._selectedSlug.slug + '-UID'
+            : Math.random().toString(16).slice(0, 8)
         }`,
         app_slug: this._selectedSlug.slug,
-        entity_id: this._selectedEntity
-          ? this._selectedEntity.entity_id
-          : this._selectedSlug.slug + '-UID',
+        entity_id: this._selectedEntity ? this._selectedEntity.entity_id : '',
         friendly_name: this._selectedEntity
           ? this._selectedEntity.attributes.friendly_name ?? ''
-          : 'Stopwatch', //TODO what to add if no frindly name? entity id?
+          : this._selectedSlug.friendly_name,
       },
       app_slug: this._selectedSlug,
       entity: this._selectedEntity,

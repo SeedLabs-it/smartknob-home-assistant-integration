@@ -1,0 +1,87 @@
+{
+	"name": "style-vendorizer",
+	"version": "2.2.3",
+	"description": "Tiny CSS vendor prefixer and property alias mapper for runtime styling solutions",
+	"keywords": [
+		"css",
+		"prefixer",
+		"alias",
+		"mapper",
+		"resolver"
+	],
+	"homepage": "https://github.com/kripod/style-vendorizer#readme",
+	"bugs": "https://github.com/kripod/style-vendorizer/issues",
+	"repository": "kripod/style-vendorizer",
+	"license": "MIT",
+	"author": "Kristóf Poduszló <kripod@protonmail.com>",
+	"sideEffects": false,
+	"exports": {
+		"import": "./dist/esm/bundle.min.mjs",
+		"require": "./dist/cjs/bundle.min.js"
+	},
+	"main": "./dist/cjs/bundle.min.js",
+	"module": "./dist/esm/bundle.min.mjs",
+	"types": "./dist/cjs/bundle.min.d.ts",
+	"files": [
+		"dist/",
+		"src/"
+	],
+	"scripts": {
+		"build": "rollup --config --configPlugin rollup-plugin-ts --sourcemap",
+		"clean": "git clean --interactive -dx --exclude node_modules/ --exclude .husky/",
+		"commit": "git-cz",
+		"fix": "run-s fix:*",
+		"fix:eslint": "npm run lint:eslint -- --fix",
+		"fix:prettier": "npm run lint:prettier -- --write",
+		"lint": "run-p lint:*",
+		"lint:eslint": "eslint --ext .ts,.tsx,.js,.jsx --ignore-path .gitignore .",
+		"lint:prettier": "prettier --check --ignore-path .gitignore .",
+		"lint:typescript": "tsc --noEmit",
+		"prepare": "husky install",
+		"release": "standard-version",
+		"test": "jest"
+	},
+	"commitlint": {
+		"extends": [
+			"@commitlint/config-conventional"
+		]
+	},
+	"config": {
+		"commitizen": {
+			"path": "cz-conventional-changelog"
+		}
+	},
+	"devDependencies": {
+		"@commitlint/cli": "^17.0.3",
+		"@commitlint/config-conventional": "^17.0.3",
+		"@mdn/browser-compat-data": "^5.1.2",
+		"@tsconfig/strictest": "^1.0.1",
+		"@types/jest": "^28.1.3",
+		"@typescript-eslint/eslint-plugin": "^5.29.0",
+		"@typescript-eslint/parser": "^5.29.0",
+		"browserslist": "^4.21.0",
+		"commitizen": "^4.2.4",
+		"compare-versions": "^4.1.3",
+		"cz-conventional-changelog": "^3.3.0",
+		"eslint": "^8.18.0",
+		"eslint-config-prettier": "^8.5.0",
+		"eslint-plugin-regexp": "^1.7.0",
+		"eslint-plugin-simple-import-sort": "^7.0.0",
+		"husky": "^8.0.1",
+		"jest": "^28.1.1",
+		"mdn-data": "^2.0.27",
+		"nano-staged": "^0.8.0",
+		"npm-run-all": "^4.1.5",
+		"prettier": "^2.7.1",
+		"rollup": "^2.75.7",
+		"rollup-plugin-terser": "^7.0.2",
+		"rollup-plugin-ts": "^3.0.2",
+		"standard-version": "^9.5.0",
+		"ts-jest": "^28.0.5",
+		"typescript": "^4.7.4"
+	},
+	"nano-staged": {
+		"*": "prettier --write --ignore-unknown",
+		"*.{ts,js}": "eslint --fix"
+	}
+}

@@ -1,0 +1,283 @@
+{
+  "name": "@twind/preset-tailwind",
+  "version": "1.1.4",
+  "description": "Tailwind CSS preset for twind",
+  "type": "module",
+  "homepage": "https://twind.style/preset-tailwind",
+  "bugs": {
+    "url": "https://github.com/tw-in-js/twind/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tw-in-js/twind.git",
+    "directory": "packages/preset-tailwind"
+  },
+  "keywords": [
+    "twind",
+    "tw-in-js",
+    "tailwind",
+    "tailwindcss",
+    "tailwind-in-js",
+    "twind-preset",
+    "preset"
+  ],
+  "license": "MIT",
+  "author": {
+    "name": "Sascha Tandel",
+    "url": "https://github.com/sastan"
+  },
+  "funding": [
+    {
+      "type": "Open Collective",
+      "url": "https://opencollective.com/twind"
+    },
+    {
+      "type": "Github Sponsor",
+      "url": "https://github.com/sponsors/tw-in-js"
+    },
+    {
+      "type": "Ko-fi",
+      "url": "https://ko-fi.com/twind"
+    }
+  ],
+  "engines": {
+    "node": ">=14.15.0"
+  },
+  "main": "./preset-tailwind.cjs",
+  "exports": {
+    ".": {
+      "types": "./preset-tailwind.d.ts",
+      "development": {
+        "esnext": "./preset-tailwind.esnext.dev.js",
+        "deno": "./preset-tailwind.deno.dev.js",
+        "module": "./preset-tailwind.dev.js",
+        "worker": "./preset-tailwind.worker.dev.js",
+        "browser": "./preset-tailwind.browser.dev.js",
+        "script": "./preset-tailwind.global.dev.js",
+        "node": {
+          "import": "./preset-tailwind.dev.mjs",
+          "require": "./preset-tailwind.dev.cjs"
+        },
+        "default": "./preset-tailwind.dev.js"
+      },
+      "esnext": "./preset-tailwind.esnext.js",
+      "deno": "./preset-tailwind.deno.js",
+      "module": "./preset-tailwind.js",
+      "worker": "./preset-tailwind.worker.js",
+      "browser": "./preset-tailwind.browser.js",
+      "script": "./preset-tailwind.global.js",
+      "node": {
+        "import": "./preset-tailwind.mjs",
+        "require": "./preset-tailwind.cjs"
+      },
+      "default": "./preset-tailwind.js"
+    },
+    "./base": {
+      "types": "./base.d.ts",
+      "development": {
+        "esnext": "./base.esnext.dev.js",
+        "deno": "./base.deno.dev.js",
+        "module": "./base.dev.js",
+        "worker": "./base.worker.dev.js",
+        "browser": "./base.browser.dev.js",
+        "script": "./base.global.dev.js",
+        "node": {
+          "import": "./base.dev.mjs",
+          "require": "./base.dev.cjs"
+        },
+        "default": "./base.dev.js"
+      },
+      "esnext": "./base.esnext.js",
+      "deno": "./base.deno.js",
+      "module": "./base.js",
+      "worker": "./base.worker.js",
+      "browser": "./base.browser.js",
+      "script": "./base.global.js",
+      "node": {
+        "import": "./base.mjs",
+        "require": "./base.cjs"
+      },
+      "default": "./base.js"
+    },
+    "./baseTheme": {
+      "types": "./baseTheme.d.ts",
+      "development": {
+        "esnext": "./baseTheme.esnext.dev.js",
+        "deno": "./baseTheme.deno.dev.js",
+        "module": "./baseTheme.dev.js",
+        "worker": "./baseTheme.worker.dev.js",
+        "browser": "./baseTheme.browser.dev.js",
+        "script": "./baseTheme.global.dev.js",
+        "node": {
+          "import": "./baseTheme.dev.mjs",
+          "require": "./baseTheme.dev.cjs"
+        },
+        "default": "./baseTheme.dev.js"
+      },
+      "esnext": "./baseTheme.esnext.js",
+      "deno": "./baseTheme.deno.js",
+      "module": "./baseTheme.js",
+      "worker": "./baseTheme.worker.js",
+      "browser": "./baseTheme.browser.js",
+      "script": "./baseTheme.global.js",
+      "node": {
+        "import": "./baseTheme.mjs",
+        "require": "./baseTheme.cjs"
+      },
+      "default": "./baseTheme.js"
+    },
+    "./colors": {
+      "types": "./colors.d.ts",
+      "development": {
+        "esnext": "./colors.esnext.dev.js",
+        "deno": "./colors.deno.dev.js",
+        "module": "./colors.dev.js",
+        "worker": "./colors.worker.dev.js",
+        "browser": "./colors.browser.dev.js",
+        "script": "./colors.global.dev.js",
+        "node": {
+          "import": "./colors.dev.mjs",
+          "require": "./colors.dev.cjs"
+        },
+        "default": "./colors.dev.js"
+      },
+      "esnext": "./colors.esnext.js",
+      "deno": "./colors.deno.js",
+      "module": "./colors.js",
+      "worker": "./colors.worker.js",
+      "browser": "./colors.browser.js",
+      "script": "./colors.global.js",
+      "node": {
+        "import": "./colors.mjs",
+        "require": "./colors.cjs"
+      },
+      "default": "./colors.js"
+    },
+    "./defaultTheme": {
+      "types": "./defaultTheme.d.ts",
+      "development": {
+        "esnext": "./defaultTheme.esnext.dev.js",
+        "deno": "./defaultTheme.deno.dev.js",
+        "module": "./defaultTheme.dev.js",
+        "worker": "./defaultTheme.worker.dev.js",
+        "browser": "./defaultTheme.browser.dev.js",
+        "script": "./defaultTheme.global.dev.js",
+        "node": {
+          "import": "./defaultTheme.dev.mjs",
+          "require": "./defaultTheme.dev.cjs"
+        },
+        "default": "./defaultTheme.dev.js"
+      },
+      "esnext": "./defaultTheme.esnext.js",
+      "deno": "./defaultTheme.deno.js",
+      "module": "./defaultTheme.js",
+      "worker": "./defaultTheme.worker.js",
+      "browser": "./defaultTheme.browser.js",
+      "script": "./defaultTheme.global.js",
+      "node": {
+        "import": "./defaultTheme.mjs",
+        "require": "./defaultTheme.cjs"
+      },
+      "default": "./defaultTheme.js"
+    },
+    "./preflight": {
+      "types": "./preflight.d.ts",
+      "development": {
+        "esnext": "./preflight.esnext.dev.js",
+        "deno": "./preflight.deno.dev.js",
+        "module": "./preflight.dev.js",
+        "worker": "./preflight.worker.dev.js",
+        "browser": "./preflight.browser.dev.js",
+        "script": "./preflight.global.dev.js",
+        "node": {
+          "import": "./preflight.dev.mjs",
+          "require": "./preflight.dev.cjs"
+        },
+        "default": "./preflight.dev.js"
+      },
+      "esnext": "./preflight.esnext.js",
+      "deno": "./preflight.deno.js",
+      "module": "./preflight.js",
+      "worker": "./preflight.worker.js",
+      "browser": "./preflight.browser.js",
+      "script": "./preflight.global.js",
+      "node": {
+        "import": "./preflight.mjs",
+        "require": "./preflight.cjs"
+      },
+      "default": "./preflight.js"
+    },
+    "./rules": {
+      "types": "./rules.d.ts",
+      "development": {
+        "esnext": "./rules.esnext.dev.js",
+        "deno": "./rules.deno.dev.js",
+        "module": "./rules.dev.js",
+        "worker": "./rules.worker.dev.js",
+        "browser": "./rules.browser.dev.js",
+        "script": "./rules.global.dev.js",
+        "node": {
+          "import": "./rules.dev.mjs",
+          "require": "./rules.dev.cjs"
+        },
+        "default": "./rules.dev.js"
+      },
+      "esnext": "./rules.esnext.js",
+      "deno": "./rules.deno.js",
+      "module": "./rules.js",
+      "worker": "./rules.worker.js",
+      "browser": "./rules.browser.js",
+      "script": "./rules.global.js",
+      "node": {
+        "import": "./rules.mjs",
+        "require": "./rules.cjs"
+      },
+      "default": "./rules.js"
+    },
+    "./variants": {
+      "types": "./variants.d.ts",
+      "development": {
+        "esnext": "./variants.esnext.dev.js",
+        "deno": "./variants.deno.dev.js",
+        "module": "./variants.dev.js",
+        "worker": "./variants.worker.dev.js",
+        "browser": "./variants.browser.dev.js",
+        "script": "./variants.global.dev.js",
+        "node": {
+          "import": "./variants.dev.mjs",
+          "require": "./variants.dev.cjs"
+        },
+        "default": "./variants.dev.js"
+      },
+      "esnext": "./variants.esnext.js",
+      "deno": "./variants.deno.js",
+      "module": "./variants.js",
+      "worker": "./variants.worker.js",
+      "browser": "./variants.browser.js",
+      "script": "./variants.global.js",
+      "node": {
+        "import": "./variants.mjs",
+        "require": "./variants.cjs"
+      },
+      "default": "./variants.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "sideEffects": false,
+  "peerDependencies": {
+    "@twind/core": "^1.1.0",
+    "typescript": "^4.8.4"
+  },
+  "peerDependenciesMeta": {
+    "typescript": {
+      "optional": true
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "module": "./preset-tailwind.js",
+  "unpkg": "./preset-tailwind.global.js",
+  "jsdelivr": "./preset-tailwind.global.js",
+  "types": "./preset-tailwind.d.ts"
+}

@@ -2,21 +2,26 @@
 
 
 
+!LICENSE
+!README.md
+!info.md
+!mqtt-api-docs.md
+
+
+
 !custom_components/
-!custom_components/smartknob/
+
+
+
 !custom_components/smartknob/*
-
-
+!custom_components/smartknob/translations/*
 
 custom_components/smartknob/__pycache__
 custom_components/smartknob/node_modules
 
 
 
-!custom_components/smartknob/react-vite-frontend/
 !custom_components/smartknob/react-vite-frontend/*
-
-
 
 custom_components/smartknob/react-vite-frontend/node_modules
 custom_components/smartknob/react-vite-frontend/dist

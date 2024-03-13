@@ -1,0 +1,36 @@
+
+# License for SmartKnob Home Assistant Integration by SeedLabs
+Version 0.1
+
+Date: March 2024
+
+## 1. Definitions
+
+"The Software" refers to the Home Assistant extension designed to operate exclusively with the Smart Knob Development Kit provided by SeedLabs.it.
+"Commercial Use" involves any use of The Software in which the user or any third party benefits financially directly or indirectly from the utilization of The Software. This includes, but is not limited to, resale, use in advertising, or inclusion as part of a paid solution or service.
+"Personal Use" refers to the use of The Software for personal, non-commercial purposes.
+"Upstream Repository" refers to the original repository hosted by [Insert your repository link here] where The Software's source code is maintained.
+
+## 2. Grant of License
+Subject to the terms of this License, SeedLabs grants you a non-exclusive, non-transferable, non-sublicensable license to use The Software for Personal Use only, provided all conditions below are met.
+
+## 3. Restrictions
+Commercial Use Prohibition: The Software may not be used for Commercial Use without obtaining a separate license from SeedLabs. For inquiries about obtaining a commercial license, please contact info@seedlabs.it.
+
+Open Source Requirement: Any modifications or derivative works of The Software must be made available under the same terms as this License and must be linked to the Upstream Repository. Forking is required; cloning for redistribution is prohibited.
+
+Credit: Credit to SeedLabs and any other contributors as specified in The Software's documentation must remain visible in the user interface of any versions of The Software or derivative works thereof.
+
+Hardware Restriction: The use of The Software is restricted to operation with the Smart Knob Development Kit hardware provided by SeedLabs.it. Use with any other hardware is prohibited without a separate license.
+
+## 4. Termination
+Violation of any of the terms of this License will result in automatic termination of the rights granted hereunder. Upon termination, you must cease all use of The Software and destroy all copies.
+
+## 5. Disclaimer of Warranty
+The Software is provided "as is", without warranty of any kind, express or implied. SeedLabs does not warrant that The Software will meet your requirements or operate under your specific conditions of use. SeedLabs assumes no responsibility for your use of The Software or liability for any damages, whether direct or indirect, arising from its use.
+
+## 6. Limitation of Liability
+In no event will SeedLabs be liable for any special, incidental, indirect, or consequential damages whatsoever arising out of or in any way related to your use of or inability to use The Software.
+
+## 7. General
+This License constitutes the entire agreement between you and SeedLabs regarding your use of The Software and supersedes all prior agreements and understandings, whether written or oral.

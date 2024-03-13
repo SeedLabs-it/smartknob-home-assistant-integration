@@ -651,6 +651,18 @@
   resolved "https://registry.yarnpkg.com/@twind/preset-tailwind/-/preset-tailwind-1.1.4.tgz#354710e9700de27712bfcd226af32b3162fea172"
   integrity sha512-zv85wrP/DW4AxgWrLfH7kyGn/KJF3K04FMLVl2AjoxZGYdCaoZDkL8ma3hzaKQ+WGgBFRubuB/Ku2Rtv/wjzVw==
 
+"@twind/with-react@^1.1.3":
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/@twind/with-react/-/with-react-1.1.3.tgz#9019d0c9cc40ffd141763041cb5a4700b09e9561"
+  integrity sha512-xWQ+BC7P8gECjIFamJ0UGGmcWaUKxcmH6HcnPIANO+NDJIoTFbkjHu/jxlBtADX706nYRYeuOXBDzDd0mSdJvg==
+  dependencies:
+    fast-diff "^1.2.0"
+
+"@twind/with-web-components@^1.1.3":
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/@twind/with-web-components/-/with-web-components-1.1.3.tgz#803fe90aeedc454c6814d464bd4d9f52916b17a7"
+  integrity sha512-pM2Ps58pkLQva2HsC/cm2y5kTIwojJ6896w4+kXIMCOhuoOfTeyNOkYvBdr8Cpkvm+vR+ggPITNdvpzAOXa+Dg==
+
 "@types/babel__core@^7.20.5":
   version "7.20.5"
   resolved "https://registry.yarnpkg.com/@types/babel__core/-/babel__core-7.20.5.tgz#3df15f27ba85319caa07ba08d0721889bb39c017"
@@ -1404,6 +1416,11 @@ fast-deep-equal@^3.1.1, fast-deep-equal@^3.1.3:
   version "3.1.3"
   resolved "https://registry.yarnpkg.com/fast-deep-equal/-/fast-deep-equal-3.1.3.tgz#3a7d56b559d6cbc3eb512325244e619a65c6c525"
   integrity sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==
+
+fast-diff@^1.2.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/fast-diff/-/fast-diff-1.3.0.tgz#ece407fa550a64d638536cd727e129c61616e0f0"
+  integrity sha512-VxPP4NqbUjj6MaAOafWeUn2cXWLcCtljklUtZf0Ind4XQ+QPtmA0b18zZy0jIQx+ExRVCR/ZQpBmik5lXshNsw==
 
 fast-glob@^3.2.7, fast-glob@^3.2.9, fast-glob@^3.3.0:
   version "3.3.2"

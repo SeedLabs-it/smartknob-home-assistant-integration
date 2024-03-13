@@ -1,6 +1,0 @@
-{
-  "verbose": true,
-  "ext": "ts,js,tsx,jsx,html,css",
-  "ignore": ["**/node_modules/**", "**/dist/**"],
-  "exec": "yarn run build"
-}

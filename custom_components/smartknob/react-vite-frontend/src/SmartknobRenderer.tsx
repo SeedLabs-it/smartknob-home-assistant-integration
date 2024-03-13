@@ -36,11 +36,6 @@ export default function reactToCustomElementTailwind(
       this.shadow = this.attachShadow({ mode: 'open' });
 
       this.firstUpdated();
-
-      // this._render();
-
-      // const shadow = this.attachShadow({ mode: 'open' });
-      // this.shadow.innerHTML = `<h1 class="text-3xl font-bold underline text-red-500">Hello world!</h1>`;
     }
 
     async firstUpdated() {

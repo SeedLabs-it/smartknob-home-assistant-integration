@@ -13,12 +13,18 @@
 
 
 
+custom_components/smartknob/*
 !custom_components/smartknob/*
 
+!custom_components/smartknob/translations/
 !custom_components/smartknob/translations/*
 
+!custom_components/smartknob/react-vite-frontend/
 !custom_components/smartknob/react-vite-frontend/*
+!custom_components/smartknob/react-vite-frontend/src/
 !custom_components/smartknob/react-vite-frontend/src/*
+!custom_components/smartknob/react-vite-frontend/src/data/
+!custom_components/smartknob/react-vite-frontend/src/data/*
 
 custom_components/smartknob/__pycache__
 custom_components/smartknob/node_modules

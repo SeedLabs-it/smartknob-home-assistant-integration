@@ -10,6 +10,8 @@
 /custom_components/smartknob/frontend/node_modules/
 /custom_components/smartknob/frontend/yarn.lock
 
+/custom_components/smartknob/react-vite-frontend/
+
 !.gitignore
 !info.md
 !/custom_components

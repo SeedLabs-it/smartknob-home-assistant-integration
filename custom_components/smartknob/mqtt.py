@@ -116,8 +116,6 @@ class MqttHandler:
                 coordinator: SmartknobCoordinator = self.hass.data[DOMAIN][
                     "coordinator"
                 ]
-                _LOGGER.debug("INIT RECEIVED")
-
                 if not coordinator.store.async_get_knob(mac_address):
                     await coordinator.store.async_init_knob(
                         {"mac_address": mac_address, "apps": []}
@@ -127,6 +125,8 @@ class MqttHandler:
                     knob: dict = coordinator.store.async_get_knob(mac_address)
                     _LOGGER.debug(knob.get("apps"))
                     await self.async_sync_knob(mac_address)
+
+                await self.async_acknowledge(mac_address, payload["id"], "init")
 
         except ValueError:
             _LOGGER.error("Error decoding JSON payload")
@@ -222,3 +222,20 @@ class MqttHandler:
             )
         else:
             _LOGGER.debug("KNOB NOT FOUND")
+
+    @callback
+    async def async_acknowledge(
+        self, mac_address, acknowledgement_id, acknowledgement_type
+    ):
+        """Send an acknowledgement to the knob."""
+        await mqtt.async_publish(
+            self.hass,
+            "smartknob/" + mac_address + "/from_hass",
+            json.dumps(
+                {
+                    "type": "acknowledgement",
+                    "acknowledge_id": acknowledgement_id,
+                    "acknowledge_type": acknowledgement_type,
+                }
+            ),
+        )

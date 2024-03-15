@@ -31,9 +31,9 @@ class LightState:
 class BlindsState:
     """Defines the structure of the BlindsState object."""
 
-    def __init__(self, state) -> None:
+    def __init__(self, position: int) -> None:
         """Initialize the BlindsState object."""
-        self.position: int = state["position"]
+        self.position: int = position
 
 
 class ClimateMode(Enum):
@@ -134,6 +134,17 @@ class Services:
         else:
             _LOGGER.error("Not implemented")
 
+    async def async_handle_blinds(self, entity_id: str, position: int):
+        """Handle blinds entity."""
+        await self.hass.services.async_call(
+            "cover",
+            "set_cover_position",
+            {
+                "entity_id": entity_id,
+                "position": position,
+            },
+        )
+
     async def async_handle_climate(self, entity_id: str, state: ClimateState):
         """Handle climate entity."""
         mode = ClimateMode(state.mode)
@@ -162,13 +173,19 @@ class StateEncoder(json.JSONEncoder):
     def default(self, o):
         """Encode the state objects."""
         if isinstance(o, SwitchState):
-            return {"on": o.on}
+            return {
+                "on": o.on,
+            }
         if isinstance(o, LightState):
             return {
                 "on": o.on,
                 "brightness": o.brightness,
                 "color_temp": o.color_temp,
                 "rgb_color": o.rgb_color,
+            }
+        if isinstance(o, BlindsState):
+            return {
+                "position": o.position,
             }
         if isinstance(o, ClimateState):
             return {

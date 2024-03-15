@@ -183,6 +183,11 @@ class MqttHandler:
                                 state.get("on"),
                             ),
                         )
+                    elif app["app_slug"] == "blinds":
+                        await self.services.async_handle_blinds(
+                            app["entity_id"],
+                            state.get("position"),
+                        )
                     elif app["app_slug"] == "climate":
                         await self.services.async_handle_climate(
                             app["entity_id"],

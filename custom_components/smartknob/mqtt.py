@@ -82,6 +82,7 @@ class MqttHandler:
                                 "id": payload_id,
                                 "type": "state_update",
                                 "app_id": app["app_id"],
+                                "entity_id": app["entity_id"],
                                 "new_state": state,
                             },
                             cls=StateEncoder,
@@ -212,6 +213,10 @@ class MqttHandler:
                     else:
                         _LOGGER.error("Not implemented command: ")
                         _LOGGER.debug(app)
+
+                    await self.async_acknowledge(
+                        mac_address, payload["id"], "state_update"
+                    )
 
         except ValueError:
             _LOGGER.error("Error decoding JSON payload")

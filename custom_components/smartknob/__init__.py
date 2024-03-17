@@ -1,6 +1,6 @@
 """The Smartknob integration."""
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.core import HomeAssistant
+from homeassistant.core import HomeAssistant, State
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.event import async_track_state_change
 
@@ -57,7 +57,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     knobs = coordinator.store.async_get_knobs()
     entity_ids = [(app["entity_id"]) for knob in knobs.values() for app in knob["apps"]]
 
-    async def async_state_change_callback(entity_id, old_state, new_state):
+    async def async_state_change_callback(
+        entity_id, old_state: State, new_state: State
+    ):
         """Handle entity state changes."""
         affected_knobs = []
         apps = []

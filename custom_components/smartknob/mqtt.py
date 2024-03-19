@@ -1,5 +1,6 @@
 """MQTT handler for Smartknob."""
 import json
+import secrets
 
 from homeassistant.components import mqtt
 from homeassistant.core import HomeAssistant, State, callback
@@ -8,6 +9,7 @@ from .const import DOMAIN, TOPIC_INIT
 from .coordinator import SmartknobCoordinator
 from .logger import _LOGGER
 from .services import (
+    BlindsState,
     ClimateMode,
     ClimateState,
     LightState,
@@ -42,18 +44,27 @@ class MqttHandler:
         _LOGGER.debug(new_state)
         for knob in affected_knobs:
             for app in apps:
+                random_number = secrets.randbits(32)
+                hex_string = hex(random_number)[2:]
+                payload_id = hex_string.zfill(8)[-8:]
+
                 state = None
+
                 if app["app_slug"] == "light_switch" or app["app_slug"] == "switch":
                     state = SwitchState(new_state.state == "on")
 
-                if app["app_slug"] == "light_dimmer":
+                elif app["app_slug"] == "light_dimmer":
                     state = LightState(  #! FOR SOME REASON BRIGHTNESS IS NOT SET ON FIRST STATE AFTER RESTART OF HASS UI CAN SHOW LIGHT ON STATE CAN BE "ON" BUT BRIGHTNESS IS NOT SET SO FIRST STATE SENT TO KNOB IS OFF BRIGHTNESS 0
                         new_state.state == "on" or False,
                         new_state.attributes.get("brightness") or 0,
                         new_state.attributes.get("color_temp") or None,
                         new_state.attributes.get("rgb_color") or None,
                     )
-                if app["app_slug"] == "climate":
+                elif app["app_slug"] == "blinds":
+                    state = BlindsState(
+                        new_state.attributes.get("current_position") or 0
+                    )
+                elif app["app_slug"] == "climate":
                     if new_state.state in ClimateMode.__members__:
                         mode = ClimateMode[new_state.state].value
                     state = ClimateState(
@@ -68,8 +79,10 @@ class MqttHandler:
                         "smartknob/" + knob["mac_address"] + "/from_hass",
                         json.dumps(
                             {
+                                "id": payload_id,
                                 "type": "state_update",
                                 "app_id": app["app_id"],
+                                "entity_id": app["entity_id"],
                                 "new_state": state,
                             },
                             cls=StateEncoder,
@@ -116,8 +129,6 @@ class MqttHandler:
                 coordinator: SmartknobCoordinator = self.hass.data[DOMAIN][
                     "coordinator"
                 ]
-                _LOGGER.debug("INIT RECEIVED")
-
                 if not coordinator.store.async_get_knob(mac_address):
                     await coordinator.store.async_init_knob(
                         {"mac_address": mac_address, "apps": []}
@@ -127,6 +138,8 @@ class MqttHandler:
                     knob: dict = coordinator.store.async_get_knob(mac_address)
                     _LOGGER.debug(knob.get("apps"))
                     await self.async_sync_knob(mac_address)
+
+                await self.async_acknowledge(mac_address, payload["id"], "init")
 
         except ValueError:
             _LOGGER.error("Error decoding JSON payload")
@@ -183,6 +196,11 @@ class MqttHandler:
                                 state.get("on"),
                             ),
                         )
+                    elif app["app_slug"] == "blinds":
+                        await self.services.async_handle_blinds(
+                            app["entity_id"],
+                            state.get("position"),
+                        )
                     elif app["app_slug"] == "climate":
                         await self.services.async_handle_climate(
                             app["entity_id"],
@@ -195,6 +213,10 @@ class MqttHandler:
                     else:
                         _LOGGER.error("Not implemented command: ")
                         _LOGGER.debug(app)
+
+                    await self.async_acknowledge(
+                        mac_address, payload["id"], "state_update"
+                    )
 
         except ValueError:
             _LOGGER.error("Error decoding JSON payload")
@@ -217,3 +239,20 @@ class MqttHandler:
             )
         else:
             _LOGGER.debug("KNOB NOT FOUND")
+
+    @callback
+    async def async_acknowledge(
+        self, mac_address, acknowledgement_id, acknowledgement_type
+    ):
+        """Send an acknowledgement to the knob."""
+        await mqtt.async_publish(
+            self.hass,
+            "smartknob/" + mac_address + "/from_hass",
+            json.dumps(
+                {
+                    "type": "acknowledgement",
+                    "acknowledge_id": acknowledgement_id,
+                    "acknowledge_type": acknowledgement_type,
+                }
+            ),
+        )

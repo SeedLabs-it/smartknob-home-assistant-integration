@@ -11,7 +11,10 @@ This is an integration for Home Assistant. It provides a user interface for sett
   - [Trello Board](#trello-board)
 
 ## Introduction
-This is an integration for <a href="https://github.com/brushknight/smartknob">brushknight´s</a> fork of <a href="https://github.com/scottbez1/smartknob">scottbez1´s</a> Smartknob project. It allows for usage and setup of multiple Smartknobs with Home Assistant. Through an easy to use user interface.
+This is an integration for <a href="https://www.seedlabs.it">Seedlabs.it´s</a> Smart Knob. 
+It allows for usage and setup of multiple SmartKnobs with Home Assistant. Through an easy to use user interface.
+The hardware is inspired by <a href="https://github.com/scottbez1/smartknob">scottbez1´s</a> Smartknob project, but its functionalities are substantially different, as such, Scott's knob is not compatible with this project.
+
 
 ### Current Features
 * Control and setup single Smartknob

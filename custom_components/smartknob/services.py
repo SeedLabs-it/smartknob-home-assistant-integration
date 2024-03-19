@@ -31,9 +31,9 @@ class LightState:
 class BlindsState:
     """Defines the structure of the BlindsState object."""
 
-    def __init__(self, state) -> None:
+    def __init__(self, position: int) -> None:
         """Initialize the BlindsState object."""
-        self.position: int = state["position"]
+        self.position: int = position
 
 
 class ClimateMode(Enum):
@@ -100,28 +100,8 @@ class Services:
 
     async def async_set_light(self, entity_id: str, state: LightState):
         """Switch the light on or off, and set its brightness and color."""
-
-        # if state.brightness == 255:
-        #     await self.hass.services.async_call(
-        #         "light", "turn_on", {"entity_id": entity_id}
-        #     )
-        if state.brightness >= 0 and state.brightness <= 255:
-            await self.hass.services.async_call(
-                "light",
-                "turn_on",
-                {
-                    "entity_id": entity_id,
-                    "brightness": state.brightness,
-                },
-            )
-        # elif state.brightness == 0:
-        #     await self.hass.services.async_call(
-        #         "light", "turn_off", {"entity_id": entity_id}
-        #     )
-        else:
-            _LOGGER.error("Not implemented")
-
-        if state.rgb_color:
+        # TODO: SERVICE CALL CAN STILL FAIL SOMETIMES ATLEAST FOR MY HUE BAR LIGHT
+        if state.rgb_color and state.brightness >= 0 and state.brightness <= 255:
             await self.hass.services.async_call(
                 "light",
                 "turn_on",
@@ -131,8 +111,29 @@ class Services:
                     "rgb_color": state.rgb_color,
                 },
             )
+        elif state.brightness >= 0 and state.brightness <= 255:
+            await self.hass.services.async_call(
+                "light",
+                "turn_on",
+                {
+                    "entity_id": entity_id,
+                    "brightness": state.brightness,
+                },
+            )
+
         else:
             _LOGGER.error("Not implemented")
+
+    async def async_handle_blinds(self, entity_id: str, position: int):
+        """Handle blinds entity."""
+        await self.hass.services.async_call(
+            "cover",
+            "set_cover_position",
+            {
+                "entity_id": entity_id,
+                "position": position,
+            },
+        )
 
     async def async_handle_climate(self, entity_id: str, state: ClimateState):
         """Handle climate entity."""
@@ -162,13 +163,19 @@ class StateEncoder(json.JSONEncoder):
     def default(self, o):
         """Encode the state objects."""
         if isinstance(o, SwitchState):
-            return {"on": o.on}
+            return {
+                "on": o.on,
+            }
         if isinstance(o, LightState):
             return {
                 "on": o.on,
                 "brightness": o.brightness,
                 "color_temp": o.color_temp,
                 "rgb_color": o.rgb_color,
+            }
+        if isinstance(o, BlindsState):
+            return {
+                "position": o.position,
             }
         if isinstance(o, ClimateState):
             return {

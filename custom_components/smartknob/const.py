@@ -27,6 +27,9 @@ DOMAIN_CLIMATE = "climate"
 STOPWATCH = "stopwatch"
 DOMAIN_STOPWATCH = "stopwatch"
 
+BLINDS = "blinds"
+DOMAIN_BLINDS = "cover"
+
 
 APP_SLUGS = [
     {
@@ -57,6 +60,12 @@ APP_SLUGS = [
         "slug": STOPWATCH,
         "friendly_name": "Stopwatch",
         "domain": DOMAIN_STOPWATCH,
+        "supported_features": 1,
+    },
+    {
+        "slug": BLINDS,
+        "friendly_name": "Blinds",
+        "domain": DOMAIN_BLINDS,
         "supported_features": 1,
     },
 ]

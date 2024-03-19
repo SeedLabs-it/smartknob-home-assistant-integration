@@ -76,7 +76,7 @@ INTEGRATION_FOLDER = DOMAIN
 
 PANEL_TITLE = NAME
 PANEL_FOLDER = "react-vite-frontend/dist"
-PANEL_FILENAME = "tailwindcss-template-card.js"
+PANEL_FILENAME = "smartknob-integration.js"
 PANEL_URL = "/api/panel_custom/smartknob"
-PANEL_NAME = "hello-wc"
+PANEL_NAME = "smartknob-integration"
 PANEL_ICON = "mdi:knob"

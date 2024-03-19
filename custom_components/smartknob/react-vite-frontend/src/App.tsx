@@ -1,79 +1,92 @@
 import {} from 'custom-card-helpers';
-import { useEffect, useRef } from 'react';
-import { HomeAssistant, SelectOption, SelectSelector } from './types';
+import { useEffect, useRef, useState } from 'react';
+import { HomeAssistant } from './types';
+import AddApp from 'views/add-app';
 
 declare global {
   namespace JSX {
     interface IntrinsicElements {
       ['ha-selector']: any;
-      ['ha-top-app-bar-fixed']: any;
       ['ha-menu-button']: any;
-      ['ha-select']: any;
-      ['mwc-list-item']: any;
-      ['ha-selector-select']: any;
-      ['ha-sortable']: any;
+      ['ha-tabs']: any;
+      ['paper-tab']: any;
     }
   }
 }
 
-const HelloApp = ({
+const SmartknobIntegration = ({
   hass,
   narrow,
 }: {
   hass: HomeAssistant;
   narrow: boolean;
 }) => {
-  const selectorRef = useRef<any>(null);
-  const appSlugs = [
-    { slug: 'dimmer', friendly_name: 'Dimmer' },
-    { slug: 'stopwatch', friendly_name: 'Stopwatch' },
-    { slug: 'light', friendly_name: 'Light' },
-    { slug: 'led_strip', friendly_name: 'LED Strip' },
-    { slug: 'fan', friendly_name: 'Fan' },
-  ];
+  const menuButtonRef = useRef<any>(null);
+  const tabsRef = useRef<any>(null);
 
-  const options: SelectOption[] = appSlugs.map((slug) => {
-    return {
-      value: slug.slug,
-      label: slug.friendly_name,
-    };
-  });
+  const [currentTabId, setCurrentTabId] = useState<string>('setup');
 
-  const slugSelector: SelectSelector = {
-    select: {
-      custom_value: false,
-      mode: 'dropdown',
-      options,
-    },
+  const handleTabSelect = (e: any) => {
+    setCurrentTabId(e.target.getAttribute('tab-id'));
   };
 
+  const tabs = [
+    {
+      tabId: 'setup',
+      tabName: 'Setup',
+    },
+    {
+      tabId: 'configuration',
+      tabName: 'Configuration',
+    },
+  ];
+
   useEffect(() => {
-    if (selectorRef.current) {
+    // setDomain(selectedSlug);
+    if (menuButtonRef.current) {
       let el: {
         hass: HomeAssistant;
-        selector: SelectSelector;
-        label: string;
-      } & HTMLElement = selectorRef.current;
+        narrow: boolean;
+        dockedSidebar: boolean;
+      } & HTMLElement = menuButtonRef.current;
       el.hass = hass;
-      el.selector = slugSelector;
-      el.label = 'Select an app';
+      el.narrow = narrow;
+      el.dockedSidebar = true;
     }
 
-    if (narrow) console.log('narrow');
-  }, []);
+    if (tabsRef.current) {
+      let el: {
+        attrForSelected: string;
+      } & HTMLElement = tabsRef.current;
+      el.attrForSelected = 'tab-id';
+      el.style.setProperty(
+        '--paper-tabs-selection-bar-color',
+        'var(--app-header-selection-bar-color, var(--app-header-text-color, #fff))',
+      );
+    }
+  }, [hass, narrow]);
 
   return (
-    <div className='container mx-auto'>
-      <p className=''>seedlabs.it</p>
-      <h2>Smart Knob - DevKit v0.1</h2>
-      <p>
-        STATE OF {hass.states['light.led_strip'].entity_id}:{' '}
-        {hass.states['light.led_strip'].attributes.friendly_name}
-      </p>
-      <p>HASS language: {hass.language}</p>
-      <ha-selector ref={selectorRef} />
-    </div>
+    <>
+      <div className='px-4 bg-[color:var(--app-header-background-color)]'>
+        <div className='flex px-4 items-center gap-2 text-xl h-[var(--header-height)]'>
+          <ha-menu-button ref={menuButtonRef}></ha-menu-button>
+          <h2 className='m-0'>Smartknob</h2>
+        </div>
+        <ha-tabs
+          ref={tabsRef}
+          onClick={handleTabSelect}
+          selected={currentTabId}
+          scrollable
+        >
+          {tabs.map((tab) => (
+            <paper-tab tab-id={tab.tabId}>{tab.tabName}</paper-tab>
+          ))}
+        </ha-tabs>
+      </div>
+      <AddApp hass={hass} apps={[]} />
+    </>
   );
 };
 
-export default HelloApp;
+export default SmartknobIntegration;

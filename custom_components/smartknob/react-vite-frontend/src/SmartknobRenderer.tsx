@@ -17,19 +17,12 @@ const withTwind = install(config);
 export default function reactToCustomElementTailwind(
   reactComponent: React.ComponentType<any>,
 ): CustomElementConstructor {
-  // loadHa().then(() => {
-  //   console.log('loadHa done');
-  // });
-  // const renderSymbol = Symbol.for('smartknob.render');
-  // const connectedSymbol = Symbol.for('smartknob.connected');
-  // const contextSymbol = Symbol.for('smartknob.context');
-  // const propsSymbol = Symbol.for('smartknob.props');
-
   class SmartknobCustomElementRenderer extends withTwind(HTMLElement) {
     _hass: HomeAssistant | undefined;
     _oldHass: HomeAssistant | undefined;
+    _narrow: boolean | undefined;
+    _oldNarrow: boolean | undefined;
     shadow: ShadowRoot;
-    _rerender_after_set_hass = true;
 
     constructor() {
       super();
@@ -39,9 +32,7 @@ export default function reactToCustomElementTailwind(
     }
 
     async firstUpdated() {
-      console.log('First update.');
       await loadHa();
-
       this._render();
     }
 
@@ -49,13 +40,20 @@ export default function reactToCustomElementTailwind(
       this._oldHass = this._hass;
       this._hass = hass;
 
-      if (!this._oldHass || this._rerender_after_set_hass) this._render();
+      if (this._oldHass !== this._hass) this._render();
+    }
+
+    public set narrow(narrow: boolean) {
+      this._oldNarrow = this._narrow;
+      this._narrow = narrow;
+
+      if (this._oldNarrow !== this._narrow) this._render();
     }
 
     _render() {
       const el = React.createElement(reactComponent, {
         hass: this._hass,
-        // narrow: true,
+        narrow: this._narrow,
       });
 
       render(el, this.shadow);

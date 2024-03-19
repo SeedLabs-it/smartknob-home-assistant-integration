@@ -1,5 +1,5 @@
 {
-  "name": "tailwindcss-template-card",
+  "name": "smartknob-integration",
   "private": true,
   "version": "3.1.1",
   "type": "module",
@@ -38,7 +38,6 @@
     "eslint": "^8.46.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
-    "nodemon": "^2.0.22",
     "postcss": "^8.4.23",
     "react-icons": "^4.10.1",
     "tailwind-scrollbar": "^3.0.4",

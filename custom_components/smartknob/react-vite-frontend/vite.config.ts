@@ -33,7 +33,7 @@ export default defineConfig({
       input: 'src/main.ts',
       output: {
         dir: 'dist',
-        entryFileNames: 'tailwindcss-template-card.js',
+        entryFileNames: 'smartknob-integration.js',
         manualChunks: undefined,
       },
     },

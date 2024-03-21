@@ -1,19 +1,10 @@
-/*
+/custom_components/smartknob/__pycache__
+/custom_components/smartknob/node_modules
 
-/custom_components/*
-/custom_components/smartknob/__pycache__/
-/custom_components/smartknob/old_stuff_do_not_include/
 
-/custom_components/smartknob/frontend/.vscode/
-/custom_components/smartknob/frontend/dist/
-/custom_components/smartknob/frontend/dev/
-/custom_components/smartknob/frontend/node_modules/
+/custom_components/smartknob/frontend/node_modules
 /custom_components/smartknob/frontend/yarn.lock
 
-/custom_components/smartknob/react-vite-frontend/
 
-!.gitignore
-!info.md
-!/custom_components
-!/custom_components/smartknob
-!/custom_components/smartknob/frontend
+/custom_components/smartknob/react-vite-frontend
+

@@ -63,8 +63,10 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
         """Handle entity state changes."""
         affected_knobs = []
         apps = []
+
         if new_state.context.user_id is None:
             return
+
         for knob in knobs.values():
             for app in knob["apps"]:
                 if app["entity_id"] == entity_id:

@@ -41,7 +41,6 @@ class MqttHandler:
         new_state: State,
     ):
         """Handle entity state changes."""
-        _LOGGER.debug(new_state)
         for knob in affected_knobs:
             for app in apps:
                 random_number = secrets.randbits(32)

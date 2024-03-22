@@ -135,7 +135,7 @@ export class SmartknobPanel extends withTwind(LitElement) {
             )}
           </ha-tabs>
         </div>
-        <div class="content">
+        <div class="content max-w-4xl mx-auto">
           <app-form
             .hass=${this.hass}
             .entities=${entities}

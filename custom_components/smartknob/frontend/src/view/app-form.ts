@@ -1,4 +1,4 @@
-import { LitElement, css, html } from 'lit';
+import { LitElement, html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import {
   AppListItem,
@@ -9,37 +9,18 @@ import {
   SelectSelector,
 } from '../types';
 import { HassEntity } from 'home-assistant-js-websocket';
-import '../components/SkReorderableList';
+import '../components/SkReorderableList/SkReorderableList.ts';
 import { mdiPlus, mdiSort } from '@mdi/js';
 import { asyncSaveApp, asyncSyncToKnob } from '../data/websockets';
 // import { selectSelector } from '../const';
 
+import install from '@twind/with-web-components';
+import config from '../../twind.config';
+
+const withTwind = install(config);
+
 @customElement('app-form')
-export class AppForm extends LitElement {
-  static styles = css`
-    :host {
-      display: block;
-      max-width: 600px;
-    }
-    ha-selector {
-      min-width: 200px;
-      width: 100%;
-    }
-
-    .add-app {
-      width: 100%;
-      display: flex;
-      gap: 12px;
-      padding-bottom: 12px;
-      align-items: center;
-    }
-
-    .btn {
-      height: 100%;
-      aspect-ratio: 1/1;
-    }
-  `;
-
+export class AppForm extends withTwind(LitElement) {
   @property({ type: Object }) hass!: HomeAssistant;
   @property({ type: Array }) entities!: HassEntity[];
   @property({ type: Array }) appSlugs!: AppSlug[];
@@ -104,14 +85,14 @@ export class AppForm extends LitElement {
     };
 
     return html`
-      <button
+      <!-- <button
         @click=${() => {
-          asyncSyncToKnob(this.hass, this.mac_address);
-        }}
+        asyncSyncToKnob(this.hass, this.mac_address);
+      }}
       >
         Sync to KNOB
-      </button>
-      <form class="add-app" @submit=${this.handleSubmit}>
+      </button> -->
+      <form class="flex items-center gap-3 pb-3" @submit=${this.handleSubmit}>
         <ha-selector
           .hass=${this.hass}
           .selector=${slugSelector}
@@ -119,6 +100,7 @@ export class AppForm extends LitElement {
           .label=${'Select App'}
           .value=${this._selectedSlug?.slug}
           @value-changed=${this.appSlugChanged}
+          class="min-w-56 w-full"
         ></ha-selector>
         <ha-selector
           .hass=${this.hass}
@@ -127,9 +109,10 @@ export class AppForm extends LitElement {
           .disabled=${entitySelectorDisabled()}
           .value=${this._selectedEntity?.attributes.friendly_name}
           @value-changed=${this.entityChanged}
+          class="min-w-56 w-full"
         ></ha-selector>
 
-        <button type="submit" class="btn">
+        <button type="submit" class="aspect-square">
           <ha-svg-icon title="submit" .path=${mdiPlus}></ha-svg-icon>
         </button>
         <button
@@ -137,7 +120,7 @@ export class AppForm extends LitElement {
             e.preventDefault();
             this._sortable = !this._sortable;
           }}
-          class="btn reorder-btn"
+          class="aspect-square"
         >
           <ha-svg-icon title="reorder" .path=${mdiSort}></ha-svg-icon>
         </button>

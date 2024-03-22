@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-  //output FILE NAME
+  //add @ for src folder in vite config file
 
   build: {
     outDir: './dist',

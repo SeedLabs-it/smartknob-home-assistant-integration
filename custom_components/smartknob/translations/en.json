@@ -4,6 +4,9 @@
       "user": {
         "title": "Setup SmartKnob"
       }
+    },
+    "abort": {
+      "single_instance_allowed": "Only a single configuration of SmartKnob is allowed."
     }
   }
 }

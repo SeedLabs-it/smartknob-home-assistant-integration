@@ -1,6 +1,6 @@
 import { mdiDelete, mdiDrag } from '@mdi/js';
 import { LitElement, css, html } from 'lit';
-import { customElement, property } from 'lit/decorators';
+import { customElement, property } from 'lit/decorators.js';
 import {
   AppListItem,
   AppSlug,

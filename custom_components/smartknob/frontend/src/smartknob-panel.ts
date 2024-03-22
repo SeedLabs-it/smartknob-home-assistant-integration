@@ -1,6 +1,6 @@
 import './types';
 import { html, css, LitElement } from 'lit';
-import { customElement, property, state } from 'lit/decorators';
+import { customElement, property, state } from 'lit/decorators.js';
 
 import './view/app-form';
 import { AppListItem, AppSlug, HomeAssistant, Knob, Tab } from './types';
@@ -8,8 +8,14 @@ import { loadHa } from './load-ha-elements';
 import { getAsyncAppSlugs, getAsyncKnobs } from './data/websockets';
 import { DOMAIN, TABS } from './const';
 
+import install from '@twind/with-web-components';
+import config from '../twind.config';
+
+const withTwind = install(config);
+
 @customElement('smartknob-panel')
-export class SmartknobPanel extends LitElement {
+// @install(config)
+export class SmartknobPanel extends withTwind(LitElement) {
   static styles = css`
     .header {
       /* display: flex;
@@ -101,7 +107,7 @@ export class SmartknobPanel extends LitElement {
       !customElements.get('ha-panel-config') ||
       !customElements.get('ha-menu-button')
     )
-      return html` loading... `;
+      return html` <h1>loading...</h1> `;
 
     const entities = [...Object.values(this.hass.states)];
 

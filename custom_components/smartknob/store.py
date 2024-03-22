@@ -1,4 +1,4 @@
-"""Store for Smartknob integration."""
+"""Store for SmartKnob integration."""
 
 from collections import OrderedDict
 from collections.abc import MutableMapping
@@ -26,17 +26,17 @@ class AppEntry:
 
 @attr.s(slots=True, frozen=False)
 class SmartknobConfig:
-    """Smartknob device configuration, storage entry."""
+    """SmartKnob device configuration, storage entry."""
 
     mac_address = attr.ib(type=str, default=None)
     apps = attr.ib(type=list[AppEntry], default=None)
 
 
 class SmartknobStorage:
-    """Class to hold Smartknob storage."""
+    """Class to hold SmartKnob storage."""
 
     def __init__(self, hass: HomeAssistant) -> None:
-        """Initialize the Smartknob storage."""
+        """Initialize the SmartKnob storage."""
         self.hass = hass
         self.config: MutableMapping[
             str, str
@@ -45,7 +45,7 @@ class SmartknobStorage:
         self._store = Store(hass, 1, STORAGE_KEY)
 
     async def async_load(self) -> None:
-        """Load the registry of Smartknob."""
+        """Load the registry of SmartKnob."""
         data = await self._store.async_load()
         knobs: "OrderedDict[str, AppEntry]" = OrderedDict()
 
@@ -80,7 +80,7 @@ class SmartknobStorage:
         self._store.async_delay_save(self._data_to_save, SAVE_DELAY)
 
     async def async_save(self) -> None:
-        """Save the registry of Smartknob."""
+        """Save the registry of SmartKnob."""
         await self._store.async_save(self._data_to_save())
 
     @callback
@@ -94,7 +94,7 @@ class SmartknobStorage:
 
     async def async_delete(self):
         """Delete all registry data."""
-        _LOGGER.warning("Removing Smartknob configuration data!")
+        _LOGGER.warning("Removing SmartKnob configuration data!")
         await self._store.async_remove()
         self.config = {}
         self.knobs = []

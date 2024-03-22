@@ -1,4 +1,4 @@
-"""Websocket API for Smartknob integration."""
+"""Websocket API for SmartKnob integration."""
 # import json
 
 import voluptuous as vol
@@ -26,7 +26,7 @@ class SmartknobAppSlugsView(HomeAssistantView):
     name = "api:smartknob:app_slugs"
 
     async def get(self, request):
-        """Get Smartknob AppSlugs."""
+        """Get SmartKnob AppSlugs."""
         # hass: HomeAssistant = request.app["hass"]
         # coordinator = hass.data[DOMAIN]["coordinator"]
 
@@ -34,13 +34,13 @@ class SmartknobAppSlugsView(HomeAssistantView):
 
 
 class SmartknobKnobsView(HomeAssistantView):
-    """View to handle Smartknob config requests."""
+    """View to handle SmartKnob config requests."""
 
     url = "/api/smartknob/knobs"
     name = "api:smartknob:knobs"
 
     async def get(self, request):
-        """Get Smartknob config."""
+        """Get SmartKnob config."""
         hass: HomeAssistant = request.app["hass"]
         coordinator = hass.data[DOMAIN]["coordinator"]
         knobs = coordinator.store.async_get_knobs()
@@ -50,7 +50,7 @@ class SmartknobKnobsView(HomeAssistantView):
 
 
 class SmartknobKnobSyncView(HomeAssistantView):
-    """View to handle Smartknob config requests."""
+    """View to handle SmartKnob config requests."""
 
     url = "/api/smartknob/knob/sync"
     name = "api:smartknob:knob:sync"
@@ -71,7 +71,7 @@ class SmartknobKnobSyncView(HomeAssistantView):
 
 
 class SmartknobAppsView(HomeAssistantView):
-    """View to handle Smartknob config requests."""
+    """View to handle SmartKnob config requests."""
 
     url = "/api/smartknob/apps"
     name = "api:smartknob:apps"

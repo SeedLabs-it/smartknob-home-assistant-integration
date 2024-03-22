@@ -1,8 +1,8 @@
-# Smartknob
+# SmartKnob
 
-This is an integration for Home Assistant. It provides a user interface for setting up and using ur Smartknob with Home Assistant.
+This is an integration for Home Assistant. It provides a user interface for setting up and using ur SmartKnob with Home Assistant.
 
-- [Smartknob](#smartknob)
+- [SmartKnob](#smartknob)
   - [Introduction](#introduction)
     - [Current Features](#current-features)
   - [Installation](#installation)
@@ -13,11 +13,11 @@ This is an integration for Home Assistant. It provides a user interface for sett
 ## Introduction
 This is an integration for <a href="https://www.seedlabs.it">Seedlabs.it´s</a> SmartKnob.
 It allows for usage and setup of multiple SmartKnobs with Home Assistant. Through an easy to use user interface.
-The hardware is inspired by <a href="https://github.com/scottbez1/smartknob">scottbez1´s</a> Smartknob project, but its functionalities are substantially different, as such, Scott's knob is not compatible with this project.
+The hardware is inspired by <a href="https://github.com/scottbez1/smartknob">scottbez1´s</a> SmartKnob project, but its functionalities are substantially different, as such, Scott's knob is not compatible with this project.
 
 
 ### Current Features
-* Control and setup single Smartknob
+* Control and setup single SmartKnob
 * No yaml or automation setup neccessary all configurable from UI
 
 <br/>

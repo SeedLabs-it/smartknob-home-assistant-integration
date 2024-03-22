@@ -1,6 +1,6 @@
 import './types';
 import { html, css, LitElement } from 'lit';
-import { customElement, property, state } from 'lit/decorators.js';
+import { customElement, property, state } from 'lit/decorators';
 
 import './view/app-form';
 import { AppListItem, AppSlug, HomeAssistant, Knob, Tab } from './types';

@@ -3,7 +3,7 @@
   "name": "SmartKnob",
   "documentation": "",
   "dependencies": ["mqtt"],
-  "codeowners": ["@SeedLabs-it", "@carlhampuswall"],
+  "codeowners": ["@SeedLabs-it"],
   "requirements": [],
   "config_flow": true,
   "translations": ["en"],

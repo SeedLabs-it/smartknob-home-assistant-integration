@@ -8,6 +8,7 @@ from homeassistant.components.http.data_validator import RequestDataValidator
 from homeassistant.core import HomeAssistant
 
 from .const import APP_SLUGS, DOMAIN
+from .coordinator import SmartknobCoordinator
 from .logger import _LOGGER
 
 
@@ -94,11 +95,9 @@ class SmartknobAppsView(HomeAssistantView):
     async def post(self, request, data: dict):
         """Update config for app."""
         hass: HomeAssistant = request.app["hass"]
-        coordinator = hass.data[DOMAIN]["coordinator"]
+        coordinator: SmartknobCoordinator = hass.data[DOMAIN]["coordinator"]
         if "mac_address" and "apps" in data:
             apps = data.get("apps")
-
-            _LOGGER.debug(apps)
 
             if len(apps) > 1:
                 await coordinator.store.async_update_apps(
@@ -106,6 +105,7 @@ class SmartknobAppsView(HomeAssistantView):
                 )  # ADD ADD APPS FUNCTION!!!
 
             await coordinator.store.async_add_app(data.get("mac_address"), apps[0])
+            await coordinator.update()
 
         return self.json({"success": True})  # TODO return actual success or error
 

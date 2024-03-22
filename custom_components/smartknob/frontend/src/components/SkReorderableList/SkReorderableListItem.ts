@@ -83,7 +83,8 @@ export class SkReorderableListItem extends withTwind(LitElement) {
   }
   dragStart(e: any) {
     this.style.opacity = '0.4';
-    e.dataTransfer?.setData('text/plain', this.id);
+
+    e.dataTransfer?.setData('text/plain', this.app_id);
     e.dataTransfer!.effectAllowed = 'move';
 
     this.classList.add('draggable-content');

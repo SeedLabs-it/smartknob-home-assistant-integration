@@ -1,4 +1,4 @@
-import { LitElement, css, html } from 'lit';
+import { LitElement, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import {
   AppListItem,
@@ -64,7 +64,7 @@ export class SkReorderableList extends withTwind(LitElement) {
             );
             this.requestUpdate();
           }}"
-          class="flex flex-col justify-between h-full py-2 odd:bg-zinc-800 even:bg-zinc-900"
+          class="flex flex-col justify-between h-full py-2 my-2 odd:bg-zinc-800 even:bg-zinc-900 rounded-lg"
         >
           <div class="flex flex-row flex-nowrap items-center gap-3">
             <p class="text-center w-36 h-full">${index + 1}</p>
@@ -101,7 +101,7 @@ export class SkReorderableList extends withTwind(LitElement) {
 
   drop(e: any) {
     e.target.classList.remove('over');
-    const draggableId = e.dataTransfer?.getData('text/plain');
+    const draggableId = e.dataTransfer.getData('text/plain');
     const dropId = e.target.getAttribute('draggable-id');
 
     this.apps = this.reorderItems(this.apps, draggableId, dropId);
@@ -124,12 +124,10 @@ export class SkReorderableList extends withTwind(LitElement) {
     );
     const dropIndex = items.findIndex((item) => item.app.app_id === dropId);
 
-    const [draggedItem] = items.splice(draggableIndex, 1);
-    items.splice(
-      draggableIndex < dropIndex ? dropIndex : dropIndex,
-      0,
-      draggedItem,
-    );
+    const draggedItem = items[draggableIndex];
+
+    items.splice(draggableIndex, 1);
+    items.splice(dropIndex, 0, draggedItem);
 
     return items;
   }

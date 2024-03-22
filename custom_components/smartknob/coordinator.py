@@ -41,7 +41,7 @@ class SmartknobCoordinator(DataUpdateCoordinator):
         await self.store.async_delete()
 
     async def update(self):
-        """Update data."""
+        """Update state tracker."""
         # Subsribe to entity state changes of all entities used in knobs
 
         mqtt = self.hass.data[DOMAIN]["mqtt_handler"]

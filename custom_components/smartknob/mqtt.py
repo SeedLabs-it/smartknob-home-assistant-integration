@@ -1,4 +1,4 @@
-"""MQTT handler for Smartknob."""
+"""MQTT handler for SmartKnob."""
 import json
 import secrets
 
@@ -20,7 +20,7 @@ from .services import (
 
 
 class MqttHandler:
-    """Handles MQTT messages between HASS and Smartknob."""
+    """Handles MQTT messages between HASS and SmartKnob."""
 
     def __init__(self, hass: HomeAssistant) -> None:
         """Initialize the MQTT handler."""
@@ -119,7 +119,7 @@ class MqttHandler:
 
     @callback
     async def async_init_received(self, msg):
-        """Handle init message from Smartknob."""
+        """Handle init message from SmartKnob."""
         try:
             payload = json.loads(msg.payload)
 
@@ -146,7 +146,7 @@ class MqttHandler:
 
     @callback
     async def async_message_received(self, msg):
-        """Handle messages from Smartknob."""
+        """Handle messages from SmartKnob."""
         try:
             payload = json.loads(msg.payload)
 

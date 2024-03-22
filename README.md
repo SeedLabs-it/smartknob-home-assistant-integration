@@ -1,8 +1,8 @@
-# Smartknob
+# SmartKnob
 
-This is an integration for Home Assistant. It provides a user interface for setting up and using ur Smartknob with Home Assistant.
+This is an integration for Home Assistant. It provides a user interface for setting up and using ur SmartKnob with Home Assistant.
 
-- [Smartknob](#smartknob)
+- [SmartKnob](#smartknob)
   - [Introduction](#introduction)
     - [Current Features](#current-features)
   - [Installation](#installation)
@@ -11,13 +11,13 @@ This is an integration for Home Assistant. It provides a user interface for sett
   - [Trello Board](#trello-board)
 
 ## Introduction
-This is an integration for <a href="https://www.seedlabs.it">Seedlabs.it´s</a> Smart Knob. 
+This is an integration for <a href="https://www.seedlabs.it">Seedlabs.it´s</a> SmartKnob.
 It allows for usage and setup of multiple SmartKnobs with Home Assistant. Through an easy to use user interface.
-The hardware is inspired by <a href="https://github.com/scottbez1/smartknob">scottbez1´s</a> Smartknob project, but its functionalities are substantially different, as such, Scott's knob is not compatible with this project.
+The hardware is inspired by <a href="https://github.com/scottbez1/smartknob">scottbez1´s</a> SmartKnob project, but its functionalities are substantially different, as such, Scott's knob is not compatible with this project.
 
 
 ### Current Features
-* Control and setup single Smartknob
+* Control and setup single SmartKnob
 * No yaml or automation setup neccessary all configurable from UI
 
 <br/>
@@ -36,8 +36,8 @@ Easiest install is via [HACS](https://hacs.xyz/):
 
 Notes:
 
-- HACS does not "configure" the integration for you. You must go to `Configuration -> Integrations` and add `Smart Knob` after installing via HACS.
-- The `mqtt` integration must be installed and configured in order for the `Smart Knob` integration to work. As manual configuration is required for the `mqtt` setup, this cannot happen automatically.
+- HACS does not "configure" the integration for you. You must go to `Configuration -> Integrations` and add `SmartKnob` after installing via HACS.
+- The `mqtt` integration must be installed and configured in order for the `SmartKnob` integration to work. As manual configuration is required for the `mqtt` setup, this cannot happen automatically.
 
 For manual installation for advanced users, copy `custom_components/smartknob` to
 your `custom_components` folder in Home Assistant.
@@ -53,7 +53,7 @@ your `custom_components` folder in Home Assistant.
 <details>
 <summary>Click to show instructions for setting up ur Development  Environment</summary>
 
-If you are interestd in developing Home Assistant's Smart Knob Integration you will need three things:
+If you are interestd in developing Home Assistant's SmartKnob Integration you will need three things:
 
 1) A working version of Home Assistant Core. We will use a local dockerized version.
 2) A MQTT Broker. We will use Mosquitto
@@ -90,7 +90,7 @@ Set-up
   **SETUP INTEGRATION CODEBASE**. Checkout this codebase. [TODO] include here all the comments that are needed to compile the code.
 </li>
 <li>
-  **UPDATE HOME ASSISTANT WITH THE SMART KNOB INTEGRATION**.
+  **UPDATE HOME ASSISTANT WITH THE SmartKnob INTEGRATION**.
   <ul> This repository generates a custom components, that needs to be moved to the home assistant running instance.
   To do so, you can type from command line <code> docker cp path_to/smart-knob-home-assistant-integration/custom_components docker_name_instance:/workspaces/core/config </code>, where docker name instance is the identifier that docker uses when booting a new image. This command will copy the content of the custom_components folder in this repo to the dockerized home assistant instance.</ul>
   <ul>
@@ -99,10 +99,10 @@ Set-up
   <ul> Login to home assistant (usually available at <code>http://localhost:8123/</code>). Go to Settings -> Devices and Services, and from the Integrations Tab, press the button 'Add Integration'. Select MQTT from the list, and when prompted use the following informations: <code>host: host.docker.internal</code> (or the ip of the machine where the MQTT broker is running) and <code>port: 1883.</code> (or the custom port used by the MQTT broker)
   </ul>
   <ul>
-  From Setting -> Device and Services, select the tab Devices, and press the <code>Add Device</code> button. From the list select <code> Smart Knob </code>
+  From Setting -> Device and Services, select the tab Devices, and press the <code>Add Device</code> button. From the list select <code> SmartKnob </code>
   </ul>
   <ul>
-    On the main menu on the right, you should see a new item called 'Smart Knob'.
+    On the main menu on the right, you should see a new item called 'SmartKnob'.
   </ul>
 </li>
 

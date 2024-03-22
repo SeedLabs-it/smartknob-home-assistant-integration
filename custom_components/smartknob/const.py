@@ -1,7 +1,7 @@
 """Constants."""
 
 DOMAIN = "smartknob"
-NAME = "Smartknob"
+NAME = "SmartKnob"
 
 STORAGE_KEY = f"{DOMAIN}.storage"
 DATA_REGISTRY = f"{DOMAIN}_storage"

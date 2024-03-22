@@ -1,6 +1,6 @@
 {
   "domain": "smartknob",
-  "name": "Smart Knob",
+  "name": "SmartKnob",
   "documentation": "",
   "dependencies": ["mqtt"],
   "codeowners": ["@SeedLabs-it", "@carlhampuswall"],

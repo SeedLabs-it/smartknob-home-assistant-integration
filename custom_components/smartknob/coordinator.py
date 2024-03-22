@@ -8,7 +8,7 @@ from .store import SmartknobStorage
 
 
 class SmartknobCoordinator(DataUpdateCoordinator):
-    """Smartknob DataUpdateCoordinator."""
+    """SmartKnob DataUpdateCoordinator."""
 
     def __init__(
         self, hass: HomeAssistant | None, session, entry, store: SmartknobStorage

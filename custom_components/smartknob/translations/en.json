@@ -2,8 +2,11 @@
   "config": {
     "step": {
       "user": {
-        "title": "Setup Smartknob"
+        "title": "Setup SmartKnob"
       }
+    },
+    "abort": {
+      "single_instance_allowed": "Only a single configuration of SmartKnob is allowed."
     }
   }
 }

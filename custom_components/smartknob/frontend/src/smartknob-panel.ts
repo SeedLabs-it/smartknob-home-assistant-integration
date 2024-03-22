@@ -113,7 +113,7 @@ export class SmartknobPanel extends LitElement {
               .hass=${this.hass}
               .narrow=${this.narrow}
             ></ha-menu-button>
-            <h2>Smartknob</h2>
+            <h2>SmartKnob</h2>
           </div>
           <ha-tabs
             scrollable

@@ -6,7 +6,7 @@ Date: March 2024
 
 ## 1. Definitions
 
-"The Software" refers to the Home Assistant extension designed to operate exclusively with the Smart Knob Development Kit provided by SeedLabs.it.
+"The Software" refers to the Home Assistant extension designed to operate exclusively with the SmartKnob Development Kit provided by SeedLabs.it.
 "Commercial Use" involves any use of The Software in which the user or any third party benefits financially directly or indirectly from the utilization of The Software. This includes, but is not limited to, resale, use in advertising, or inclusion as part of a paid solution or service.
 "Personal Use" refers to the use of The Software for personal, non-commercial purposes.
 "Upstream Repository" refers to the original repository hosted by [Insert your repository link here] where The Software's source code is maintained.
@@ -21,7 +21,7 @@ Open Source Requirement: Any modifications or derivative works of The Software m
 
 Credit: Credit to SeedLabs and any other contributors as specified in The Software's documentation must remain visible in the user interface of any versions of The Software or derivative works thereof.
 
-Hardware Restriction: The use of The Software is permitted with the Smart Knob Development Kit hardware provided by SeedLabs.it for both Personal Use and development purposes. Use of The Software with any other hardware for Personal Use is allowed. However, use of The Software with hardware other than the Smart Knob Development Kit for any commercial purposes is prohibited without obtaining a separate license.
+Hardware Restriction: The use of The Software is permitted with the SmartKnob Development Kit hardware provided by SeedLabs.it for both Personal Use and development purposes. Use of The Software with any other hardware for Personal Use is allowed. However, use of The Software with hardware other than the SmartKnob Development Kit for any commercial purposes is prohibited without obtaining a separate license.
 
 ## 4. Termination
 Violation of any of the terms of this License will result in automatic termination of the rights granted hereunder. Upon termination, you must cease all use of The Software and destroy all copies.

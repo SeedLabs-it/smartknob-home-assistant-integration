@@ -1,4 +1,4 @@
-"""The Smartknob integration."""
+"""The SmartKnob integration."""
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, State
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
@@ -14,21 +14,15 @@ from .websockets import async_register_websockets
 
 
 async def async_setup(hass: HomeAssistant, config):
-    """Set up the Smartknob component."""
-    _LOGGER.debug("Smartknob - Setup")
-
-    # # Define a callback function to call when a state change occurs
-    # def state_change_callback(entity_id, old_state, new_state):
-    #     update_knob_on_entity_change(knobs, entity_id, new_state.state)
-
-    # # Subscribe to state changes of the entities
-    # async_track_state_change(hass, entity_ids, state_change_callback)
-
+    """Set up the SmartKnob component."""
+    _LOGGER.debug("SmartKnob - Setup")
     return True
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
-    """Set up Smartknob from a config entry."""
+    """Set up SmartKnob from a config entry."""
+    _LOGGER.debug("SmartKnob - Setup Entry")
+    _LOGGER.debug("SmartKnob - Entry: %s", entry)
     hass.data.setdefault(DOMAIN, {})
     session = async_get_clientsession(hass)
 

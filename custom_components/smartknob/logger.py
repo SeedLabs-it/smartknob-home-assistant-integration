@@ -1,4 +1,4 @@
-"""Logger for Smartknob integration."""
+"""Logger for SmartKnob integration."""
 import logging
 
 _LOGGER = logging.getLogger(__name__)

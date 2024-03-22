@@ -1,27 +1,30 @@
-"""Config flow for Smartknob integration."""
+"""Config flow for SmartKnob integration."""
 
 import logging
+import secrets
 
 from homeassistant import config_entries
 
-from .const import DOMAIN
+from .const import DOMAIN, NAME
 
 _LOGGER = logging.getLogger(__name__)
 
 
-# TODO tell user to go to Smartknob panel after submit
+# TODO tell user to go to SmartKnob panel after submit
 class SmartknobConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
-    """Handle a config flow for Smartknob."""
+    """Handle a config flow for SmartKnob."""
 
     VERSION = 1
     MINOR_VERSION = 1
 
     async def async_step_user(self, user_input=None):
-        """Handle the initial step."""
-        if user_input is None:
-            return self.async_show_form(
-                step_id="user",
-            )
+        """Handle conflow flow initiated by user (run on adding integration to HASS)."""
+        if self._async_current_entries():
+            return self.async_abort(reason="single_instance_allowed")
 
-        _LOGGER.debug("Creating config entry for Smartknob")
-        return self.async_create_entry(title=DOMAIN, data=user_input)
+        _id = secrets.token_hex(6)
+
+        await self.async_set_unique_id(_id)
+        self._abort_if_unique_id_configured(updates=user_input)
+
+        return self.async_create_entry(title=NAME, data={})

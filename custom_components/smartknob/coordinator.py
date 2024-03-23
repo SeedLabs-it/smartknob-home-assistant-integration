@@ -47,9 +47,7 @@ class SmartknobCoordinator(DataUpdateCoordinator):
         mqtt = self.hass.data[DOMAIN]["mqtt_handler"]
 
         knobs = self.store.async_get_knobs()
-        entity_ids = [
-            (app["entity_id"]) for knob in knobs.values() for app in knob["apps"]
-        ]
+        entity_ids = [(app["entity_id"]) for knob in knobs for app in knob["apps"]]
 
         async def async_state_change_callback(
             entity_id, old_state: State, new_state: State

@@ -1,4 +1,4 @@
-import { App, AppSlug, HomeAssistant, KnobData, Knobs } from '../types';
+import { App, AppSlug, HomeAssistant, KnobData } from '../types';
 
 export const getAsyncApps = (hass: HomeAssistant) => {
   return hass.callApi<{ success; apps: App[] }>('GET', 'smartknob/apps');

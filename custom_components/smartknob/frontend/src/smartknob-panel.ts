@@ -8,7 +8,6 @@ import {
   AppSlug,
   HomeAssistant,
   KnobData,
-  SelectOption,
   SelectSelector,
   Tab,
 } from './types';
@@ -35,47 +34,21 @@ export class SmartknobPanel extends withTwind(LitElement) {
 
   @property({ type: Object }) public hass!: HomeAssistant;
   @property({ type: Boolean }) public narrow!: boolean;
-  @state() private _appSlugs: AppSlug[] = [];
-  @state() private _appList: AppListItem[] = [];
   @state() private _knobs: KnobData[] = [];
   @state() private _selectedKnob: KnobData | undefined = undefined;
   @state() private _currentTab: Tab = TABS[0];
+  @state() private _appSlugs: AppSlug[] = [];
+  @state() private _appList: AppListItem[] = [];
 
   async connectedCallback() {
     const loadedKnobs = (await getAsyncKnobs(this.hass)).knobs;
-    this._selectedKnob = loadedKnobs[0];
-
     const loadedAppSlugs = (await getAsyncAppSlugs(this.hass)).app_slugs;
 
-    const __appList: AppListItem[] = [];
-
-    for (const knob in loadedKnobs) {
-      for (const app of loadedKnobs[knob].apps) {
-        const _appSlug =
-          loadedAppSlugs.find((a) => a.slug == app.app_slug) ??
-          loadedAppSlugs[0];
-
-        const _entity =
-          [...Object.values(this.hass.states)].find(
-            (e) => e.entity_id == app.entity_id,
-          ) ?? null;
-
-        __appList.push({
-          app: {
-            app_id: app.app_id,
-            app_slug: app.app_slug,
-            entity_id: app.entity_id,
-            friendly_name: app.friendly_name,
-          },
-          app_slug: _appSlug,
-          entity: _entity,
-        });
-      }
-    }
-    this._appList = __appList;
+    this._selectedKnob = loadedKnobs[0];
+    this._knobs = loadedKnobs;
     this._appSlugs = loadedAppSlugs;
 
-    this._knobs = loadedKnobs;
+    this.setAppList();
 
     super.connectedCallback();
 
@@ -146,6 +119,8 @@ export class SmartknobPanel extends withTwind(LitElement) {
                 this._selectedKnob = this._knobs.find(
                   (knob) => knob.mac_address == val.detail.value,
                 );
+                this.setAppList();
+                this.requestUpdate();
               }}
               class="mb-4"
             ></ha-selector>
@@ -175,5 +150,30 @@ export class SmartknobPanel extends withTwind(LitElement) {
     } else {
       this.scrollTo(0, 0);
     }
+  }
+
+  setAppList() {
+    var __appList: AppListItem[] = [];
+    for (const app of this._selectedKnob?.apps ?? []) {
+      const _appSlug =
+        this._appSlugs.find((a) => a.slug == app.app_slug) ?? this._appSlugs[0];
+
+      const _entity =
+        [...Object.values(this.hass.states)].find(
+          (e) => e.entity_id == app.entity_id,
+        ) ?? null;
+
+      __appList.push({
+        app: {
+          app_id: app.app_id,
+          app_slug: app.app_slug,
+          entity_id: app.entity_id,
+          friendly_name: app.friendly_name,
+        },
+        app_slug: _appSlug,
+        entity: _entity,
+      });
+    }
+    this._appList = __appList;
   }
 }

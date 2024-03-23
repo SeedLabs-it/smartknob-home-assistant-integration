@@ -1,4 +1,4 @@
-import { mdiDelete, mdiDrag } from '@mdi/js';
+import { mdiDelete, mdiDragHorizontalVariant } from '@mdi/js';
 import { LitElement, css, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 
@@ -16,25 +16,10 @@ export class SkReorderableListItem extends withTwind(LitElement) {
     [draggable] {
       opacity: 1;
     }
-
-    /* .actions {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 4px;
-      cursor: pointer;
-    }
-
-    .actions .delete {
-      color: var(--error-color);
-    }
-
-    .actions .sort {
-      cursor: grab;
-    }*/
   `;
 
   @property() app_id!: string;
+  @property({ type: Number }) index!: number;
   @property({ type: Boolean }) isDraggable?: boolean = true;
 
   connectedCallback() {
@@ -53,10 +38,12 @@ export class SkReorderableListItem extends withTwind(LitElement) {
     this.setAttribute('draggable-id', this.app_id);
     return html`
       <div
-        class="flex flex-row flex-nowrap items-center justify-between select-none "
+        class="flex flex-row flex-nowrap items-center justify-between select-none relative"
       >
         <slot></slot>
-        <div class="flex items-center justify-center gap-1 cursor-pointer">
+        <div
+          class="flex items-center justify-center gap-1 cursor-pointer pl-4 pr-2"
+        >
           <ha-svg-icon
             title="delete"
             class="text-[color:var(--error-color)]"
@@ -73,11 +60,12 @@ export class SkReorderableListItem extends withTwind(LitElement) {
           ></ha-svg-icon>
           <ha-svg-icon
             title="draggable"
-            .path=${mdiDrag}
+            .path=${mdiDragHorizontalVariant}
             class="cursor-grab"
             style=${this.isDraggable ? '' : 'display: none;'}
           ></ha-svg-icon>
         </div>
+        <p class="absolute top-0 right-0 m-0 text-xs">${this.index + 1}</p>
       </div>
     `;
   }

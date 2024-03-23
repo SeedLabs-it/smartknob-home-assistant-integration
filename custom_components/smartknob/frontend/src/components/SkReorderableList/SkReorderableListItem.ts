@@ -37,8 +37,8 @@ export class SkReorderableListItem extends withTwind(LitElement) {
     this.addEventListener('dragend', this.dragEnd);
     this.addEventListener('drop', this.handleDrop);
 
+    // TODO: Look over this workaround for touch events
     this.addEventListener('touchstart', this.dragStart);
-    // this.addEventListener('touchmove', this.dragOver);
     this.addEventListener('touchleave', this.dragLeave);
     this.addEventListener('touchcancel', this.dragEnd);
     this.addEventListener('touchend', this.dragEnd);
@@ -81,7 +81,7 @@ export class SkReorderableListItem extends withTwind(LitElement) {
       </div>
     `;
   }
-  dragStart(e: DragEvent) {
+  dragStart(e: any) {
     if (this.isDraggable === false) return;
 
     this.style.opacity = '0.1';
@@ -92,11 +92,11 @@ export class SkReorderableListItem extends withTwind(LitElement) {
     this.classList.add('draggable-content');
   }
 
-  dragEnter(e: DragEvent) {
+  dragEnter(e: any) {
     e.preventDefault();
   }
 
-  dragOver(e: DragEvent) {
+  dragOver(e: any) {
     e.preventDefault();
     const target = e.target as HTMLElement;
 
@@ -116,7 +116,7 @@ export class SkReorderableListItem extends withTwind(LitElement) {
     }
   }
 
-  dragLeave(e: DragEvent) {
+  dragLeave(e: any) {
     e.preventDefault();
     const target = e.target as HTMLElement;
 
@@ -126,7 +126,7 @@ export class SkReorderableListItem extends withTwind(LitElement) {
     }
   }
 
-  dragEnd(e: DragEvent) {
+  dragEnd(e: any) {
     this.style.opacity = '1';
     const target = e.target as HTMLElement;
     if (target) {
@@ -136,7 +136,7 @@ export class SkReorderableListItem extends withTwind(LitElement) {
     }
   }
 
-  handleDrop(e: DragEvent) {
+  handleDrop(e: any) {
     e.stopPropagation();
     e.preventDefault();
     const target = e.target as HTMLElement;

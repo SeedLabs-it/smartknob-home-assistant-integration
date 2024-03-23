@@ -132,7 +132,8 @@ export class SmartknobPanel extends withTwind(LitElement) {
             .entities=${entities}
             .appSlugs=${this._appSlugs}
             .apps=${this._appList}
-            .mac_address=${this._knobs[Object.keys(this._knobs)[0]].mac_address}
+            .mac_address=${this._selectedKnob?.mac_address ??
+            this._knobs[0].mac_address}
           ></app-form>
         </div>
       </div>

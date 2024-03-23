@@ -59,7 +59,7 @@ class SmartknobCoordinator(DataUpdateCoordinator):
             if new_state.context.user_id is None:
                 return
 
-            for knob in knobs.values():
+            for knob in knobs:
                 for app in knob["apps"]:
                     if app["entity_id"] == entity_id:
                         affected_knobs.append(knob)

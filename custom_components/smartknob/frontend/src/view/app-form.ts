@@ -92,26 +92,27 @@ export class AppForm extends withTwind(LitElement) {
       >
         Sync to KNOB
       </button> -->
-      <form class="flex items-center gap-3 pb-3" @submit=${this.handleSubmit}>
-        <ha-selector
-          .hass=${this.hass}
-          .selector=${slugSelector}
-          .required=${true}
-          .label=${'Select App'}
-          .value=${this._selectedSlug?.slug}
-          @value-changed=${this.appSlugChanged}
-          class="min-w-56 w-full"
-        ></ha-selector>
-        <ha-selector
-          .hass=${this.hass}
-          .selector=${entitySelector}
-          .required=${this._selectedSlug?.slug == 'stopwatch' ? false : true}
-          .disabled=${entitySelectorDisabled()}
-          .value=${this._selectedEntity?.attributes.friendly_name}
-          @value-changed=${this.entityChanged}
-          class="min-w-56 w-full"
-        ></ha-selector>
-
+      <form class="flex  items-center gap-3 pb-3" @submit=${this.handleSubmit}>
+        <div class="flex md:flex-row flex-col gap-3 w-full">
+          <ha-selector
+            .hass=${this.hass}
+            .selector=${slugSelector}
+            .required=${true}
+            .label=${'Select App'}
+            .value=${this._selectedSlug?.slug}
+            @value-changed=${this.appSlugChanged}
+            class="min-w-56 w-full"
+          ></ha-selector>
+          <ha-selector
+            .hass=${this.hass}
+            .selector=${entitySelector}
+            .required=${this._selectedSlug?.slug == 'stopwatch' ? false : true}
+            .disabled=${entitySelectorDisabled()}
+            .value=${this._selectedEntity?.attributes.friendly_name}
+            @value-changed=${this.entityChanged}
+            class="min-w-56 w-full"
+          ></ha-selector>
+        </div>
         <button type="submit" class="aspect-square">
           <ha-svg-icon title="submit" .path=${mdiPlus}></ha-svg-icon>
         </button>

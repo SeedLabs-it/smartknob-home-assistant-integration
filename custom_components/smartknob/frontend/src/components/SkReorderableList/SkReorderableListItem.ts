@@ -10,9 +10,14 @@ const withTwind = install(config);
 @customElement('sk-reorderable-list-item')
 export class SkReorderableListItem extends withTwind(LitElement) {
   static styles = css`
-    :host(.over) {
+    :host(.over-top) {
+      border-top: 4px solid var(--primary-color);
+    }
+
+    :host(.over-bottom) {
       border-bottom: 4px solid var(--primary-color);
     }
+
     [draggable] {
       opacity: 1;
     }
@@ -30,11 +35,18 @@ export class SkReorderableListItem extends withTwind(LitElement) {
     this.addEventListener('dragover', this.dragOver);
     this.addEventListener('dragleave', this.dragLeave);
     this.addEventListener('dragend', this.dragEnd);
+    this.addEventListener('drop', this.handleDrop);
+
+    this.addEventListener('touchstart', this.dragStart);
+    // this.addEventListener('touchmove', this.dragOver);
+    this.addEventListener('touchleave', this.dragLeave);
+    this.addEventListener('touchcancel', this.dragEnd);
+    this.addEventListener('touchend', this.dragEnd);
   }
 
   render() {
     if (this.isDraggable) this.setAttribute('draggable', 'true');
-    else this.removeAttribute('draggable');
+    else this.setAttribute('draggable', 'false');
     this.setAttribute('draggable-id', this.app_id);
     return html`
       <div
@@ -69,34 +81,68 @@ export class SkReorderableListItem extends withTwind(LitElement) {
       </div>
     `;
   }
-  dragStart(e: any) {
-    this.style.opacity = '0.4';
+  dragStart(e: DragEvent) {
+    if (this.isDraggable === false) return;
+
+    this.style.opacity = '0.1';
 
     e.dataTransfer?.setData('text/plain', this.app_id);
     e.dataTransfer!.effectAllowed = 'move';
 
     this.classList.add('draggable-content');
-    e.target.classList.add('over');
   }
 
-  dragEnter(e: any) {
+  dragEnter(e: DragEvent) {
     e.preventDefault();
-    e.target.classList.add('over');
   }
 
-  dragOver(e: any) {
+  dragOver(e: DragEvent) {
     e.preventDefault();
-    e.dataTransfer.dropEffect = 'move';
+    const target = e.target as HTMLElement;
+
+    if (target) {
+      const rect = target.getBoundingClientRect();
+      const y = e.clientY - rect.top;
+      const height = rect.height;
+      const half = height / 2;
+      if (y < half) {
+        target.classList.remove('over-bottom');
+        target.classList.add('over-top');
+      } else {
+        target.classList.remove('over-top');
+        target.classList.add('over-bottom');
+      }
+      e.dataTransfer!.dropEffect = 'move';
+    }
   }
 
-  dragLeave(e: any) {
+  dragLeave(e: DragEvent) {
     e.preventDefault();
-    e.target.classList.remove('over');
+    const target = e.target as HTMLElement;
+
+    if (target) {
+      target.classList.remove('over-top');
+      target.classList.remove('over-bottom');
+    }
   }
 
-  dragEnd(e: any) {
+  dragEnd(e: DragEvent) {
     this.style.opacity = '1';
-    e.target.classList.remove('over');
-    this.requestUpdate();
+    const target = e.target as HTMLElement;
+    if (target) {
+      target.classList.remove('over-top');
+      target.classList.remove('over-bottom');
+      this.requestUpdate();
+    }
+  }
+
+  handleDrop(e: DragEvent) {
+    e.stopPropagation();
+    e.preventDefault();
+    const target = e.target as HTMLElement;
+    if (target) {
+      target.classList.remove('over-top');
+      target.classList.remove('over-bottom');
+    }
   }
 }

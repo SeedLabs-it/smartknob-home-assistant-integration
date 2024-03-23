@@ -68,7 +68,7 @@ const kr=async e=>{const t=await e.callApi("GET","smartknob/app_slugs");return t
           @delete="${()=>{this.apps=this.apps.filter(l=>l.app.app_id!==r.app.app_id),Rt(this.hass,this.mac_address,this.apps.map(l=>l.app)),this.requestUpdate()}}"
           class="flex flex-col justify-between h-full py-2 my-2 odd:bg-zinc-800 even:bg-zinc-900 rounded-lg px-2"
         >
-          <div class="flex flex-row flex-nowrap gap-3 w-full">
+          <div class="flex flex-row flex-nowrap gap-2 w-full">
             <ha-selector
               .hass=${this.hass}
               .selector=${t}

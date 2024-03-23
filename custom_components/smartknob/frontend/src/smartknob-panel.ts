@@ -3,7 +3,15 @@ import { html, css, LitElement } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 
 import './view/app-form';
-import { AppListItem, AppSlug, HomeAssistant, Knob, Tab } from './types';
+import {
+  AppListItem,
+  AppSlug,
+  HomeAssistant,
+  KnobData,
+  SelectOption,
+  SelectSelector,
+  Tab,
+} from './types';
 import { loadHa } from './load-ha-elements';
 import { getAsyncAppSlugs, getAsyncKnobs } from './data/websockets';
 import { DOMAIN, TABS } from './const';
@@ -17,35 +25,11 @@ const withTwind = install(config);
 // @install(config)
 export class SmartknobPanel extends withTwind(LitElement) {
   static styles = css`
-    .header {
-      /* display: flex;
-      align-items: center;
-      justify-content: space-between; */
-      padding: 0 16px;
-      background-color: var(--app-header-background-color);
-      color: var(--text-primary-color);
-    }
-
-    .header h2 {
-      margin: 0;
-    }
-
-    .header .toolbar {
-      padding: 16px 0;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .header ha-tabs {
+    ha-tabs {
       --paper-tabs-selection-bar-color: var(
         --app-header-selection-bar-color,
         var(--app-header-text-color, #fff)
       );
-    }
-
-    .content {
-      padding: 24px;
     }
   `;
 
@@ -53,11 +37,13 @@ export class SmartknobPanel extends withTwind(LitElement) {
   @property({ type: Boolean }) public narrow!: boolean;
   @state() private _appSlugs: AppSlug[] = [];
   @state() private _appList: AppListItem[] = [];
-  @state() private _knobs: Knob = {};
+  @state() private _knobs: KnobData[] = [];
+  @state() private _selectedKnob: KnobData | undefined = undefined;
   @state() private _currentTab: Tab = TABS[0];
 
   async connectedCallback() {
     const loadedKnobs = (await getAsyncKnobs(this.hass)).knobs;
+    this._selectedKnob = loadedKnobs[0];
 
     const loadedAppSlugs = (await getAsyncAppSlugs(this.hass)).app_slugs;
 
@@ -103,6 +89,19 @@ export class SmartknobPanel extends withTwind(LitElement) {
   }
 
   render() {
+    const knobSelector: SelectSelector = {
+      select: {
+        custom_value: false,
+        mode: 'dropdown',
+        options: this._knobs.map((knob) => {
+          return {
+            value: knob.mac_address,
+            label: knob.mac_address,
+          };
+        }),
+      },
+    };
+
     if (
       !customElements.get('ha-panel-config') ||
       !customElements.get('ha-menu-button')
@@ -113,29 +112,46 @@ export class SmartknobPanel extends withTwind(LitElement) {
 
     return html`<div>
       <div>
-        <div class="header">
-          <div class="toolbar">
+        <div
+          class="px-4 bg-[color:var(--app-header-background-color)] text-[color: var(--text-primary-color);]"
+        >
+          <div class="flex py-4 items-center gap-2 w-full">
             <ha-menu-button
               .hass=${this.hass}
               .narrow=${this.narrow}
             ></ha-menu-button>
-            <h2>SmartKnob</h2>
+            <h2 class="m-0">SmartKnob</h2>
           </div>
-          <ha-tabs
-            scrollable
-            attr-for-selected="tab-name"
-            .selected=${this._currentTab.tabId}
-            @iron-activate=${this.handleTabSelect}
-          >
-            ${TABS.map(
-              (tab) =>
-                html`<paper-tab tab-name=${tab.tabId}
-                  >${tab.tabName}</paper-tab
-                >`,
-            )}
-          </ha-tabs>
+          <div class="flex justify-between">
+            <ha-tabs
+              scrollable
+              attr-for-selected="tab-name"
+              .selected=${this._currentTab.tabId}
+              @iron-activate=${this.handleTabSelect}
+              class="w-full pt-6"
+            >
+              ${TABS.map(
+                (tab) =>
+                  html`<paper-tab tab-name=${tab.tabId}
+                    >${tab.tabName}</paper-tab
+                  >`,
+              )}
+            </ha-tabs>
+            <ha-selector
+              .hass=${this.hass}
+              .label=${'Select Knob'}
+              .value=${this._selectedKnob?.mac_address}
+              .selector=${knobSelector}
+              @value-changed=${(val) => {
+                this._selectedKnob = this._knobs.find(
+                  (knob) => knob.mac_address == val.detail.value,
+                );
+              }}
+              class="mb-4"
+            ></ha-selector>
+          </div>
         </div>
-        <div class="content max-w-4xl mx-auto">
+        <div class="p-6 max-w-4xl mx-auto">
           <app-form
             .hass=${this.hass}
             .entities=${entities}

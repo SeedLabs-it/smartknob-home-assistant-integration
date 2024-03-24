@@ -11,6 +11,8 @@ from .store import SmartknobStorage
 class SmartknobCoordinator(DataUpdateCoordinator):
     """SmartKnob DataUpdateCoordinator."""
 
+    remove_state_callback = None
+
     def __init__(
         self, hass: HomeAssistant | None, session, entry, store: SmartknobStorage
     ) -> None:
@@ -43,13 +45,20 @@ class SmartknobCoordinator(DataUpdateCoordinator):
     async def update(self):
         """Update state tracker."""
         # Subsribe to entity state changes of all entities used in knobs
+        _LOGGER.debug("Updating state tracker")
+        if self.remove_state_callback:
+            _LOGGER.debug("Removing existing state callback")
+            self.remove_state_callback()
+            self.remove_state_callback = None
 
         mqtt = self.hass.data[DOMAIN]["mqtt_handler"]
 
         knobs = self.store.async_get_knobs()
-        entity_ids = [
-            (app["entity_id"]) for knob in knobs.values() for app in knob["apps"]
-        ]
+        entity_ids = []
+        for knob in knobs.values():
+            for app in knob["apps"]:
+                if app["entity_id"] not in entity_ids:
+                    entity_ids.append(app["entity_id"])
 
         async def async_state_change_callback(
             entity_id, old_state: State, new_state: State
@@ -57,6 +66,9 @@ class SmartknobCoordinator(DataUpdateCoordinator):
             """Handle entity state changes."""
             affected_knobs = []
             apps = []
+
+            if old_state is None:
+                return
 
             if new_state.context.user_id is None:
                 return
@@ -71,4 +83,6 @@ class SmartknobCoordinator(DataUpdateCoordinator):
                 affected_knobs, apps, old_state, new_state
             )
 
-        async_track_state_change(self.hass, entity_ids, async_state_change_callback)
+        self.remove_state_callback = async_track_state_change(
+            self.hass, entity_ids, async_state_change_callback
+        )

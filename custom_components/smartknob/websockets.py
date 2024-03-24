@@ -103,7 +103,6 @@ class SmartknobAppsView(HomeAssistantView):
                 await coordinator.store.async_update_apps(
                     data.get("mac_address"), apps
                 )  # ADD ADD APPS FUNCTION!!!
-
             await coordinator.store.async_add_app(data.get("mac_address"), apps[0])
             await coordinator.update()
 
@@ -127,10 +126,11 @@ class SmartknobAppsView(HomeAssistantView):
     async def put(self, request, data: dict):
         """Update config for app."""
         hass: HomeAssistant = request.app["hass"]
-        coordinator = hass.data[DOMAIN]["coordinator"]
+        coordinator: SmartknobCoordinator = hass.data[DOMAIN]["coordinator"]
         if "mac_address" and "apps" in data:
             apps = data.get("apps")
 
             await coordinator.store.async_update_apps(data.get("mac_address"), apps)
+            await coordinator.update()
 
         return self.json({"success": True})  # TODO return actual success or error

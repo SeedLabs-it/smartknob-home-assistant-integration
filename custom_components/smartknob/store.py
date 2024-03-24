@@ -134,7 +134,7 @@ class SmartknobStorage:
         return attr.asdict(new_app)
 
     @callback
-    def async_update_apps(self, mac_address, new_apps):
+    async def async_update_apps(self, mac_address, new_apps):
         """Update existing config."""
         new = []
 
@@ -149,7 +149,7 @@ class SmartknobStorage:
         self.hass.async_add_job(mqtt.async_subscribe_to_knobs())
         self.hass.async_add_job(mqtt.async_sync_knob(mac_address))
 
-        return attr.asdict(self.knobs)  #! MIGHT BE INCORRECT
+        return list(self.knobs.values())  #! MIGHT BE INCORRECT
 
     @callback
     async def async_get_app(self, mac_address, app_id: str) -> AppEntry:

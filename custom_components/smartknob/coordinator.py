@@ -11,6 +11,8 @@ from .store import SmartknobStorage
 class SmartknobCoordinator(DataUpdateCoordinator):
     """SmartKnob DataUpdateCoordinator."""
 
+    remove_state_callback = None
+
     def __init__(
         self, hass: HomeAssistant | None, session, entry, store: SmartknobStorage
     ) -> None:
@@ -42,12 +44,18 @@ class SmartknobCoordinator(DataUpdateCoordinator):
 
     async def update(self):
         """Update state tracker."""
-        # Subsribe to entity state changes of all entities used in knobs
+        if self.remove_state_callback:
+            self.remove_state_callback()
+            self.remove_state_callback = None
 
         mqtt = self.hass.data[DOMAIN]["mqtt_handler"]
 
         knobs = self.store.async_get_knobs()
-        entity_ids = [(app["entity_id"]) for knob in knobs for app in knob["apps"]]
+        entity_ids = []
+        for knob in knobs.values():
+            for app in knob["apps"]:
+                if app["entity_id"] not in entity_ids:
+                    entity_ids.append(app["entity_id"])
 
         async def async_state_change_callback(
             entity_id, old_state: State, new_state: State
@@ -56,17 +64,23 @@ class SmartknobCoordinator(DataUpdateCoordinator):
             affected_knobs = []
             apps = []
 
+            if old_state is None:
+                return
+
             if new_state.context.user_id is None:
                 return
 
             for knob in knobs:
                 for app in knob["apps"]:
                     if app["entity_id"] == entity_id:
-                        affected_knobs.append(knob)
+                        if knob not in affected_knobs:
+                            affected_knobs.append(knob)
                         apps.append(app)  # THIS DOESNT REALLY WORK WILL WORK FOR NOW
 
             await mqtt.async_entity_state_changed(
                 affected_knobs, apps, old_state, new_state
             )
 
-        async_track_state_change(self.hass, entity_ids, async_state_change_callback)
+        self.remove_state_callback = async_track_state_change(
+            self.hass, entity_ids, async_state_change_callback
+        )

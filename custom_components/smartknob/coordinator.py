@@ -52,7 +52,7 @@ class SmartknobCoordinator(DataUpdateCoordinator):
 
         knobs = self.store.async_get_knobs()
         entity_ids = []
-        for knob in knobs.values():
+        for knob in knobs:
             for app in knob["apps"]:
                 if app["entity_id"] not in entity_ids:
                     entity_ids.append(app["entity_id"])

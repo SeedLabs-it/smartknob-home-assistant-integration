@@ -1,4 +1,4 @@
-import { App, AppSlug, HomeAssistant, Knob } from '../types';
+import { App, AppSlug, HomeAssistant, KnobData } from '../types';
 
 export const getAsyncApps = (hass: HomeAssistant) => {
   return hass.callApi<{ success; apps: App[] }>('GET', 'smartknob/apps');
@@ -65,7 +65,7 @@ export const getAsyncAppSlugs = async (hass: HomeAssistant) => {
 };
 
 export const getAsyncKnobs = async (hass: HomeAssistant) => {
-  const res = await hass.callApi<{ success; knobs: Knob }>(
+  const res = await hass.callApi<{ success; knobs: KnobData[] }>(
     'GET',
     'smartknob/knobs',
   );

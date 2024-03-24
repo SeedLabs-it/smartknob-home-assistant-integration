@@ -45,7 +45,7 @@ export interface Tab {
 //   [mac_address: string]: KnobData;
 // }
 
-export type Knob = Record<string, KnobData>;
+export type Knobs = Record<string, KnobData>;
 
 export interface KnobData {
   mac_address: string;

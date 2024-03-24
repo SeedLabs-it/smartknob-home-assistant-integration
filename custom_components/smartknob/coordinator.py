@@ -44,10 +44,7 @@ class SmartknobCoordinator(DataUpdateCoordinator):
 
     async def update(self):
         """Update state tracker."""
-        # Subsribe to entity state changes of all entities used in knobs
-        _LOGGER.debug("Updating state tracker")
         if self.remove_state_callback:
-            _LOGGER.debug("Removing existing state callback")
             self.remove_state_callback()
             self.remove_state_callback = None
 
@@ -76,7 +73,8 @@ class SmartknobCoordinator(DataUpdateCoordinator):
             for knob in knobs.values():
                 for app in knob["apps"]:
                     if app["entity_id"] == entity_id:
-                        affected_knobs.append(knob)
+                        if knob not in affected_knobs:
+                            affected_knobs.append(knob)
                         apps.append(app)  # THIS DOESNT REALLY WORK WILL WORK FOR NOW
 
             await mqtt.async_entity_state_changed(

@@ -3,6 +3,7 @@ import json
 import secrets
 
 from homeassistant.components import mqtt
+from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, State, callback
 
 from .const import DOMAIN, TOPIC_INIT
@@ -22,15 +23,16 @@ from .services import (
 class MqttHandler:
     """Handles MQTT messages between HASS and SmartKnob."""
 
-    def __init__(self, hass: HomeAssistant) -> None:
+    def __init__(self, hass: HomeAssistant, entry: ConfigEntry) -> None:
         """Initialize the MQTT handler."""
         self.hass = hass
+        self.entry = entry
         self.services = Services(hass)
         self._subscribed_topics = []
         self._subscriptions = []
 
-        self.hass.async_add_job(self._async_subscribe_to_init())
-        self.hass.async_add_job(self.async_subscribe_to_knobs())
+        self.entry.async_create_task(self.hass, self._async_subscribe_to_init())
+        self.entry.async_create_task(self.hass, self.async_subscribe_to_knobs())
 
     # @callback
     async def async_entity_state_changed(

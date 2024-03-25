@@ -128,9 +128,11 @@ class SmartknobStorage:
         new_app = AppEntry(**data)
         self.knobs[mac_address].apps.append(new_app)  #! GOOD WAY TO DO THIS?
         self.async_schedule_save()
+
         mqtt = self.hass.data[DOMAIN]["mqtt_handler"]
-        self.hass.async_add_job(mqtt.async_subscribe_to_knobs())
-        self.hass.async_add_job(mqtt.async_sync_knob(mac_address))
+        coordinator = self.hass.data[DOMAIN]["coordinator"]
+        coordinator.entry.async_create_task(mqtt.async_subscribe_to_knobs())
+        coordinator.entry.async_create_task(mqtt.async_sync_knob(mac_address))
         return attr.asdict(new_app)
 
     @callback
@@ -146,8 +148,11 @@ class SmartknobStorage:
         self.async_schedule_save()
 
         mqtt = self.hass.data[DOMAIN]["mqtt_handler"]
-        self.hass.async_add_job(mqtt.async_subscribe_to_knobs())
-        self.hass.async_add_job(mqtt.async_sync_knob(mac_address))
+        coordinator = self.hass.data[DOMAIN]["coordinator"]
+        coordinator.entry.async_create_task(self.hass, mqtt.async_subscribe_to_knobs())
+        coordinator.entry.async_create_task(
+            self.hass, mqtt.async_sync_knob(mac_address)
+        )
 
         return list(self.knobs.values())  #! MIGHT BE INCORRECT
 

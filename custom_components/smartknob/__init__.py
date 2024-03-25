@@ -28,7 +28,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
 
     store = await async_get_registry(hass)
     coordinator = SmartknobCoordinator(hass, session, entry, store)
-    mqtt_handler = MqttHandler(hass)
+    mqtt_handler = MqttHandler(hass, entry)
 
     hass.data[DOMAIN] = {
         "coordinator": coordinator,

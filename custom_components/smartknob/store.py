@@ -57,7 +57,7 @@ class SmartknobStorage:
     async def async_load(self) -> None:
         """Load the registry of SmartKnob."""
         data = await self._store.async_load()
-        knobs: "OrderedDict[str, AppEntry]" = OrderedDict()
+        knobs = {}
 
         if data is None:
             return
@@ -107,7 +107,7 @@ class SmartknobStorage:
         _LOGGER.warning("Removing SmartKnob configuration data!")
         await self._store.async_remove()
         self.config = {}
-        self.knobs = []
+        self.knobs = {}
 
     @callback
     def async_get_knob(self, mac_address: str):
@@ -122,8 +122,6 @@ class SmartknobStorage:
     @callback
     def async_get_knobs(self):
         """Get all smartknobs."""
-        if not self.knobs:
-            return []
         return [attr.asdict(val) for val in self.knobs.values()]
 
     @callback

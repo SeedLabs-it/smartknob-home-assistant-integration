@@ -122,6 +122,8 @@ class SmartknobStorage:
     @callback
     def async_get_knobs(self):
         """Get all smartknobs."""
+        if not self.knobs:
+            return []
         return [attr.asdict(val) for val in self.knobs.values()]
 
     @callback

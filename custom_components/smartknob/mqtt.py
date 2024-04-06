@@ -128,6 +128,7 @@ class MqttHandler:
 
             if "mac_address" in payload:
                 mac_address = payload["mac_address"]
+                data = payload["data"]
                 coordinator: SmartknobCoordinator = self.hass.data[DOMAIN][
                     "coordinator"
                 ]
@@ -140,9 +141,9 @@ class MqttHandler:
                         config_entry_id=self.entry.entry_id,
                         identifiers={(DOMAIN, mac_address)},
                         name=mac_address or "GET FROM KNOB",
-                        model="GET FROM KNOB",
-                        sw_version="GET FROM KNOB",
-                        manufacturer=MANUFACTURER,
+                        model=data["model"],
+                        sw_version=data["firmware_version"],
+                        manufacturer=data["manufacturer"],
                     )
 
                 else:

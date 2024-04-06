@@ -5,8 +5,9 @@ import secrets
 from homeassistant.components import mqtt
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, State, callback
+from homeassistant.helpers import device_registry as dr
 
-from .const import DOMAIN, TOPIC_INIT
+from .const import DOMAIN, MANUFACTURER, TOPIC_INIT
 from .coordinator import SmartknobCoordinator
 from .logger import _LOGGER
 from .services import (
@@ -134,6 +135,16 @@ class MqttHandler:
                     await coordinator.store.async_init_knob(
                         {"mac_address": mac_address, "apps": []}
                     )
+                    device_registry = dr.async_get(self.hass)
+                    device_registry.async_get_or_create(
+                        config_entry_id=self.entry.entry_id,
+                        identifiers={(DOMAIN, mac_address)},
+                        name=mac_address or "GET FROM KNOB",
+                        model="GET FROM KNOB",
+                        sw_version="GET FROM KNOB",
+                        manufacturer=MANUFACTURER,
+                    )
+
                 else:
                     _LOGGER.debug("KNOB ALREADY INITIALIZED")
                     knob: dict = coordinator.store.async_get_knob(mac_address)

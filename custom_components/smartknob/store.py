@@ -24,11 +24,21 @@ class AppEntry:
     friendly_name = attr.ib(type=str, default=None)
 
 
+@attr.s(slots=True, frozen=True)
+class KnobSettings:
+    """SmartKnob settings storage entry."""
+
+    dim_screen = attr.ib(type=bool, default=False)
+    screen_min_brightness = attr.ib(type=int, default=10)
+
+
 @attr.s(slots=True, frozen=False)
 class SmartknobConfig:
     """SmartKnob device configuration, storage entry."""
 
     mac_address = attr.ib(type=str, default=None)
+    name = attr.ib(type=str, default="")
+    settings = attr.ib(type=KnobSettings, default=KnobSettings())
     apps = attr.ib(type=list[AppEntry], default=None)
 
 

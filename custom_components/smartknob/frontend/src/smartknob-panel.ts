@@ -81,7 +81,8 @@ export class SmartknobPanel extends withTwind(LitElement) {
     )
       return html` <h1>loading...</h1> `;
 
-    const entities = [...Object.values(this.hass.states)];
+    console.log('rendering');
+    console.log(this._currentTab);
 
     return html`<div>
       <div>
@@ -126,18 +127,31 @@ export class SmartknobPanel extends withTwind(LitElement) {
             ></ha-selector>
           </div>
         </div>
-        <div class="p-6 max-w-4xl mx-auto">
+        <div class="p-6 max-w-4xl mx-auto">${this.getView()}</div>
+      </div>
+    </div>`;
+  }
+
+  getView() {
+    switch (this._currentTab.tabId) {
+      case 'setup':
+        return html`<div>
           <app-form
             .hass=${this.hass}
-            .entities=${entities}
+            .entities=${[...Object.values(this.hass.states)]}
             .appSlugs=${this._appSlugs}
             .apps=${this._appList}
             .mac_address=${this._selectedKnob?.mac_address ??
             this._knobs[0].mac_address}
           ></app-form>
-        </div>
-      </div>
-    </div>`;
+        </div>`;
+        break;
+      case 'configuration':
+        return html`<div><h2>Configuration</h2></div>`;
+        break;
+      default:
+        return html`<div><h2>No valid view.</h2></div> `;
+    }
   }
 
   handleTabSelect(e: any) {
@@ -147,6 +161,7 @@ export class SmartknobPanel extends withTwind(LitElement) {
       history.replaceState(null, '', `${pathName}/${DOMAIN}/${newTab}`);
 
       // window.dispatchEvent(new Event('location-changed'));
+      this._currentTab = TABS.find((tab) => tab.tabId == newTab) ?? TABS[0];
       this.requestUpdate();
     } else {
       this.scrollTo(0, 0);

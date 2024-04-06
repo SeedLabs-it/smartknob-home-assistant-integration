@@ -2,6 +2,11 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
   //add @ for src folder in vite config file
+  resolve: {
+    alias: {
+      '@': '/src',
+    },
+  },
 
   build: {
     outDir: './dist',

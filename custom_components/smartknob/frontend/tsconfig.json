@@ -1,5 +1,8 @@
 {
   "compilerOptions": {
+    "paths": {
+      "@/*": ["./*"]
+    },
     "target": "es2017",
     "experimentalDecorators": true,
     "useDefineForClassFields": false,

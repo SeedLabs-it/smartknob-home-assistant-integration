@@ -102,6 +102,8 @@ class MqttHandler:
 
     async def async_device_change(self, event: Event[EventDeviceRegistryUpdatedData]):
         """Handle device registry changes."""
+        if event.data.get("action") != "update":
+            return
         device_registry = dr.async_get(self.hass)
         device: dr.DeviceEntry = device_registry.async_get(event.data.get("device_id"))
         coordinator: SmartknobCoordinator = self.hass.data[DOMAIN]["coordinator"]

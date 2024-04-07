@@ -5,8 +5,14 @@ import secrets
 from homeassistant.components import mqtt
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, State, callback
+from homeassistant.helpers import device_registry as dr
+from homeassistant.helpers.event import (
+    Event,
+    EventDeviceRegistryUpdatedData,
+    async_track_device_registry_updated_event,
+)
 
-from .const import DOMAIN, TOPIC_INIT
+from .const import DOMAIN, MANUFACTURER, TOPIC_INIT
 from .coordinator import SmartknobCoordinator
 from .logger import _LOGGER
 from .services import (
@@ -94,6 +100,18 @@ class MqttHandler:
                         ),
                     )
 
+    async def async_device_change(self, event: Event[EventDeviceRegistryUpdatedData]):
+        """Handle device registry changes."""
+        device_registry = dr.async_get(self.hass)
+        device: dr.DeviceEntry = device_registry.async_get(event.data.get("device_id"))
+        coordinator: SmartknobCoordinator = self.hass.data[DOMAIN]["coordinator"]
+        knob = coordinator.store.async_get_knob(
+            device.identifiers.copy().pop()[1]
+        )  #! BAD
+        coordinator.store.async_update_knob(
+            {"mac_address": knob["mac_address"], "name": device.name_by_user}
+        )
+
     async def _async_subscribe_to_init(self):
         """Subscribe to init topic."""
         try:
@@ -127,13 +145,31 @@ class MqttHandler:
 
             if "mac_address" in payload:
                 mac_address = payload["mac_address"]
+                data = payload["data"]
                 coordinator: SmartknobCoordinator = self.hass.data[DOMAIN][
                     "coordinator"
                 ]
                 if not coordinator.store.async_get_knob(mac_address):
-                    await coordinator.store.async_init_knob(
-                        {"mac_address": mac_address, "apps": []}
+                    device_registry = dr.async_get(self.hass)
+                    device = device_registry.async_get_or_create(
+                        config_entry_id=self.entry.entry_id,
+                        identifiers={(DOMAIN, mac_address)},
+                        name=mac_address or "GET FROM KNOB",
+                        model=data["model"],
+                        sw_version=data["firmware_version"],
+                        manufacturer=data["manufacturer"],
                     )
+
+                    await coordinator.store.async_init_knob(
+                        {"mac_address": mac_address, "device_id": device.id, "apps": []}
+                    )
+
+                    async_track_device_registry_updated_event(
+                        self.hass,
+                        [device.id],
+                        self.async_device_change,
+                    )
+
                 else:
                     _LOGGER.debug("KNOB ALREADY INITIALIZED")
                     knob: dict = coordinator.store.async_get_knob(mac_address)

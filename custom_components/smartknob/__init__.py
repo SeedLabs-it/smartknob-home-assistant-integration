@@ -1,8 +1,7 @@
 """The SmartKnob integration."""
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.core import HomeAssistant, State
+from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
-from homeassistant.helpers.event import async_track_state_change
 
 from .const import DOMAIN
 from .coordinator import SmartknobCoordinator
@@ -21,6 +20,7 @@ async def async_setup(hass: HomeAssistant, config):
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     """Set up SmartKnob from a config entry."""
+
     _LOGGER.debug("SmartKnob - Setup Entry")
     _LOGGER.debug("SmartKnob - Entry: %s", entry)
     hass.data.setdefault(DOMAIN, {})

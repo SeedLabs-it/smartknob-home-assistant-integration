@@ -49,7 +49,14 @@ export type Knobs = Record<string, KnobData>;
 
 export interface KnobData {
   mac_address: string;
+  name: string;
+  settings: KnobSettings;
   apps: App[];
+}
+
+export interface KnobSettings {
+  dim_screen: boolean;
+  screen_min_brightness: number;
 }
 
 //MY CUSTOM TYPES

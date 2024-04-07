@@ -100,7 +100,7 @@ class MqttHandler:
                         ),
                     )
 
-    async def async_device_changed(self, event: Event[EventDeviceRegistryUpdatedData]):
+    async def async_device_change(self, event: Event[EventDeviceRegistryUpdatedData]):
         """Handle device registry changes."""
         device_registry = dr.async_get(self.hass)
         device: dr.DeviceEntry = device_registry.async_get(event.data.get("device_id"))
@@ -144,9 +144,6 @@ class MqttHandler:
                     "coordinator"
                 ]
                 if not coordinator.store.async_get_knob(mac_address):
-                    await coordinator.store.async_init_knob(
-                        {"mac_address": mac_address, "apps": []}
-                    )
                     device_registry = dr.async_get(self.hass)
                     device = device_registry.async_get_or_create(
                         config_entry_id=self.entry.entry_id,
@@ -157,10 +154,14 @@ class MqttHandler:
                         manufacturer=data["manufacturer"],
                     )
 
+                    await coordinator.store.async_init_knob(
+                        {"mac_address": mac_address, "device_id": device.id, "apps": []}
+                    )
+
                     async_track_device_registry_updated_event(
                         self.hass,
                         [device.id],
-                        self.async_device_changed,
+                        self.async_device_change,
                     )
 
                 else:

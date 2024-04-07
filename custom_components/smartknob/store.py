@@ -37,6 +37,7 @@ class SmartknobConfig:
     """SmartKnob device configuration, storage entry."""
 
     mac_address = attr.ib(type=str, default=None)
+    device_id = attr.ib(type=str, default=None)
     name = attr.ib(type=str, default="")
     settings = attr.ib(type=KnobSettings, default=KnobSettings())
     apps = attr.ib(type=list[AppEntry], default=None)
@@ -74,7 +75,11 @@ class SmartknobStorage:
                     for (app) in knob["apps"]
                 ]
                 knobs[knob["mac_address"]] = SmartknobConfig(
-                    mac_address=knob["mac_address"], apps=apps
+                    mac_address=knob["mac_address"],
+                    device_id=knob["device_id"],
+                    name=knob["name"],
+                    settings=knob["settings"],
+                    apps=apps,
                 )
 
         self.knobs = knobs

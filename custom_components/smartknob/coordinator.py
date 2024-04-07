@@ -1,6 +1,9 @@
 """Coordinator."""
 from homeassistant.core import HomeAssistant, State
-from homeassistant.helpers.event import async_track_state_change
+from homeassistant.helpers.event import (
+    async_track_device_registry_updated_event,
+    async_track_state_change,
+)
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
 from .const import DOMAIN
@@ -12,6 +15,7 @@ class SmartknobCoordinator(DataUpdateCoordinator):
     """SmartKnob DataUpdateCoordinator."""
 
     remove_state_callback = None
+    remove_device_change_callback = None
 
     def __init__(
         self, hass: HomeAssistant | None, session, entry, store: SmartknobStorage
@@ -44,15 +48,23 @@ class SmartknobCoordinator(DataUpdateCoordinator):
 
     async def update(self):
         """Update state tracker."""
+        _LOGGER.debug("SmartKnob - Update Change Trackers")
         if self.remove_state_callback:
             self.remove_state_callback()
             self.remove_state_callback = None
+
+        if self.remove_device_change_callback:
+            self.remove_device_change_callback()
+            self.remove_device_change_callback = None
 
         mqtt = self.hass.data[DOMAIN]["mqtt_handler"]
 
         knobs = self.store.async_get_knobs()
         entity_ids = []
+        device_ids = []
         for knob in knobs:
+            _LOGGER.debug("SmartKnob Device ID - %s", knob)
+            device_ids.append(knob["device_id"])
             for app in knob["apps"]:
                 if app["entity_id"] not in entity_ids:
                     entity_ids.append(app["entity_id"])
@@ -83,4 +95,12 @@ class SmartknobCoordinator(DataUpdateCoordinator):
 
         self.remove_state_callback = async_track_state_change(
             self.hass, entity_ids, async_state_change_callback
+        )
+
+        _LOGGER.debug("SmartKnob - %s", device_ids)
+
+        self.remove_device_change_callback = async_track_device_registry_updated_event(
+            self.hass,
+            device_ids,
+            mqtt.async_device_change,
         )

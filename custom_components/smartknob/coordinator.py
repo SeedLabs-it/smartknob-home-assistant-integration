@@ -63,7 +63,6 @@ class SmartknobCoordinator(DataUpdateCoordinator):
         entity_ids = []
         device_ids = []
         for knob in knobs:
-            _LOGGER.debug("SmartKnob Device ID - %s", knob)
             device_ids.append(knob["device_id"])
             for app in knob["apps"]:
                 if app["entity_id"] not in entity_ids:

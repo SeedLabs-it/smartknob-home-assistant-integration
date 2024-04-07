@@ -6,6 +6,11 @@ from homeassistant.components import mqtt
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, State, callback
 from homeassistant.helpers import device_registry as dr
+from homeassistant.helpers.event import (
+    Event,
+    EventDeviceRegistryUpdatedData,
+    async_track_device_registry_updated_event,
+)
 
 from .const import DOMAIN, MANUFACTURER, TOPIC_INIT
 from .coordinator import SmartknobCoordinator
@@ -95,6 +100,12 @@ class MqttHandler:
                         ),
                     )
 
+    async def async_device_changed(self, event: Event[EventDeviceRegistryUpdatedData]):
+        """Handle device registry changes."""
+        device_registry = dr.async_get(self.hass)
+        device: dr.DeviceEntry = device_registry.async_get(event.data.get("device_id"))
+        _LOGGER.debug(device.name_by_user)
+
     async def _async_subscribe_to_init(self):
         """Subscribe to init topic."""
         try:
@@ -137,13 +148,19 @@ class MqttHandler:
                         {"mac_address": mac_address, "apps": []}
                     )
                     device_registry = dr.async_get(self.hass)
-                    device_registry.async_get_or_create(
+                    device = device_registry.async_get_or_create(
                         config_entry_id=self.entry.entry_id,
                         identifiers={(DOMAIN, mac_address)},
                         name=mac_address or "GET FROM KNOB",
                         model=data["model"],
                         sw_version=data["firmware_version"],
                         manufacturer=data["manufacturer"],
+                    )
+
+                    async_track_device_registry_updated_event(
+                        self.hass,
+                        [device.id],
+                        self.async_device_changed,
                     )
 
                 else:

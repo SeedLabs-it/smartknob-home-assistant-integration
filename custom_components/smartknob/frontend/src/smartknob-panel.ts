@@ -69,7 +69,7 @@ export class SmartknobPanel extends withTwind(LitElement) {
         options: this._knobs.map((knob) => {
           return {
             value: knob.mac_address,
-            label: knob.mac_address,
+            label: knob.name ?? knob.mac_address,
           };
         }),
       },

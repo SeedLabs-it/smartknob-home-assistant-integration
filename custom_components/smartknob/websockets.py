@@ -45,6 +45,7 @@ class SmartknobKnobsView(HomeAssistantView):
         hass: HomeAssistant = request.app["hass"]
         coordinator = hass.data[DOMAIN]["coordinator"]
         knobs = coordinator.store.async_get_knobs()
+        _LOGGER.debug(f"Knobs: {knobs}")
         return self.json(
             {"success": True, "knobs": knobs}
         )  # TODO return actual success or error

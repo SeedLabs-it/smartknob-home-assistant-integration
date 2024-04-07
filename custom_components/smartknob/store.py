@@ -191,6 +191,21 @@ class SmartknobStorage:
         return False
 
     @callback
+    def async_update_knob(self, knob: SmartknobConfig) -> SmartknobConfig:
+        """Update existing config."""
+        new_knob = SmartknobConfig(**knob)
+        if new_knob.mac_address not in self.knobs:
+            return None
+        if new_knob.device_id is not None:
+            self.knobs[new_knob.mac_address].device_id = new_knob.device_id
+        if new_knob.name is not None:
+            self.knobs[new_knob.mac_address].name = new_knob.name
+        if new_knob.settings is not None:
+            self.knobs[new_knob.mac_address].settings = new_knob.settings
+        self.async_schedule_save()
+        return attr.asdict(new_knob)
+
+    @callback
     def async_update_knobs(self, new_knobs):
         """Update existing config."""
         new = []

@@ -104,7 +104,13 @@ class MqttHandler:
         """Handle device registry changes."""
         device_registry = dr.async_get(self.hass)
         device: dr.DeviceEntry = device_registry.async_get(event.data.get("device_id"))
-        _LOGGER.debug(device.name_by_user)
+        coordinator: SmartknobCoordinator = self.hass.data[DOMAIN]["coordinator"]
+        knob = coordinator.store.async_get_knob(
+            device.identifiers.copy().pop()[1]
+        )  #! BAD
+        coordinator.store.async_update_knob(
+            {"mac_address": knob["mac_address"], "name": device.name_by_user}
+        )
 
     async def _async_subscribe_to_init(self):
         """Subscribe to init topic."""

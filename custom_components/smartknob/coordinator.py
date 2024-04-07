@@ -96,8 +96,6 @@ class SmartknobCoordinator(DataUpdateCoordinator):
             self.hass, entity_ids, async_state_change_callback
         )
 
-        _LOGGER.debug("SmartKnob - %s", device_ids)
-
         self.remove_device_change_callback = async_track_device_registry_updated_event(
             self.hass,
             device_ids,

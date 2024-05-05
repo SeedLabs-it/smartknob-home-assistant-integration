@@ -3,6 +3,9 @@
 DOMAIN = "smartknob"
 NAME = "SmartKnob"
 MANUFACTURER = "Seedlabs"
+VERSION = "0.2.0"
+STORE_MAJOR_VERSION = 2
+STORE_MINOR_VERSION = 0
 
 STORAGE_KEY = f"{DOMAIN}.storage"
 DATA_REGISTRY = f"{DOMAIN}_storage"

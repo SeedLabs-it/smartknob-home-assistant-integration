@@ -3,14 +3,16 @@
 from collections import OrderedDict
 from collections.abc import MutableMapping
 from typing import cast
+from homeassistant.helpers import device_registry as dr
 
 import attr
 
 from homeassistant.core import HomeAssistant, callback
+from homeassistant.helpers.event import async_track_device_registry_updated_event
 from homeassistant.helpers.storage import Store
 from homeassistant.loader import bind_hass
 
-from .const import DATA_REGISTRY, DOMAIN, SAVE_DELAY, STORAGE_KEY
+from .const import DATA_REGISTRY, DOMAIN, SAVE_DELAY, STORAGE_KEY, STORE_MAJOR_VERSION, STORE_MINOR_VERSION, MANUFACTURER
 from .logger import _LOGGER
 
 
@@ -43,6 +45,32 @@ class SmartknobConfig:
     apps = attr.ib(type=list[AppEntry], default=None)
 
 
+class MigratableStore(Store):
+    async def _async_migrate_func(self, old_major_version: int, old_minor_version: int, old_data: dict):
+        if old_major_version <= 1:
+            device_registry = dr.async_get(self.hass)
+            mqtt = self.hass.data[DOMAIN]["mqtt_handler"]
+            for knob in old_data["knobs"]:
+
+                device = device_registry.async_get_or_create(
+                    config_entry_id=self.hass.data[DOMAIN]["entry"].entry_id,
+                    identifiers={(DOMAIN, knob["mac_address"])},
+                    name=knob["mac_address"] or "GET FROM KNOB",
+                    model="SmartKnob Devkit v0.1", #HMMM NORMALLY GOTTEN FROM KNOB
+                    sw_version="0.2.0", #HMMM NORMALLY GOTTEN FROM KNOB
+                    manufacturer=MANUFACTURER,
+                )
+                async_track_device_registry_updated_event(
+                  self.hass,
+                  [device.id],
+                  mqtt.async_device_change,
+                )
+                knob["device_id"] = device.id
+                knob["name"] = knob["mac_address"] or "GET FROM KNOB"
+                knob["settings"] = {"dim_screen": False, "screen_min_brightness": 10}
+
+        return old_data
+
 class SmartknobStorage:
     """Class to hold SmartKnob storage."""
 
@@ -53,12 +81,15 @@ class SmartknobStorage:
             str, str
         ] = {}  #! ADD SMARTKNOB DEVICE SPECIFIC CONFIG HERE
         self.knobs: MutableMapping[str, SmartknobConfig] = {}
-        self._store = Store(hass, 1, STORAGE_KEY)
+        self._store = MigratableStore(hass, STORE_MAJOR_VERSION, STORAGE_KEY, minor_version=STORE_MINOR_VERSION)
 
     async def async_load(self) -> None:
         """Load the registry of SmartKnob."""
         data = await self._store.async_load()
         knobs = {}
+
+        _LOGGER.debug("Loading SmartKnob data")
+        _LOGGER.error(data)
 
         if data is None:
             return

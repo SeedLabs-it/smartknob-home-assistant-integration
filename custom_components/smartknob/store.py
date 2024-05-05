@@ -88,9 +88,6 @@ class SmartknobStorage:
         data = await self._store.async_load()
         knobs = {}
 
-        _LOGGER.debug("Loading SmartKnob data")
-        _LOGGER.error(data)
-
         if data is None:
             return
 

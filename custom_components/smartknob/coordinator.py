@@ -2,7 +2,9 @@
 from homeassistant.core import HomeAssistant, State
 from homeassistant.helpers.event import (
     async_track_device_registry_updated_event,
-    async_track_state_change,
+    async_track_state_change_event,
+    Event,
+    EventStateChangedData
 )
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
@@ -69,30 +71,30 @@ class SmartknobCoordinator(DataUpdateCoordinator):
                     entity_ids.append(app["entity_id"])
 
         async def async_state_change_callback(
-            entity_id, old_state: State, new_state: State
+            event: Event[EventStateChangedData]
         ):
             """Handle entity state changes."""
             affected_knobs = []
             apps = []
 
-            if old_state is None:
+            if event is None:
                 return
 
-            if new_state.context.user_id is None:
+            if event.data["new_state"].context.user_id is None:
                 return
 
             for knob in knobs:
                 for app in knob["apps"]:
-                    if app["entity_id"] == entity_id:
+                    if app["entity_id"] == event.data["entity_id"]:
                         if knob not in affected_knobs:
                             affected_knobs.append(knob)
                         apps.append(app)  # THIS DOESNT REALLY WORK WILL WORK FOR NOW
 
             await mqtt.async_entity_state_changed(
-                affected_knobs, apps, old_state, new_state
+                affected_knobs, apps, event.data["old_state"], event.data["new_state"]
             )
 
-        self.remove_state_callback = async_track_state_change(
+        self.remove_state_callback = async_track_state_change_event(
             self.hass, entity_ids, async_state_change_callback
         )
 

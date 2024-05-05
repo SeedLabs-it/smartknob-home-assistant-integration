@@ -158,7 +158,7 @@ class MqttHandler:
                         identifiers={(DOMAIN, mac_address)},
                         name=mac_address or "GET FROM KNOB",
                         model=data["model"],
-                        sw_version=data["firmware_version"],
+                        sw_version=data["version"],
                         manufacturer=data["manufacturer"],
                     )
 

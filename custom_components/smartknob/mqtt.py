@@ -1,4 +1,5 @@
 """MQTT handler for SmartKnob."""
+
 import json
 import secrets
 
@@ -158,7 +159,7 @@ class MqttHandler:
                         identifiers={(DOMAIN, mac_address)},
                         name=mac_address or "GET FROM KNOB",
                         model=data["model"],
-                        sw_version=data["version"],
+                        sw_version=data["firmware_version"],
                         manufacturer=data["manufacturer"],
                     )
 

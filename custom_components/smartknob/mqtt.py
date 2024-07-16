@@ -154,12 +154,20 @@ class MqttHandler:
                 ]
                 if not coordinator.store.async_get_knob(mac_address):
                     device_registry = dr.async_get(self.hass)
+
+                    if not data[
+                        "version"
+                    ]:  # Quick fix for different key name depending on dev build or release build... Fix should be implemented in firmware.
+                        sw_version_ = data["firmware_version"]
+                    else:
+                        sw_version_ = data["version"]
+
                     device = device_registry.async_get_or_create(
                         config_entry_id=self.entry.entry_id,
                         identifiers={(DOMAIN, mac_address)},
                         name=mac_address or "GET FROM KNOB",
                         model=data["model"],
-                        sw_version=data["firmware_version"],
+                        sw_version=sw_version_,
                         manufacturer=data["manufacturer"],
                     )
 

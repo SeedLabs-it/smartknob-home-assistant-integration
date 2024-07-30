@@ -155,9 +155,9 @@ class MqttHandler:
                 if not coordinator.store.async_get_knob(mac_address):
                     device_registry = dr.async_get(self.hass)
 
-                    if not data[
-                        "version"
-                    ]:  # Quick fix for different key name depending on dev build or release build... Fix should be implemented in firmware.
+                    if (
+                        "version" not in data
+                    ):  # Quick fix for different key name depending on dev build or release build... Fix should be implemented in firmware.
                         sw_version_ = data["firmware_version"]
                     else:
                         sw_version_ = data["version"]

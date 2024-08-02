@@ -137,8 +137,8 @@ class MqttHandler:
                     self.hass, topic, self.async_message_received
                 )
 
-        except Exception as e:
-            _LOGGER.error(e)
+        except Exception as _:
+            _LOGGER.error("Couldnt subscribe to knob topics")
 
     @callback
     async def async_init_received(self, msg):
@@ -197,6 +197,7 @@ class MqttHandler:
     async def async_message_received(self, msg):
         """Handle messages from SmartKnob."""
         try:
+            _LOGGER.debug("MESSAGE RECEIVED")
             payload = json.loads(msg.payload)
 
             mac_address = msg.topic.split("/")[1]  # UGLY BAD WAY
@@ -223,6 +224,7 @@ class MqttHandler:
                 state = payload["state"]
 
                 # knob = coordinator.store.async_get_knob(mac_address)
+                _LOGGER.debug("STATE UPDATE")
                 app = await coordinator.store.async_get_app(mac_address, app_id)
                 if app is not None:
                     if app["app_slug"] == "light_dimmer":
@@ -265,6 +267,8 @@ class MqttHandler:
                     await self.async_acknowledge(
                         mac_address, payload["id"], "state_update"
                     )
+                else:
+                    _LOGGER.error("App not found")
 
         except ValueError:
             _LOGGER.error("Error decoding JSON payload")

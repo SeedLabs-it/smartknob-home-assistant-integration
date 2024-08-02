@@ -1,4 +1,5 @@
 """The SmartKnob integration."""
+
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
@@ -26,16 +27,16 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     hass.data.setdefault(DOMAIN, {})
     session = async_get_clientsession(hass)
 
-    mqtt_handler = MqttHandler(hass, entry)
-
-    hass.data[DOMAIN]["mqtt_handler"] = mqtt_handler
-    hass.data[DOMAIN]["entry"] = entry
-
     store = await async_get_registry(hass)
     coordinator = SmartknobCoordinator(hass, session, entry, store)
 
     hass.data[DOMAIN]["coordinator"] = coordinator
     hass.data[DOMAIN]["apps"] = []
+
+    mqtt_handler = MqttHandler(hass, entry)
+
+    hass.data[DOMAIN]["mqtt_handler"] = mqtt_handler
+    hass.data[DOMAIN]["entry"] = entry
 
     if entry.unique_id is None:
         hass.config_entries.async_update_entry(entry, unique_id=coordinator.id, data={})

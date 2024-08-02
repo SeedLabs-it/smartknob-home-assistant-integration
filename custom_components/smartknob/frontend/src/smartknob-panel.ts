@@ -81,7 +81,7 @@ export class SmartknobPanel extends withTwind(LitElement) {
     )
       return html`
         <h1 style="text-align:center;">
-          Waiting for INIT message from SmartKnob...
+          Waiting for init message from SmartKnob...
         </h1>
       `;
 

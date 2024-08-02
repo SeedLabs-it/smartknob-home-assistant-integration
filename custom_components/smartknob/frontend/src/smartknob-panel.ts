@@ -79,7 +79,11 @@ export class SmartknobPanel extends withTwind(LitElement) {
       !customElements.get('ha-panel-config') ||
       !customElements.get('ha-menu-button')
     )
-      return html` <h1>loading...</h1> `;
+      return html`
+        <h1 style="text-align:center;">
+          Waiting for init message from SmartKnob...
+        </h1>
+      `;
 
     const entities = [...Object.values(this.hass.states)];
 

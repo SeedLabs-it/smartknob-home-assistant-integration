@@ -3,7 +3,7 @@
 DOMAIN = "smartknob"
 NAME = "SmartKnob"
 MANUFACTURER = "Seedlabs"
-VERSION = "0.2.0"
+VERSION = "0.2.4"
 STORE_MAJOR_VERSION = 2
 STORE_MINOR_VERSION = 0
 

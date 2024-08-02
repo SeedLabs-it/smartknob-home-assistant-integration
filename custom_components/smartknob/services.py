@@ -1,4 +1,5 @@
 """Define the services called by smartknob on HASS entities."""
+
 from enum import Enum
 import json
 
@@ -88,72 +89,86 @@ class Services:
     async def async_toggle_switch(self, entity_id: str, state: SwitchState):
         """Switch the entity on or off."""
         if state.on:
-            await self.hass.services.async_call(
-                "light", "turn_on", {"entity_id": entity_id}
+            await self.hass.async_add_job(
+                self.hass.services.async_call(
+                    "light", "turn_on", {"entity_id": entity_id}
+                )
             )
         elif not state.on:
-            await self.hass.services.async_call(
-                "light", "turn_off", {"entity_id": entity_id}
+            await self.hass.async_add_job(
+                self.hass.services.async_call(
+                    "light", "turn_off", {"entity_id": entity_id}
+                )
             )
         else:
             _LOGGER.error("Not implemented")
 
     async def async_set_light(self, entity_id: str, state: LightState):
         """Switch the light on or off, and set its brightness and color."""
-        # TODO: SERVICE CALL CAN STILL FAIL SOMETIMES ATLEAST FOR MY HUE BAR LIGHT
         if state.rgb_color and state.brightness >= 0 and state.brightness <= 255:
-            await self.hass.services.async_call(
-                "light",
-                "turn_on",
-                {
-                    "entity_id": entity_id,
-                    "brightness": state.brightness,
-                    "rgb_color": state.rgb_color,
-                },
+            await self.hass.async_add_job(
+                self.hass.services.async_call(
+                    "light",
+                    "turn_on",
+                    {
+                        "entity_id": entity_id,
+                        "brightness": state.brightness,
+                        "rgb_color": state.rgb_color,
+                    },
+                    True,
+                )
             )
         elif state.brightness >= 0 and state.brightness <= 255:
-            await self.hass.services.async_call(
-                "light",
-                "turn_on",
-                {
-                    "entity_id": entity_id,
-                    "brightness": state.brightness,
-                },
+            await self.hass.async_add_job(
+                self.hass.services.async_call(
+                    "light",
+                    "turn_on",
+                    {
+                        "entity_id": entity_id,
+                        "brightness": state.brightness,
+                    },
+                    True,
+                )
             )
-
         else:
             _LOGGER.error("Not implemented")
 
     async def async_handle_blinds(self, entity_id: str, position: int):
         """Handle blinds entity."""
-        await self.hass.services.async_call(
-            "cover",
-            "set_cover_position",
-            {
-                "entity_id": entity_id,
-                "position": position,
-            },
+        await self.hass.async_add_job(
+            self.hass.services.async_call(
+                "cover",
+                "set_cover_position",
+                {
+                    "entity_id": entity_id,
+                    "position": position,
+                },
+            )
         )
 
     async def async_handle_climate(self, entity_id: str, state: ClimateState):
         """Handle climate entity."""
         mode = ClimateMode(state.mode)
 
-        await self.hass.services.async_call(
-            "climate",
-            "set_temperature",
-            {
-                "entity_id": entity_id,
-                "temperature": state.target_temp,
-            },
+        await self.hass.async_add_job(
+            self.hass.services.async_call(
+                "climate",
+                "set_temperature",
+                {
+                    "entity_id": entity_id,
+                    "temperature": state.target_temp,
+                },
+            )
         )
-        await self.hass.services.async_call(
-            "climate",
-            "set_hvac_mode",
-            {
-                "entity_id": entity_id,
-                "hvac_mode": mode.name,
-            },
+        await self.hass.async_add_job(
+            self.hass.services.async_call(
+                "climate",
+                "set_hvac_mode",
+                {
+                    "entity_id": entity_id,
+                    "hvac_mode": mode.name,
+                },
+            )
         )
 
 

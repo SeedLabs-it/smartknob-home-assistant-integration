@@ -1,4 +1,5 @@
 """Define the services called by smartknob on HASS entities."""
+
 from enum import Enum
 import json
 
@@ -102,7 +103,7 @@ class Services:
         """Switch the light on or off, and set its brightness and color."""
         # TODO: SERVICE CALL CAN STILL FAIL SOMETIMES ATLEAST FOR MY HUE BAR LIGHT
         if state.rgb_color and state.brightness >= 0 and state.brightness <= 255:
-            await self.hass.services.async_call(
+            self.hass.services.async_call(
                 "light",
                 "turn_on",
                 {
@@ -112,7 +113,7 @@ class Services:
                 },
             )
         elif state.brightness >= 0 and state.brightness <= 255:
-            await self.hass.services.async_call(
+            self.hass.services.async_call(
                 "light",
                 "turn_on",
                 {

@@ -42,8 +42,8 @@ class KnobSettings:
     screen_timeout = attr.ib(type=int, default=30)  # seconds
     screen_min_brightness = attr.ib(type=int, default=10)
     beacon_enabled = attr.ib(type=bool, default=False)
-    beacon_color = attr.ib(type=str, default="FFFFFF")
-    led_color = attr.ib(type=str, default="FFFFFF")
+    beacon_color = attr.ib(type=int, default=32896)
+    led_color = attr.ib(type=int, default=32896)
 
 
 @attr.s(slots=True, frozen=False)
@@ -86,8 +86,8 @@ class MigratableStore(Store):
             for knob in old_data["knobs"]:
                 knob["settings"]["screen_timeout"] = 30
                 knob["settings"]["beacon_enabled"] = True
-                knob["settings"]["beacon_color"] = "FFFFFF"
-                knob["settings"]["led_color"] = "FFFFFF"
+                knob["settings"]["beacon_color"] = 32896
+                knob["settings"]["led_color"] = 32896
         return old_data
 
 

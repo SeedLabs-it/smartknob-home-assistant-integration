@@ -44,11 +44,12 @@ export class Config extends withTwind(LitElement) {
           <li>
             <input
               type="text"
-              .value="${this._updated_knob_settings?.beacon_color}"
+              .value="${this._updated_knob_settings?.beacon_color
+                .toString(16)
+                .padStart(6, '0')}"
               @change="${(e: Event) => {
-                this._updated_knob_settings!.beacon_color = (
-                  e.target as HTMLInputElement
-                ).value;
+                let hex = (e.target as HTMLInputElement).value;
+                this._updated_knob_settings!.beacon_color = parseInt(hex, 16);
               }}"
             />
             <p>beacon color</p>
@@ -92,11 +93,12 @@ export class Config extends withTwind(LitElement) {
           <li>
             <input
               type="text"
-              .value="${this._updated_knob_settings?.led_color}"
+              .value="${this._updated_knob_settings?.led_color
+                .toString(16)
+                .padStart(6, '0')}"
               @change="${(e: Event) => {
-                this._updated_knob_settings!.led_color = (
-                  e.target as HTMLInputElement
-                ).value;
+                let hex = (e.target as HTMLInputElement).value;
+                this._updated_knob_settings!.led_color = parseInt(hex, 16);
               }}"
             />
             <p>color code for led ring</p>

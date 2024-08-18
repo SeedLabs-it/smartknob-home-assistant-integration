@@ -59,8 +59,8 @@ export interface KnobSettings {
   screen_timeout: number;
   screen_min_brightness: number;
   beacon_enabled: boolean;
-  beacon_color: string;
-  led_color: string;
+  beacon_color: number;
+  led_color: number;
 }
 
 //MY CUSTOM TYPES

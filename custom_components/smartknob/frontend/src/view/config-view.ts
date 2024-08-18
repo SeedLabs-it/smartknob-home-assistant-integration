@@ -1,7 +1,7 @@
 import { LitElement, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
 import '../components/SkReorderableList/SkReorderableList.ts';
-// import { selectSelector } from '../const';
+// import { selectSelector } from '../const'; t
 
 import install from '@twind/with-web-components';
 import config from '../../twind.config.ts';

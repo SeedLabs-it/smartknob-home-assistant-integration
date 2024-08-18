@@ -3,6 +3,7 @@ import { html, css, LitElement } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 
 import './view/app-form';
+import './view/config-view';
 import {
   AppListItem,
   AppSlug,
@@ -131,14 +132,30 @@ export class SmartknobPanel extends withTwind(LitElement) {
           </div>
         </div>
         <div class="p-6 max-w-4xl mx-auto">
-          <app-form
-            .hass=${this.hass}
-            .entities=${entities}
-            .appSlugs=${this._appSlugs}
-            .apps=${this._appList}
-            .mac_address=${this._selectedKnob?.mac_address ??
-            this._knobs[0].mac_address}
-          ></app-form>
+          ${(() => {
+            switch (this._currentTab.tabId) {
+              case 'setup':
+                return html`<app-form
+                  .hass=${this.hass}
+                  .entities=${entities}
+                  .appSlugs=${this._appSlugs}
+                  .apps=${this._appList}
+                  .mac_address=${this._selectedKnob?.mac_address ??
+                  this._knobs[0].mac_address}
+                ></app-form>`;
+              case 'configuration':
+                return html`<config-view></config-view>`;
+              default:
+                return html`<app-form
+                  .hass=${this.hass}
+                  .entities=${entities}
+                  .appSlugs=${this._appSlugs}
+                  .apps=${this._appList}
+                  .mac_address=${this._selectedKnob?.mac_address ??
+                  this._knobs[0].mac_address}
+                ></app-form>`;
+            }
+          })()}
         </div>
       </div>
     </div>`;
@@ -148,9 +165,9 @@ export class SmartknobPanel extends withTwind(LitElement) {
     const newTab = e.detail.item.getAttribute('tab-name');
     const pathName = window.location.origin;
     if (!pathName.endsWith(newTab)) {
-      history.replaceState(null, '', `${pathName}/${DOMAIN}/${newTab}`);
+      this._currentTab = TABS.find((tab) => tab.tabId == newTab) ?? TABS[0];
 
-      // window.dispatchEvent(new Event('location-changed'));
+      history.replaceState(null, '', `${pathName}/${DOMAIN}/${newTab}`);
       this.requestUpdate();
     } else {
       this.scrollTo(0, 0);

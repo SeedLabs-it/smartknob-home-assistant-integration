@@ -16,6 +16,7 @@ async def async_register_websockets(hass: HomeAssistant):
     """Register websockets."""
     hass.http.register_view(SmartknobAppSlugsView)
     hass.http.register_view(SmartknobKnobsView)
+    hass.http.register_view(SmartknobKnobSettingsView)
     hass.http.register_view(SmartknobAppsView)
     hass.http.register_view(SmartknobKnobSyncView)
 
@@ -64,15 +65,13 @@ class SmartknobKnobSettingsView(HomeAssistantView):
             }
         )
     )
-    async def post(self, request, data: dict):
+    async def put(self, request, data: dict):
         """Update config for app."""
-        _LOGGER.debug("SmartKnob - Update Knob Settings")
-        _LOGGER.debug(data)
-        # hass: HomeAssistant = request.app["hass"]
-        # mqtt = hass.data[DOMAIN]["mqtt_handler"]
-
-        # if "mac_address" and "settings" in data:
-        #     await mqtt.async_update_knob(data.get("mac_address"), data.get("settings"))
+        hass: HomeAssistant = request.app["hass"]
+        coordinator: SmartknobCoordinator = hass.data[DOMAIN]["coordinator"]
+        coordinator.store.async_update_knob_settings(
+            data.get("mac_address"), data.get("settings")
+        )
 
 
 class SmartknobKnobSyncView(HomeAssistantView):

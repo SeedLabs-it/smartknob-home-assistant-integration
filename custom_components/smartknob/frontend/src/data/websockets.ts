@@ -80,7 +80,7 @@ export const asyncSaveKnobSettings = async (
   settings: KnobSettings,
 ) => {
   return await hass.callApi('PUT', 'smartknob/knob/settings', {
-    mac_address,
-    settings,
+    mac_address: mac_address,
+    settings: settings,
   });
 };

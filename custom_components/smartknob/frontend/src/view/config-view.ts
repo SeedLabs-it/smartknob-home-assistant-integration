@@ -6,7 +6,7 @@ import '../components/SkReorderableList/SkReorderableList.ts';
 import install from '@twind/with-web-components';
 import config from '../../twind.config.ts';
 import { HomeAssistant, KnobData, KnobSettings } from '../types.ts';
-// import { asyncSaveKnobSettings } from '../data/websockets.ts';
+import { asyncSaveKnobSettings } from '../data/websockets.ts';
 
 const withTwind = install(config);
 
@@ -14,7 +14,6 @@ const withTwind = install(config);
 export class Config extends withTwind(LitElement) {
   @property({ type: Object }) hass!: HomeAssistant;
   @property({ type: Object }) knob!: KnobData;
-  // @property({ type: Object }) knob_settings!: KnobSettings;
 
   @state() private _updated_knob_settings: KnobSettings | undefined = undefined;
 
@@ -33,7 +32,12 @@ export class Config extends withTwind(LitElement) {
           <li>
             <input
               type="checkbox"
-              .checked="${this._updated_knob_settings?.beacon_enabled}"
+              ?checked="${this._updated_knob_settings?.beacon_enabled}"
+              @change="${(e: Event) => {
+                this._updated_knob_settings!.beacon_enabled = (
+                  e.target as HTMLInputElement
+                ).checked;
+              }}"
             />
             <p>enable beacon</p>
           </li>
@@ -41,13 +45,23 @@ export class Config extends withTwind(LitElement) {
             <input
               type="text"
               .value="${this._updated_knob_settings?.beacon_color}"
+              @change="${(e: Event) => {
+                this._updated_knob_settings!.beacon_color = (
+                  e.target as HTMLInputElement
+                ).value;
+              }}"
             />
             <p>beacon color</p>
           </li>
           <li>
             <input
               type="checkbox"
-              .checked="${this._updated_knob_settings?.dim_screen}"
+              ?checked="${this._updated_knob_settings?.dim_screen}"
+              @change="${(e: Event) => {
+                this._updated_knob_settings!.dim_screen = (
+                  e.target as HTMLInputElement
+                ).checked;
+              }}"
             />
             <p>dim screen</p>
           </li>
@@ -55,6 +69,11 @@ export class Config extends withTwind(LitElement) {
             <input
               type="number"
               .value="${this._updated_knob_settings?.screen_timeout}"
+              @change="${(e: Event) => {
+                this._updated_knob_settings!.screen_timeout = parseInt(
+                  (e.target as HTMLInputElement).value,
+                );
+              }}"
             />
             <p>screen timeout</p>
           </li>
@@ -62,30 +81,40 @@ export class Config extends withTwind(LitElement) {
             <input
               type="number"
               .value="${this._updated_knob_settings?.screen_min_brightness}"
+              @change="${(e: Event) => {
+                this._updated_knob_settings!.screen_min_brightness = parseInt(
+                  (e.target as HTMLInputElement).value,
+                );
+              }}"
             />
             <p>screen min brightness</p>
           </li>
-
           <li>
             <input
               type="text"
               .value="${this._updated_knob_settings?.led_color}"
+              @change="${(e: Event) => {
+                this._updated_knob_settings!.led_color = (
+                  e.target as HTMLInputElement
+                ).value;
+              }}"
             />
             <p>color code for led ring</p>
           </li>
         </ul>
-        <button>Save</button>
+        <button @click=${this.save}>Save</button>
+        <button>Sync</button>
       </div>
     `;
   }
 
-  // sync() {
-  //   console.log('sync');
+  save() {
+    console.log('save');
 
-  //   asyncSaveKnobSettings(
-  //     this.hass,
-  //     this.knob.mac_address,
-  //     this._updated_knob_settings,
-  //   );
-  // }
+    asyncSaveKnobSettings(
+      this.hass,
+      this.knob.mac_address,
+      this._updated_knob_settings!,
+    );
+  }
 }

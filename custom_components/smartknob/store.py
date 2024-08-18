@@ -256,6 +256,16 @@ class SmartknobStorage:
         return attr.asdict(new_knob)
 
     @callback
+    def async_update_knob_settings(self, mac_address, settings: KnobSettings):
+        """Update existing config."""
+        new_settings = KnobSettings(**settings)
+        self.knobs[mac_address].settings = new_settings
+        _LOGGER.debug("Updated settings for %s", mac_address)
+        _LOGGER.debug(self.knobs[mac_address].settings)
+        self.async_schedule_save()
+        return attr.asdict(new_settings)
+
+    @callback
     def async_update_knobs(self, new_knobs):
         """Update existing config."""
         new = []

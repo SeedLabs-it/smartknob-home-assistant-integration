@@ -287,7 +287,9 @@ class MqttHandler:
             await mqtt.async_publish(
                 self.hass,
                 "smartknob/" + knob["mac_address"] + "/from_hass",
-                json.dumps({"type": "sync", "apps": knob["apps"]}),
+                json.dumps(
+                    {"type": "sync", "apps": knob["apps"], "settings": knob["settings"]}
+                ),
             )
         else:
             _LOGGER.debug("KNOB NOT FOUND")

@@ -56,7 +56,11 @@ export interface KnobData {
 
 export interface KnobSettings {
   dim_screen: boolean;
+  screen_timeout: number;
   screen_min_brightness: number;
+  beacon_enabled: boolean;
+  beacon_color: string;
+  led_color: string;
 }
 
 //MY CUSTOM TYPES

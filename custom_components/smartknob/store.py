@@ -12,7 +12,15 @@ from homeassistant.helpers.event import async_track_device_registry_updated_even
 from homeassistant.helpers.storage import Store
 from homeassistant.loader import bind_hass
 
-from .const import DATA_REGISTRY, DOMAIN, SAVE_DELAY, STORAGE_KEY, STORE_MAJOR_VERSION, STORE_MINOR_VERSION, MANUFACTURER
+from .const import (
+    DATA_REGISTRY,
+    DOMAIN,
+    SAVE_DELAY,
+    STORAGE_KEY,
+    STORE_MAJOR_VERSION,
+    STORE_MINOR_VERSION,
+    MANUFACTURER,
+)
 from .logger import _LOGGER
 
 
@@ -30,8 +38,12 @@ class AppEntry:
 class KnobSettings:
     """SmartKnob settings storage entry."""
 
-    dim_screen = attr.ib(type=bool, default=False)
+    dim_screen = attr.ib(type=bool, default=True)
+    screen_timeout = attr.ib(type=int, default=30)  # seconds
     screen_min_brightness = attr.ib(type=int, default=10)
+    beacon_enabled = attr.ib(type=bool, default=False)
+    beacon_color = attr.ib(type=str, default="FFFFFF")
+    led_color = attr.ib(type=str, default="FFFFFF")
 
 
 @attr.s(slots=True, frozen=False)
@@ -46,30 +58,38 @@ class SmartknobConfig:
 
 
 class MigratableStore(Store):
-    async def _async_migrate_func(self, old_major_version: int, old_minor_version: int, old_data: dict):
+    async def _async_migrate_func(
+        self, old_major_version: int, old_minor_version: int, old_data: dict
+    ):
         if old_major_version <= 1:
             device_registry = dr.async_get(self.hass)
             mqtt = self.hass.data[DOMAIN]["mqtt_handler"]
             for knob in old_data["knobs"]:
-
                 device = device_registry.async_get_or_create(
                     config_entry_id=self.hass.data[DOMAIN]["entry"].entry_id,
                     identifiers={(DOMAIN, knob["mac_address"])},
                     name=knob["mac_address"] or "GET FROM KNOB",
-                    model="SmartKnob Devkit v0.1", #HMMM NORMALLY GOTTEN FROM KNOB
-                    sw_version="0.2.0", #HMMM NORMALLY GOTTEN FROM KNOB
+                    model="SmartKnob Devkit v0.1",  # HMMM NORMALLY GOTTEN FROM KNOB
+                    sw_version="0.2.0",  # HMMM NORMALLY GOTTEN FROM KNOB
                     manufacturer=MANUFACTURER,
                 )
                 async_track_device_registry_updated_event(
-                  self.hass,
-                  [device.id],
-                  mqtt.async_device_change,
+                    self.hass,
+                    [device.id],
+                    mqtt.async_device_change,
                 )
                 knob["device_id"] = device.id
                 knob["name"] = knob["mac_address"] or "GET FROM KNOB"
                 knob["settings"] = {"dim_screen": False, "screen_min_brightness": 10}
 
+        if old_major_version == 2 and old_minor_version == 0:
+            for knob in old_data["knobs"]:
+                knob["settings"]["screen_timeout"] = 30
+                knob["settings"]["beacon_enabled"] = True
+                knob["settings"]["beacon_color"] = "FFFFFF"
+                knob["settings"]["led_color"] = "FFFFFF"
         return old_data
+
 
 class SmartknobStorage:
     """Class to hold SmartKnob storage."""
@@ -81,7 +101,9 @@ class SmartknobStorage:
             str, str
         ] = {}  #! ADD SMARTKNOB DEVICE SPECIFIC CONFIG HERE
         self.knobs: MutableMapping[str, SmartknobConfig] = {}
-        self._store = MigratableStore(hass, STORE_MAJOR_VERSION, STORAGE_KEY, minor_version=STORE_MINOR_VERSION)
+        self._store = MigratableStore(
+            hass, STORE_MAJOR_VERSION, STORAGE_KEY, minor_version=STORE_MINOR_VERSION
+        )
 
     async def async_load(self) -> None:
         """Load the registry of SmartKnob."""

@@ -144,7 +144,10 @@ export class SmartknobPanel extends withTwind(LitElement) {
                   this._knobs[0].mac_address}
                 ></app-form>`;
               case 'configuration':
-                return html`<config-view></config-view>`;
+                return html`<config-view
+                  .hass=${this.hass}
+                  .knob=${this._selectedKnob ?? this._knobs[0]}
+                ></config-view>`;
               default:
                 return html`<app-form
                   .hass=${this.hass}

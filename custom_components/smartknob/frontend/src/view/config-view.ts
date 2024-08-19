@@ -1,4 +1,4 @@
-import { LitElement, html } from 'lit';
+import { LitElement, css, html } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
 import '../components/SkReorderableList/SkReorderableList.ts';
 // import { selectSelector } from '../const';
@@ -23,48 +23,70 @@ export class Config extends withTwind(LitElement) {
 
     this._updated_knob_settings = this.knob.settings;
   }
+
+  static styles = css`
+    li {
+      display: flex;
+      align-items: flex-start;
+      flex-direction: column;
+    }
+  `;
+
   render() {
     return html`
       <div>
-        <h1>Config</h1>
-        <p>Configure your Smartknob here.</p>
-        <ul>
+        <ul class="list-none gap-4 flex flex-col">
           <li>
-            <input
-              type="checkbox"
-              ?checked="${this._updated_knob_settings?.beacon_enabled}"
-              @change="${(e: Event) => {
-                this._updated_knob_settings!.beacon_enabled = (
-                  e.target as HTMLInputElement
-                ).checked;
-              }}"
-            />
-            <p>enable beacon</p>
+            Enable beacon
+            <label class="inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                class="sr-only peer"
+                ?checked="${this._updated_knob_settings?.beacon_enabled}"
+                @change="${(e: Event) => {
+                  this._updated_knob_settings!.beacon_enabled = (
+                    e.target as HTMLInputElement
+                  ).checked;
+                }}"
+              />
+              <div
+                class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
+              ></div>
+            </label>
           </li>
           <li>
+            Beacon color
             <input
               type="color"
               .value="#${this._updated_knob_settings?.beacon_color
                 .toString(16)
                 .padStart(6, '0')}"
-            />
-            <p>beacon color</p>
-          </li>
-          <li>
-            <input
-              type="checkbox"
-              ?checked="${this._updated_knob_settings?.dim_screen}"
               @change="${(e: Event) => {
-                this._updated_knob_settings!.dim_screen = (
-                  e.target as HTMLInputElement
-                ).checked;
+                let hex = (e.target as HTMLInputElement).value;
+                this._updated_knob_settings!.led_color = parseInt(hex, 16);
               }}"
             />
-            <p>dim screen</p>
           </li>
-          <ha-slider></ha-slider>
-
           <li>
+            Enable screen dimming
+            <label class="inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                class="sr-only peer"
+                ?checked="${this._updated_knob_settings?.dim_screen}"
+                @change="${(e: Event) => {
+                  this._updated_knob_settings!.dim_screen = (
+                    e.target as HTMLInputElement
+                  ).checked;
+                }}"
+              />
+              <div
+                class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
+              ></div>
+            </label>
+          </li>
+          <li>
+            Screen dimming timeout
             <input
               type="number"
               .value="${this._updated_knob_settings?.screen_timeout}"
@@ -73,25 +95,31 @@ export class Config extends withTwind(LitElement) {
                   (e.target as HTMLInputElement).value,
                 );
               }}"
+              max="14400"
+              min="0"
             />
-            <p>screen timeout</p>
           </li>
           <li>
+            Screen min brightness
             <input
               type="number"
-              .value="${this._updated_knob_settings?.screen_min_brightness}"
+              .value="${(this._updated_knob_settings?.screen_min_brightness ??
+                6554) /
+              (65535 / 100)}"
               @change="${(e: Event) => {
-                this._updated_knob_settings!.screen_min_brightness = parseInt(
-                  (e.target as HTMLInputElement).value,
-                );
+                this._updated_knob_settings!.screen_min_brightness =
+                  parseInt((e.target as HTMLInputElement).value) *
+                  (65535 / 100);
               }}"
+              max="100"
+              min="0"
             />
-            <p>screen min brightness</p>
           </li>
           <li>
+            Led ring color
             <input
-              type="text"
-              .value="${this._updated_knob_settings?.led_color
+              type="color"
+              .value="#${this._updated_knob_settings?.led_color
                 .toString(16)
                 .padStart(6, '0')}"
               @change="${(e: Event) => {
@@ -99,7 +127,6 @@ export class Config extends withTwind(LitElement) {
                 this._updated_knob_settings!.led_color = parseInt(hex, 16);
               }}"
             />
-            <p>color code for led ring</p>
           </li>
         </ul>
         <button @click=${this.save}>Save</button>

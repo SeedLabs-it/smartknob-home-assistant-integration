@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "tsc && vite build --watch",
+    "dev": "tsc && vite build --watch --config vite.config.ts",
     "build": "tsc && vite build",
     "preview": "vite preview"
   },

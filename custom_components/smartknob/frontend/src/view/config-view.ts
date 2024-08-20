@@ -7,6 +7,7 @@ import install from '@twind/with-web-components';
 import config from '../../twind.config.ts';
 import { HomeAssistant, KnobData, KnobSettings } from '../types.ts';
 import { asyncSaveKnobSettings } from '../data/websockets.ts';
+import { parse } from '@twind/core';
 
 const withTwind = install(config);
 
@@ -35,100 +36,127 @@ export class Config extends withTwind(LitElement) {
   render() {
     return html`
       <div>
-        <ul class="list-none gap-4 flex flex-col">
-          <li>
-            Enable beacon
-            <label class="inline-flex items-center cursor-pointer">
+        <div class="flex gap-8">
+          <div class="gap-4 flex flex-col">
+            <h2>Screen dimming</h2>
+            <li>
+              <label class="inline-flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  class="sr-only peer"
+                  ?checked="${this._updated_knob_settings?.dim_screen}"
+                  @change="${(e: Event) => {
+                    this._updated_knob_settings!.dim_screen = (
+                      e.target as HTMLInputElement
+                    ).checked;
+                  }}"
+                />
+                <div
+                  class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
+                ></div>
+              </label>
+            </li>
+            <li>
               <input
-                type="checkbox"
-                class="sr-only peer"
-                ?checked="${this._updated_knob_settings?.beacon_enabled}"
+                type="number"
+                .value="${this._updated_knob_settings?.screen_timeout}"
                 @change="${(e: Event) => {
-                  this._updated_knob_settings!.beacon_enabled = (
-                    e.target as HTMLInputElement
-                  ).checked;
+                  this._updated_knob_settings!.screen_timeout = parseInt(
+                    (e.target as HTMLInputElement).value,
+                  );
+                }}"
+                max="14400"
+                min="0"
+              />
+            </li>
+            <li>
+              <input
+                type="range"
+                .value="${
+                  (this._updated_knob_settings?.screen_min_brightness ?? 6554) /
+                  (65535 / 100)
+                }"
+                @change="${(e: Event) => {
+                  this._updated_knob_settings!.screen_min_brightness =
+                    parseInt((e.target as HTMLInputElement).value) *
+                    (65535 / 100);
+                }}"
+                max="100"
+                min="0"
+              />
+            </li>
+          </div>
+          <div class="gap-4 flex flex-col">
+            <h2>Led ring</h2>
+            <input
+                  type="checkbox"
+                  class="sr-only peer"
+                  ?checked="${this._updated_knob_settings?.dim_screen}"
+                  @change="${(e: Event) => {
+                    this._updated_knob_settings!.dim_screen = (
+                      e.target as HTMLInputElement
+                    ).checked;
+                  }}"
+                  disabled
+                />
+                <div
+                  class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-400 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-gray-500 after:border-gray-800 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-900"
+                ></div>
+              </label>
+            <li>
+              <input
+                type="color"
+                .value="#${this._updated_knob_settings?.led_color
+                  .toString(16)
+                  .padStart(6, '0')}"
+                @change="${(e: Event) => {
+                  let hex = (e.target as HTMLInputElement).value;
+
+                  this._updated_knob_settings!.led_color = parseInt(
+                    hex.replace('#', ''),
+                    16,
+                  );
                 }}"
               />
-              <div
-                class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
-              ></div>
-            </label>
-          </li>
-          <li>
-            Beacon color
-            <input
-              type="color"
-              .value="#${this._updated_knob_settings?.beacon_color
-                .toString(16)
-                .padStart(6, '0')}"
-              @change="${(e: Event) => {
-                let hex = (e.target as HTMLInputElement).value;
-                this._updated_knob_settings!.led_color = parseInt(hex, 16);
-              }}"
-            />
-          </li>
-          <li>
-            Enable screen dimming
-            <label class="inline-flex items-center cursor-pointer">
+            </li>
+          </div>
+          <div class="gap-4 flex flex-col">
+            <h2>Beacon</h2>
+            <li>
+              <label class="inline-flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  class="sr-only peer"
+                  ?checked="${this._updated_knob_settings?.beacon_enabled}"
+                  @change="${(e: Event) => {
+                    this._updated_knob_settings!.beacon_enabled = (
+                      e.target as HTMLInputElement
+                    ).checked;
+                  }}"
+                />
+                <div
+                  class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
+                ></div>
+              </label>
+            </li>
+            <li>
               <input
-                type="checkbox"
-                class="sr-only peer"
-                ?checked="${this._updated_knob_settings?.dim_screen}"
+                type="color"
+                .value="#${this._updated_knob_settings?.beacon_color
+                  .toString(16)
+                  .padStart(6, '0')}"
                 @change="${(e: Event) => {
-                  this._updated_knob_settings!.dim_screen = (
-                    e.target as HTMLInputElement
-                  ).checked;
+                  let hex = (e.target as HTMLInputElement).value;
+
+                  this._updated_knob_settings!.beacon_color = parseInt(
+                    hex.replace('#', ''),
+                    16,
+                  );
                 }}"
               />
-              <div
-                class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"
-              ></div>
-            </label>
-          </li>
-          <li>
-            Screen dimming timeout
-            <input
-              type="number"
-              .value="${this._updated_knob_settings?.screen_timeout}"
-              @change="${(e: Event) => {
-                this._updated_knob_settings!.screen_timeout = parseInt(
-                  (e.target as HTMLInputElement).value,
-                );
-              }}"
-              max="14400"
-              min="0"
-            />
-          </li>
-          <li>
-            Screen min brightness
-            <input
-              type="number"
-              .value="${(this._updated_knob_settings?.screen_min_brightness ??
-                6554) /
-              (65535 / 100)}"
-              @change="${(e: Event) => {
-                this._updated_knob_settings!.screen_min_brightness =
-                  parseInt((e.target as HTMLInputElement).value) *
-                  (65535 / 100);
-              }}"
-              max="100"
-              min="0"
-            />
-          </li>
-          <li>
-            Led ring color
-            <input
-              type="color"
-              .value="#${this._updated_knob_settings?.led_color
-                .toString(16)
-                .padStart(6, '0')}"
-              @change="${(e: Event) => {
-                let hex = (e.target as HTMLInputElement).value;
-                this._updated_knob_settings!.led_color = parseInt(hex, 16);
-              }}"
-            />
-          </li>
-        </ul>
+            </li>
+          </div>
+        </div>
         <button @click=${this.save}>Save</button>
         <button>Sync</button>
       </div>
@@ -136,8 +164,6 @@ export class Config extends withTwind(LitElement) {
   }
 
   save() {
-    console.log('save');
-
     asyncSaveKnobSettings(
       this.hass,
       this.knob.mac_address,

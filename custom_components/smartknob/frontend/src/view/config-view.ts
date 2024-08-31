@@ -7,7 +7,7 @@ import install from '@twind/with-web-components';
 import config from '../../twind.config.ts';
 import { HomeAssistant, KnobData, KnobSettings } from '../types.ts';
 import { asyncSaveKnobSettings } from '../data/websockets.ts';
-import { parse } from '@twind/core';
+// import { parse } from '@twind/core';
 
 const withTwind = install(config);
 

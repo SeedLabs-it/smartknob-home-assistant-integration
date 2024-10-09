@@ -44,13 +44,12 @@ class MqttHandler:
     # @callback
     async def async_entity_state_changed(
         self,
-        affected_knobs: list[dict],
-        apps,
+        affected_knob_apps: list[dict],
         old_state: State,
         new_state: State,
     ):
         """Handle entity state changes."""
-        for knob in affected_knobs:
+        for mac_address, apps in affected_knob_apps:
             for app in apps:
                 random_number = secrets.randbits(32)
                 hex_string = hex(random_number)[2:]
@@ -84,7 +83,7 @@ class MqttHandler:
                 if state is not None:
                     await mqtt.async_publish(
                         self.hass,
-                        "smartknob/" + knob["mac_address"] + "/from_hass",
+                        "smartknob/" + mac_address + "/from_hass",
                         json.dumps(
                             {
                                 "id": payload_id,
@@ -213,8 +212,7 @@ class MqttHandler:
                         _LOGGER.debug("Sending initial state. to " + app.get("app_id"))
                         state: State = self.hass.states.get(app.get("entity_id"))
                         await self.async_entity_state_changed(
-                            [knob],
-                            [app],
+                            [(knob["mac_address"], [app])],
                             None,
                             state,
                         )

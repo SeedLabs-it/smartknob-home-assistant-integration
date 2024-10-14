@@ -44,7 +44,11 @@ export class SkReorderableList extends withTwind(LitElement) {
     return html`
       ${this.apps.map((item, index) => {
         const entitySelectorDisabled = () => {
-          if (item.app_slug?.slug == 'stopwatch') return true;
+          if (
+            item.app_slug?.slug == 'stopwatch' ||
+            item.app_slug?.slug == 'spotify'
+          )
+            return true;
           return false;
         };
 

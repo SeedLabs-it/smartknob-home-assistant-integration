@@ -34,6 +34,9 @@ DOMAIN_STOPWATCH = "stopwatch"
 BLINDS = "blinds"
 DOMAIN_BLINDS = "cover"
 
+SPOTIFY = "spotify"
+DOMAIN_SPOTIFY = "media_player"
+
 
 APP_SLUGS = [
     {
@@ -46,6 +49,12 @@ APP_SLUGS = [
         "slug": LIGHT_DIMMER,
         "friendly_name": "Light Dimmer",
         "domain": DOMAIN_LIGHT,
+        "supported_features": 1,
+    },
+    {
+        "slug": SPOTIFY,
+        "friendly_name": "Spotify",
+        "domain": DOMAIN_SPOTIFY,
         "supported_features": 1,
     },
     # {

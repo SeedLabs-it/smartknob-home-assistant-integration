@@ -20,7 +20,11 @@ class LightState:
     """Defines the structure of the LightState object."""
 
     def __init__(
-        self, on: bool, brightness: int, color_temp: int, rgb_color: list[int]
+        self,
+        on: bool | None,
+        brightness: int | None,
+        color_temp: int | None,
+        rgb_color: list[int] | None,
     ) -> None:
         """Initialize the LightState object."""
         self.on: bool = on
@@ -114,6 +118,19 @@ class Services:
                         "entity_id": entity_id,
                         "brightness": state.brightness,
                         "rgb_color": state.rgb_color,
+                    },
+                    True,
+                )
+            )
+        elif state.color_temp and state.brightness >= 0 and state.brightness <= 255:
+            await self.hass.async_add_job(
+                self.hass.services.async_call(
+                    "light",
+                    "turn_on",
+                    {
+                        "entity_id": entity_id,
+                        "brightness": state.brightness,
+                        "color_temp": state.color_temp,
                     },
                     True,
                 )

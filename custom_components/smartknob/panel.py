@@ -1,7 +1,8 @@
 """Panel for SmartKnob integration."""
+
 import os
 
-from homeassistant.components import frontend, panel_custom
+from homeassistant.components import frontend, panel_custom, http
 from homeassistant.core import HomeAssistant
 
 from .const import (
@@ -24,11 +25,16 @@ async def async_register_panel(hass: HomeAssistant):
     panel_dir = os.path.join(root_dir, PANEL_FOLDER)
     panel_file = os.path.join(panel_dir, PANEL_FILENAME)
 
-    hass.http.register_static_path(
-        PANEL_URL,
-        panel_file,
-        cache_headers=False,
+    await hass.http.async_register_static_paths(
+        [
+            http.StaticPathConfig(
+                PANEL_URL,
+                panel_file,
+                cache_headers=False,
+            )
+        ]
     )
+    # cache_headers=False,
 
     _LOGGER.debug("Registering panel")
     await panel_custom.async_register_panel(

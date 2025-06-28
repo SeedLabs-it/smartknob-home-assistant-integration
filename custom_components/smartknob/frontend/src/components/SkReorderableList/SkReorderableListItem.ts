@@ -58,7 +58,8 @@ export class SkReorderableListItem extends withTwind(LitElement) {
         >
           <ha-svg-icon
             title="delete"
-            class="text-[color:var(--error-color)]"
+            class="text-[color:var(--error-color)] p-2"
+            style=${!this.isDraggable ? '' : 'display: none;'}
             .path=${mdiDelete}
             @click=${() => {
               this.dispatchEvent(
@@ -73,7 +74,7 @@ export class SkReorderableListItem extends withTwind(LitElement) {
           <ha-svg-icon
             title="draggable"
             .path=${mdiDragHorizontalVariant}
-            class="cursor-grab"
+            class="cursor-grab bg-zinc-700 rounded-lg p-2"
             style=${this.isDraggable ? '' : 'display: none;'}
           ></ha-svg-icon>
         </div>

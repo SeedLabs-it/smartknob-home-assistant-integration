@@ -26,20 +26,21 @@ export class SkReorderableList extends withTwind(LitElement) {
   @property({ type: String }) mac_address!: string;
 
   render() {
-    const options: SelectOption[] = this.appSlugs.map((slug) => {
-      return {
-        value: slug.slug,
-        label: slug.friendly_name,
-      };
-    });
+    // const options: SelectOption[] = this.appSlugs.map((slug) => {
+    //   if (slug.slug === )
+    //     return {
+    //       value: slug.slug,
+    //       label: slug.friendly_name,
+    //     };
+    // });
 
-    const selectSelector: SelectSelector = {
-      select: {
-        custom_value: false,
-        mode: 'dropdown',
-        options,
-      },
-    };
+    // const selectSelector: SelectSelector = {
+    //   select: {
+    //     custom_value: false,
+    //     mode: 'dropdown',
+    //     options,
+    //   },
+    // };
 
     return html`
       ${this.apps.map((item, index) => {
@@ -70,11 +71,68 @@ export class SkReorderableList extends withTwind(LitElement) {
           <div class="flex md:flex-row flex-col flex-nowrap gap-2 w-full">
             <ha-selector
               .hass=${this.hass}
-              .selector=${selectSelector}
+              .selector=${{
+                select: {
+                  custom_value: false,
+                  mode: 'dropdown',
+                  options: this.appSlugs
+                    .filter((slug) => {
+                      if (slug.domain === item.app_slug.domain) {
+                        return true;
+                      }
+                    })
+                    .map((slug) => {
+                      return {
+                        value: slug.slug,
+                        label: slug.friendly_name,
+                      } as SelectOption;
+                    }),
+                },
+              }}
               .required=${true}
               .label=${'Select App'}
               .value=${item.app_slug.slug}
               class="w-full"
+              @value-changed=${(e: CustomEvent) => {
+                console.log('VALUE CHANGED');
+
+                const appIndex = this.apps.findIndex(
+                  (app) => app.app.app_id === item.app.app_id,
+                );
+                if (appIndex === -1) return;
+
+                const newSlug = this.appSlugs.find(
+                  (slug) => slug.slug === e.detail.value,
+                );
+                if (!newSlug) return;
+
+                console.log('New slug:', newSlug);
+
+                item.app_slug = newSlug;
+                item.app.app_slug = newSlug.slug;
+                item.app.friendly_name = newSlug.friendly_name;
+
+                this.apps[appIndex].app_slug = newSlug;
+                this.apps[appIndex].app.app_slug = newSlug.slug;
+                this.apps[appIndex].app.friendly_name = newSlug.friendly_name;
+                // this.apps = [...this.apps];
+                // // Update the app slug in the app object
+                // item.app.app_slug = newSlug.slug;
+                // item.app.friendly_name = newSlug.friendly_name;
+                // Save the updated apps list
+                // this.apps = [...this.apps];
+                // Save the updated apps list to the backend
+                // console.log('Updated apps:', this.apps);
+                // Save the updated apps list to the backend
+
+                asyncSaveApps(
+                  this.hass,
+                  this.mac_address,
+                  this.apps.map((item) => item.app),
+                );
+
+                this.requestUpdate();
+              }}
             ></ha-selector>
             <ha-selector
               .hass=${this.hass}

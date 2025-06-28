@@ -125,6 +125,7 @@ class SmartknobAppsView(HomeAssistantView):
     )
     async def put(self, request, data: dict):
         """Update config for app."""
+        _LOGGER.error("PUT request received with data")
         hass: HomeAssistant = request.app["hass"]
         coordinator: SmartknobCoordinator = hass.data[DOMAIN]["coordinator"]
         if "mac_address" and "apps" in data:

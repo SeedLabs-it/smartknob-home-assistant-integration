@@ -9,7 +9,6 @@ from homeassistant.core import HomeAssistant
 
 from .const import APP_SLUGS, DOMAIN
 from .coordinator import SmartknobCoordinator
-from .logger import _LOGGER
 
 
 async def async_register_websockets(hass: HomeAssistant):

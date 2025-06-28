@@ -93,15 +93,15 @@ class Services:
     async def async_toggle_switch(self, entity_id: str, state: SwitchState):
         """Switch the entity on or off."""
         if state.on:
-            await self.hass.async_add_job(
+            await self.hass.async_create_task(
                 self.hass.services.async_call(
-                    "light", "turn_on", {"entity_id": entity_id}
+                    "switch", "turn_on", {"entity_id": entity_id}
                 )
             )
         elif not state.on:
-            await self.hass.async_add_job(
+            await self.hass.async_create_task(
                 self.hass.services.async_call(
-                    "light", "turn_off", {"entity_id": entity_id}
+                    "switch", "turn_off", {"entity_id": entity_id}
                 )
             )
         else:
@@ -110,7 +110,7 @@ class Services:
     async def async_set_light(self, entity_id: str, state: LightState):
         """Switch the light on or off, and set its brightness and color."""
         if state.rgb_color and state.brightness >= 0 and state.brightness <= 255:
-            await self.hass.async_add_job(
+            await self.hass.async_create_task(
                 self.hass.services.async_call(
                     "light",
                     "turn_on",
@@ -123,7 +123,7 @@ class Services:
                 )
             )
         elif state.color_temp and state.brightness >= 0 and state.brightness <= 255:
-            await self.hass.async_add_job(
+            await self.hass.async_create_task(
                 self.hass.services.async_call(
                     "light",
                     "turn_on",
@@ -136,7 +136,7 @@ class Services:
                 )
             )
         elif state.brightness >= 0 and state.brightness <= 255:
-            await self.hass.async_add_job(
+            await self.hass.async_create_task(
                 self.hass.services.async_call(
                     "light",
                     "turn_on",
@@ -152,7 +152,7 @@ class Services:
 
     async def async_handle_blinds(self, entity_id: str, position: int):
         """Handle blinds entity."""
-        await self.hass.async_add_job(
+        await self.hass.async_create_task(
             self.hass.services.async_call(
                 "cover",
                 "set_cover_position",
@@ -167,7 +167,7 @@ class Services:
         """Handle climate entity."""
         mode = ClimateMode(state.mode)
 
-        await self.hass.async_add_job(
+        await self.hass.async_create_task(
             self.hass.services.async_call(
                 "climate",
                 "set_temperature",
@@ -177,7 +177,7 @@ class Services:
                 },
             )
         )
-        await self.hass.async_add_job(
+        await self.hass.async_create_task(
             self.hass.services.async_call(
                 "climate",
                 "set_hvac_mode",

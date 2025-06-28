@@ -46,6 +46,12 @@ APP_SLUGS = [
         "supported_features": 1,
     },
     {
+        "slug": SWITCH,
+        "friendly_name": "Switch",
+        "domain": DOMAIN_SWITCH,
+        "supported_features": 1,
+    },
+    {
         "slug": LIGHT_DIMMER,
         "friendly_name": "Light Dimmer",
         "domain": DOMAIN_LIGHT,
@@ -57,12 +63,6 @@ APP_SLUGS = [
         "domain": DOMAIN_SPOTIFY,
         "supported_features": 1,
     },
-    # {
-    #     "slug": SWITCH,
-    #     "friendly_name": "Switch",
-    #     "domain": DOMAIN_SWITCH,
-    #     "supported_features": 1,
-    # },
     {
         "slug": CLIMATE,
         "friendly_name": "Climate",

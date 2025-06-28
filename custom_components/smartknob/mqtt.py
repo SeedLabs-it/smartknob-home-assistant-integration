@@ -5,7 +5,7 @@ import secrets
 
 from homeassistant.components import mqtt
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.core import HomeAssistant, State, callback
+from homeassistant.core import HomeAssistant, State
 from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.event import (
     Event,
@@ -13,7 +13,7 @@ from homeassistant.helpers.event import (
     async_track_device_registry_updated_event,
 )
 
-from .const import DOMAIN, MANUFACTURER, TOPIC_INIT
+from .const import DOMAIN, TOPIC_INIT
 from .coordinator import SmartknobCoordinator
 from .logger import _LOGGER
 from .services import (
@@ -41,7 +41,6 @@ class MqttHandler:
         self.entry.async_create_task(self.hass, self._async_subscribe_to_init())
         self.entry.async_create_task(self.hass, self.async_subscribe_to_knobs())
 
-    # @callback
     async def async_entity_state_changed(
         self,
         affected_knob_apps: list[dict],
@@ -139,7 +138,6 @@ class MqttHandler:
         except Exception as _:
             _LOGGER.error("Couldnt subscribe to knob topics")
 
-    @callback
     async def async_init_received(self, msg):
         """Handle init message from SmartKnob."""
         try:
@@ -192,7 +190,6 @@ class MqttHandler:
             _LOGGER.error("Error decoding JSON payload")
             return
 
-    @callback
     async def async_message_received(self, msg):
         """Handle messages from SmartKnob."""
         try:
@@ -205,6 +202,7 @@ class MqttHandler:
             coordinator: SmartknobCoordinator = self.hass.data[DOMAIN]["coordinator"]
 
             if type_ == "acknowledgement":
+                _LOGGER.error("Acknowledgement received")
                 data = payload["data"]
                 if data == "sync":
                     knob = coordinator.store.async_get_knob(mac_address)
@@ -272,7 +270,6 @@ class MqttHandler:
             _LOGGER.error("Error decoding JSON payload")
             return
 
-    @callback
     async def async_sync_knob(self, mac_address):
         """Sync a knob."""
         _LOGGER.debug("SYNCING KNOB")
@@ -290,7 +287,6 @@ class MqttHandler:
         else:
             _LOGGER.debug("KNOB NOT FOUND")
 
-    @callback
     async def async_acknowledge(
         self, mac_address, acknowledgement_id, acknowledgement_type
     ):

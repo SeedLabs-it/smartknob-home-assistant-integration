@@ -9,7 +9,6 @@ from homeassistant.core import HomeAssistant
 
 from .const import APP_SLUGS, DOMAIN
 from .coordinator import SmartknobCoordinator
-from .logger import _LOGGER
 
 
 async def async_register_websockets(hass: HomeAssistant):
@@ -130,7 +129,9 @@ class SmartknobAppsView(HomeAssistantView):
         if "mac_address" and "apps" in data:
             apps = data.get("apps")
 
-            await coordinator.store.async_update_apps(data.get("mac_address"), apps)
+            await hass.async_create_task(
+                coordinator.store.async_update_apps(data.get("mac_address"), apps)
+            )
             await coordinator.update()
 
         return self.json({"success": True})  # TODO return actual success or error

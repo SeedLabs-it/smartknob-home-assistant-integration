@@ -80,7 +80,11 @@ export class AppForm extends withTwind(LitElement) {
     };
 
     const entitySelectorDisabled = () => {
-      if (this._selectedSlug?.slug == 'stopwatch') return true;
+      if (
+        this._selectedSlug?.slug == 'stopwatch' ||
+        this._selectedSlug?.slug == 'spotify'
+      )
+        return true;
       return false;
     };
 
@@ -106,7 +110,10 @@ export class AppForm extends withTwind(LitElement) {
           <ha-selector
             .hass=${this.hass}
             .selector=${entitySelector}
-            .required=${this._selectedSlug?.slug == 'stopwatch' ? false : true}
+            .required=${this._selectedSlug?.slug == 'stopwatch' ||
+            this._selectedSlug?.slug == 'spotify'
+              ? false
+              : true}
             .disabled=${entitySelectorDisabled()}
             .value=${this._selectedEntity?.attributes.friendly_name}
             @value-changed=${this.entityChanged}

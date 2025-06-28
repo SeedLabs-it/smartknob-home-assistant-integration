@@ -78,7 +78,7 @@ const Pr=async e=>{const t=await e.callApi("GET","smartknob/app_slugs");return t
       opacity: 1;
     }
   `,He([A()],ue.prototype,"app_id",2),He([A({type:Number})],ue.prototype,"index",2),He([A({type:Boolean})],ue.prototype,"isDraggable",2),ue=He([_e("sk-reorderable-list-item")],ue);var zi=Object.defineProperty,ji=Object.getOwnPropertyDescriptor,se=(e,t,r,i)=>{for(var s=i>1?void 0:i?ji(t,r):t,n=e.length-1,o;n>=0;n--)(o=e[n])&&(s=(i?o(t,r,s):o(s))||s);return i&&s&&zi(t,r,s),s};const Hi=xe(Ae);let J=class extends Hi(I){constructor(){super(...arguments),this.apps=[],this.sortable=!1}render(){return R`
-      ${this.apps.map((e,t)=>{var i,s;const r=()=>{var n;return((n=e.app_slug)==null?void 0:n.slug)=="stopwatch"};return Tr(e.app.app_id,R`<sk-reorderable-list-item
+      ${this.apps.map((e,t)=>{var i,s;const r=()=>{var n,o;return((n=e.app_slug)==null?void 0:n.slug)=="stopwatch"||((o=e.app_slug)==null?void 0:o.slug)=="spotify"};return Tr(e.app.app_id,R`<sk-reorderable-list-item
             .app_id=${e.app.app_id}
             .index=${t}
             .isDraggable=${this.sortable}
@@ -107,7 +107,7 @@ const Pr=async e=>{const t=await e.callApi("GET","smartknob/app_slugs");return t
             </div>
           </sk-reorderable-list-item>`)})}
     `}drop(e){const t=e.currentTarget.getBoundingClientRect(),r=e.clientY-t.top,s=t.height/2,n=e.target.getAttribute("draggable-id"),o=e.dataTransfer.getData("text/plain");var l=this.apps.findIndex(c=>c.app.app_id===n);const a=this.apps.findIndex(c=>c.app.app_id===o);r<s?(l=l-1,this.apps=this.reorderItems(this.apps,a,l)):this.apps=this.reorderItems(this.apps,a,l),Ke(this.hass,this.mac_address,this.apps.map(c=>c.app)),this.requestUpdate()}reorderItems(e,t,r){r<0&&(r=0);const i=e[t];return e.splice(t,1),e.splice(r,0,i),e}};se([A({type:Object})],J.prototype,"hass",2),se([A({type:Array})],J.prototype,"appSlugs",2),se([A({type:Array})],J.prototype,"entities",2),se([A({type:Array})],J.prototype,"apps",2),se([A({type:Boolean})],J.prototype,"sortable",2),se([A({type:String})],J.prototype,"mac_address",2),J=se([_e("sk-reorderable-list")],J);var Vi=Object.defineProperty,Fi=Object.getOwnPropertyDescriptor,V=(e,t,r,i)=>{for(var s=i>1?void 0:i?Fi(t,r):t,n=e.length-1,o;n>=0;n--)(o=e[n])&&(s=(i?o(t,r,s):o(s))||s);return i&&s&&Vi(t,r,s),s};const Wi=xe(Ae);let z=class extends Wi(I){constructor(){super(...arguments),this._selectedSlug=null,this._selectedEntity=null,this._domain="",this._sortable=!1,this.handleSubmit=e=>{e.preventDefault();//! VALIDATE INPUTS
-if(!this._selectedSlug)return;const t={app:{app_id:`${this._selectedSlug.slug}-${this._selectedEntity?this._selectedEntity.entity_id:Math.random().toString(16).slice(0,8)}`,app_slug:this._selectedSlug.slug,entity_id:this._selectedEntity?this._selectedEntity.entity_id:"",friendly_name:this._selectedEntity?this._selectedEntity.attributes.friendly_name??"":this._selectedSlug.friendly_name},app_slug:this._selectedSlug,entity:this._selectedEntity};this.apps.find(r=>r.app_slug==t.app_slug&&r.entity==t.entity)||this.apps.push(t),this.apps=[...this.apps],Dr(this.hass,this.mac_address,t.app),this.requestUpdate()}}connectedCallback(){super.connectedCallback(),this._selectedSlug=this.appSlugs[0],this._domain=this._selectedSlug.domain}render(){var n,o,l;const t={select:{custom_value:!1,mode:"dropdown",options:this.appSlugs.map(a=>({value:a.slug,label:a.friendly_name}))}},i={entity:{include_entities:this.entities.map(a=>!a.entity_id.startsWith(this._domain)||this.apps.find(c=>{var h;return((h=this._selectedSlug)==null?void 0:h.slug)==c.app.app_slug&&c.app.entity_id==a.entity_id})?"":a.entity_id).filter(a=>a!="")}},s=()=>{var a;return((a=this._selectedSlug)==null?void 0:a.slug)=="stopwatch"};return R`
+if(!this._selectedSlug)return;const t={app:{app_id:`${this._selectedSlug.slug}-${this._selectedEntity?this._selectedEntity.entity_id:Math.random().toString(16).slice(0,8)}`,app_slug:this._selectedSlug.slug,entity_id:this._selectedEntity?this._selectedEntity.entity_id:"",friendly_name:this._selectedEntity?this._selectedEntity.attributes.friendly_name??"":this._selectedSlug.friendly_name},app_slug:this._selectedSlug,entity:this._selectedEntity};this.apps.find(r=>r.app_slug==t.app_slug&&r.entity==t.entity)||this.apps.push(t),this.apps=[...this.apps],Dr(this.hass,this.mac_address,t.app),this.requestUpdate()}}connectedCallback(){super.connectedCallback(),this._selectedSlug=this.appSlugs[0],this._domain=this._selectedSlug.domain}render(){var n,o,l,a;const t={select:{custom_value:!1,mode:"dropdown",options:this.appSlugs.map(c=>({value:c.slug,label:c.friendly_name}))}},i={entity:{include_entities:this.entities.map(c=>!c.entity_id.startsWith(this._domain)||this.apps.find(h=>{var u;return((u=this._selectedSlug)==null?void 0:u.slug)==h.app.app_slug&&h.app.entity_id==c.entity_id})?"":c.entity_id).filter(c=>c!="")}},s=()=>{var c,h;return((c=this._selectedSlug)==null?void 0:c.slug)=="stopwatch"||((h=this._selectedSlug)==null?void 0:h.slug)=="spotify"};return R`
       <!-- <button
         @click=${()=>{Rr(this.hass,this.mac_address)}}
       >
@@ -127,9 +127,9 @@ if(!this._selectedSlug)return;const t={app:{app_id:`${this._selectedSlug.slug}-$
           <ha-selector
             .hass=${this.hass}
             .selector=${i}
-            .required=${((o=this._selectedSlug)==null?void 0:o.slug)!="stopwatch"}
+            .required=${!(((o=this._selectedSlug)==null?void 0:o.slug)=="stopwatch"||((l=this._selectedSlug)==null?void 0:l.slug)=="spotify")}
             .disabled=${s()}
-            .value=${(l=this._selectedEntity)==null?void 0:l.attributes.friendly_name}
+            .value=${(a=this._selectedEntity)==null?void 0:a.attributes.friendly_name}
             @value-changed=${this.entityChanged}
             class="min-w-56 w-full"
           ></ha-selector>
@@ -138,7 +138,7 @@ if(!this._selectedSlug)return;const t={app:{app_id:`${this._selectedSlug.slug}-$
           <ha-svg-icon title="submit" .path=${zr}></ha-svg-icon>
         </button>
         <button
-          @click=${a=>{a.preventDefault(),this._sortable=!this._sortable}}
+          @click=${c=>{c.preventDefault(),this._sortable=!this._sortable}}
           class="aspect-square"
         >
           <ha-svg-icon title="reorder" .path=${jr}></ha-svg-icon>

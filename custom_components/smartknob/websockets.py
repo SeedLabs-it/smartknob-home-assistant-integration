@@ -125,13 +125,14 @@ class SmartknobAppsView(HomeAssistantView):
     )
     async def put(self, request, data: dict):
         """Update config for app."""
-        _LOGGER.error("PUT request received with data")
         hass: HomeAssistant = request.app["hass"]
         coordinator: SmartknobCoordinator = hass.data[DOMAIN]["coordinator"]
         if "mac_address" and "apps" in data:
             apps = data.get("apps")
 
-            await coordinator.store.async_update_apps(data.get("mac_address"), apps)
+            await hass.async_create_task(
+                coordinator.store.async_update_apps(data.get("mac_address"), apps)
+            )
             await coordinator.update()
 
         return self.json({"success": True})  # TODO return actual success or error

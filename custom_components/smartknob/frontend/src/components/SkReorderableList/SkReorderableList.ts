@@ -1,12 +1,6 @@
 import { LitElement, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import {
-  AppListItem,
-  AppSlug,
-  HomeAssistant,
-  SelectOption,
-  SelectSelector,
-} from '../../types';
+import { AppListItem, AppSlug, HomeAssistant, SelectOption } from '../../types';
 import { asyncSaveApps } from '../../data/websockets';
 import { HassEntity } from 'home-assistant-js-websocket';
 import './SkReorderableListItem';
@@ -26,22 +20,6 @@ export class SkReorderableList extends withTwind(LitElement) {
   @property({ type: String }) mac_address!: string;
 
   render() {
-    // const options: SelectOption[] = this.appSlugs.map((slug) => {
-    //   if (slug.slug === )
-    //     return {
-    //       value: slug.slug,
-    //       label: slug.friendly_name,
-    //     };
-    // });
-
-    // const selectSelector: SelectSelector = {
-    //   select: {
-    //     custom_value: false,
-    //     mode: 'dropdown',
-    //     options,
-    //   },
-    // };
-
     return html`
       ${this.apps.map((item, index) => {
         const entitySelectorDisabled = () => {
@@ -106,8 +84,6 @@ export class SkReorderableList extends withTwind(LitElement) {
                 );
                 if (!newSlug) return;
 
-                console.log('New slug:', newSlug);
-
                 item.app_slug = newSlug;
                 item.app.app_slug = newSlug.slug;
                 item.app.friendly_name = newSlug.friendly_name;
@@ -115,15 +91,6 @@ export class SkReorderableList extends withTwind(LitElement) {
                 this.apps[appIndex].app_slug = newSlug;
                 this.apps[appIndex].app.app_slug = newSlug.slug;
                 this.apps[appIndex].app.friendly_name = newSlug.friendly_name;
-                // this.apps = [...this.apps];
-                // // Update the app slug in the app object
-                // item.app.app_slug = newSlug.slug;
-                // item.app.friendly_name = newSlug.friendly_name;
-                // Save the updated apps list
-                // this.apps = [...this.apps];
-                // Save the updated apps list to the backend
-                // console.log('Updated apps:', this.apps);
-                // Save the updated apps list to the backend
 
                 asyncSaveApps(
                   this.hass,

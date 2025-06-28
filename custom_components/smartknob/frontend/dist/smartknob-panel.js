@@ -82,7 +82,7 @@ const Cr=async e=>{const t=await e.callApi("GET","smartknob/app_slugs");return t
               .label=${"Select App"}
               .value=${e.app_slug.slug}
               class="w-full"
-              @value-changed=${n=>{console.log("VALUE CHANGED");const o=this.apps.findIndex(a=>a.app.app_id===e.app.app_id);if(o===-1)return;const l=this.appSlugs.find(a=>a.slug===n.detail.value);l&&(console.log("New slug:",l),e.app_slug=l,e.app.app_slug=l.slug,e.app.friendly_name=l.friendly_name,this.apps[o].app_slug=l,this.apps[o].app.app_slug=l.slug,this.apps[o].app.friendly_name=l.friendly_name,Ke(this.hass,this.mac_address,this.apps.map(a=>a.app)),this.requestUpdate())}}
+              @value-changed=${n=>{console.log("VALUE CHANGED");const o=this.apps.findIndex(a=>a.app.app_id===e.app.app_id);if(o===-1)return;const l=this.appSlugs.find(a=>a.slug===n.detail.value);l&&(e.app_slug=l,e.app.app_slug=l.slug,e.app.friendly_name=l.friendly_name,this.apps[o].app_slug=l,this.apps[o].app.app_slug=l.slug,this.apps[o].app.friendly_name=l.friendly_name,Ke(this.hass,this.mac_address,this.apps.map(a=>a.app)),this.requestUpdate())}}
             ></ha-selector>
             <ha-selector
               .hass=${this.hass}
@@ -201,6 +201,7 @@ this._selectedEntity=Object.values(this.hass.states).find(t=>t.entity_id==e.deta
       </div>
     </div>`}handleTabSelect(e){const t=e.detail.item.getAttribute("tab-name"),r=window.location.origin;r.endsWith(t)?this.scrollTo(0,0):(this._currentTab=Ve.find(i=>i.tabId==t)??Ve[0],history.replaceState(null,"",`${r}/${Wi}/${t}`),this.requestUpdate())}setAppList(){var t;var e=[];for(const r of((t=this._selectedKnob)==null?void 0:t.apps)??[]){const i=this._appSlugs.find(n=>n.slug==r.app_slug)??this._appSlugs[0],s=[...Object.values(this.hass.states)].find(n=>n.entity_id==r.entity_id)??null;e.push({app:{app_id:r.app_id,app_slug:r.app_slug,entity_id:r.entity_id,friendly_name:r.friendly_name},app_slug:i,entity:s})}this._appList=e}};F.styles=vt`
     ha-tabs {
+      opacity: 0%;
       --paper-tabs-selection-bar-color: var(
         --app-header-selection-bar-color,
         var(--app-header-text-color, #fff)

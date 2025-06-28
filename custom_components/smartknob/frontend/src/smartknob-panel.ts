@@ -26,12 +26,13 @@ const withTwind = install(config);
 export class SmartknobPanel extends withTwind(LitElement) {
   static styles = css`
     ha-tabs {
+      opacity: 0%;
       --paper-tabs-selection-bar-color: var(
         --app-header-selection-bar-color,
         var(--app-header-text-color, #fff)
       );
     }
-  `;
+  `; // Hide tabs until they are ready
 
   @property({ type: Object }) public hass!: HomeAssistant;
   @property({ type: Boolean }) public narrow!: boolean;

@@ -36,19 +36,14 @@ export const asyncSaveApps = async (
   mac_address: string,
   apps: App[],
 ) => {
-  const _apps: {}[] = [];
-  for (const app of apps) {
-    _apps.push({
+  return await hass.callApi('PUT', 'smartknob/apps', {
+    mac_address,
+    apps: apps.map((app) => ({
       app_id: app.app_id,
       app_slug: app.app_slug,
       entity_id: app.entity_id,
       friendly_name: app.friendly_name,
-    });
-  }
-
-  return await hass.callApi('PUT', 'smartknob/apps', {
-    mac_address,
-    apps: _apps,
+    })),
   });
 };
 
